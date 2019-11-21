@@ -10,7 +10,7 @@
 import * as HR from '@yt/hop-request';
 
 // 当前系统名称
-const systemName = 'admin后台';
+const systemName = '接口自动化平台';
 // 业务域，默认hipac，可选hipac、hiqingcang，根据域切换hop调用的域名
 const bizDomain = 'hipac';
 

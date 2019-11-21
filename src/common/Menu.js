@@ -9,5 +9,5 @@ import { basename } from '@/config/env';
  * 参考组件文档http://doc.yangtuojia.com/admin-doc/api/admin-common-menu/
  */
 export default function Menu() {
-    return <AdminCommonMenu routerConfig={routerConfig} basename={basename}/>;
+    return <AdminCommonMenu routerConfig={routerConfig} basename={basename} menuCode="menu1"/>;
 }

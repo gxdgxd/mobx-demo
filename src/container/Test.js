@@ -17,7 +17,7 @@ class Test extends Component {
     
     render() {
         return (
-            <div>Hello world</div>
+            <div>Hello world22</div>
         );
     }
 }
