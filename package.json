@@ -7,17 +7,18 @@
     "@yt/admin-common-menu": "^1.1.6",
     "@yt/admin-react-scripts": "2.3.3",
     "@yt/hop-request": "^3.10.0",
-    "antd": "^3.25.0",
+    "antd": "^3.25.3",
     "core-js": "^3.4.0",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.15",
     "mobx": "^4.15.0",
     "mobx-react": "^6.1.4",
     "query-string": "^5.1.1",
-    "react": "^16.11.0",
-    "react-dom": "^16.11.0",
+    "rc-tween-one": "^2.6.5",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
     "react-highlight-words": "^0.16.0",
-    "react-json-tree": "^0.11.2",
+    "react-json-view": "^1.19.1",
     "react-router-dom": "^5.1.2",
     "regenerator-runtime": "^0.13.3"
   },
@@ -45,7 +46,6 @@
     "lint-staged": "^9.4.2"
   },
   "config-overrides-path": "node_modules/@yt/admin-react-scripts/config/js-config-overrides.js",
-
   "useGit2Cdn": true,
   "theme": "./theme.js"
 }

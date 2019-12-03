@@ -1,19 +1,19 @@
 import React, {Component} from 'react';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import JSONTree from 'react-json-tree'
 import { Table,Input,Tree,Row, Col} from 'antd';
 import {columns} from './config';
 import SearchForm from './SearchForm';
 
-
-const { TextArea } = Input;
 const { TreeNode } = Tree;
 
 @inject('TestCaseManagerStore')
 @observer
 class TestCaseManagerList extends Component {
     componentDidMount() {
+        this.props.setBreadcrumb([
+            {name: '用例管理'},
+        ]);
         this.props.TestCaseManagerStore.initData(1);
     }
     constructor(props){
@@ -21,7 +21,6 @@ class TestCaseManagerList extends Component {
         this.state= {
             json_str:{}
         }
-
     }
 
     onSelect = (selectedKeys, info) => {
@@ -31,8 +30,9 @@ class TestCaseManagerList extends Component {
     onCheck = (checkedKeys, info) => {
         console.log('onCheck', checkedKeys, info);
     }
+
     render(){
-        const {dataSource,detailModalVisible} = this.props.TestCaseManagerStore
+        const {dataSource} = this.props.TestCaseManagerStore
         const mydataSource = dataSource.toJS()
 
         return(
@@ -61,7 +61,6 @@ class TestCaseManagerList extends Component {
                             dataSource={mydataSource}  />
                     </Col>
                 </Row>
-
             </div>
         )
     }

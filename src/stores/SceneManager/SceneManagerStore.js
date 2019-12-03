@@ -5,12 +5,16 @@ import { message } from 'antd';
 
 class SceneManagerStore {
     @observable dataSource = [];
-    @observable detailModalVisible = false;
+    @observable insertDataSource = [];
+    @observable insertCaseModalVisible = false;
     //查询条件
     @observable tableRequestData = {
 
     };
-
+    @action
+    changeTableRequestData(n,v){
+        this.tableRequestData[n]=v;
+    }
     @action
     async initFormData(){
 
@@ -21,33 +25,31 @@ class SceneManagerStore {
         this.dataSource = [
             {
                 key: '1',
-                name: '胡彦斌',
-                age: 32,
-                address: '西湖区',
-            },
-            {
-                key: '2',
-                name: '胡彦祖',
-                age: 42,
-                address: '西湖区',
-            },
+                id: '胡彦斌',
+                name: 32,
+                env: '西湖区',
+            }
         ];
+
+        this.insertDataSource = [
+            {
+                key: '1',
+                id: '胡彦斌',
+                name: 32,
+                apiMethodName: '西湖区',
+            }
+        ]
+
+
+    }
+    @action
+    async deleteScene(){
+
     }
 
     @action
-    async updateDetailData(record,type) {
-        console.log("updateDetailData:" + record)
-        this.detailModalVisible = true;
-    }
-
-    @action
-    async update(data) {
-        this.detailModalVisible = false;
-    }
-
-    @action
-    hideModal (type){
-        this.detailModalVisible = false;
+    showInsertCaseModal(){
+        this.insertCaseModalVisible = true;
     }
 }
 

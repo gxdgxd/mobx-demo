@@ -5,50 +5,44 @@ import { message } from 'antd';
 
 class TestCaseManagerStore {
     @observable dataSource = [];
-    @observable detailModalVisible = false;
+
     //查询条件
     @observable tableRequestData = {
 
     };
 
+    /**
+     * 初始化查询表单
+     * @returns {Promise<void>}
+     */
     @action
     async initFormData(){
-
     }
+
+    /**
+     * 初始化table数据
+     * @param pageNo
+     * @returns {Promise<void>}
+     */
     @action
     async initData(pageNo) {
 
         this.dataSource = [
             {
                 key: '1',
-                name: '胡彦斌',
-                age: 32,
-                address: '西湖区',
-            },
-            {
-                key: '2',
-                name: '胡彦祖',
-                age: 42,
-                address: '西湖区',
-            },
+                id: 1,
+                appName: 32,
+                name:'用例名称',
+                apiMethodName: '西湖区',
+                priority:1,
+                creatorName:"陶燕粉",
+                editTime:'2019/01/10 12:00:00',
+                paramScript:'abcd',
+                validScript:'result != null  && result.data != null && result.data.size() > 0 && result.data.id == $p.result.id'
+            }
         ];
     }
 
-    @action
-    async updateDetailData(record,type) {
-        console.log("updateDetailData:" + record)
-        this.detailModalVisible = true;
-    }
-
-    @action
-    async update(data) {
-        this.detailModalVisible = false;
-    }
-
-    @action
-    hideModal (type){
-        this.detailModalVisible = false;
-    }
 }
 
 export default new TestCaseManagerStore();

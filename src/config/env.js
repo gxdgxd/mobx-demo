@@ -31,7 +31,7 @@ const secretKey = '569cba1ffb1d6e78ddd0205b754417d7';
 const NO_LOGIN_SESSION_CODE = 9001006;
 
 // 按需求修改，本地开发环境下会使用该值
-const localhostEnv = 'master';
+const localhostEnv = '20191112apitestbaize';
 // hop请求的环境，本地开发环境下，使用自定义的localhostEnv值，生产环境使用HR内置的值
 const env = process.env.NODE_ENV === 'development' ? localhostEnv : HR.get('env');
 

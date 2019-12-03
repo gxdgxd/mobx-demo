@@ -1,0 +1,28 @@
+.editable-cell {
+    position: relative;
+}
+
+.editable-cell-value-wrap {
+    padding: 5px 0px;
+    cursor: pointer;
+}
+
+.editable-row:hover .editable-cell-value-wrap {
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    padding: 4px 6px;
+}
+
+.tree-parent-div{
+    display:none;
+    cursor: pointer;
+}
+
+.tree-span{
+    color:#4997f1;
+    margin-left:5px;
+}
+
+.tree-title:hover .tree-parent-div{
+    display:inline-block;
+}

@@ -3,6 +3,7 @@ import { observer, inject } from 'mobx-react';
 
 import { Table,Divider, Button, Alert, Select,Icon, Row, Col, Form, DatePicker, Input, Modal } from 'antd';
 import Highlighter from 'react-highlight-words';
+import common from "../../../style/common.css";
 
 const FormItem = Form.Item;
 
@@ -13,44 +14,64 @@ class SearchForm extends Component{
     constructor(props){
         super(props);
         this.state={
+            groupId:'',
+            artifactId:'',
+            version:''
         }
     }
 
-    componentDidMount() {
+    inputChange(n,e) {
+        this.props.ApiManagerStore.changeTableRequestData(n,e.target.value);
     }
 
-    optionChange(n,v,Option) {
-        this.props.ApiManagerStore.initData(1);
-    }
+    handleSearch = (e) => {
 
+        e.preventDefault();
+        this.props.form.validateFieldsAndScroll((err, values) => {
+            if (!err) {
+                this.props.ApiManagerStore.fetchApiByGAV(this.state);
+            }
+        });
+    }
     formItemLayout = {
-        labelCol: { span: 5 },
-        wrapperCol: { span: 19 },
+        labelCol: { span: 8 },
+        wrapperCol: { span: 13 },
     }
-
     render(){
-        return (
-            <Form className="ant-advanced-search-form p-xs pb-0">
-                <Alert message="api包信息" type="info" style={{backgroundColor:'#c7e7ff',border:'0px'}}/>
-                <Row gutter={48} style={{marginTop:'13px'}}>
-                    <Col span={6}>
-                        groupId：
-                            <Input placeholder="请输入groupId" style={{width:"155px"}}/>
-                    </Col>
-                    <Col span={7}>
-                        artifactId：
-                            <Input placeholder="请输入artifactId" style={{width:"175px"}}/>
-                    </Col>
-                    <Col span={6}>
-                        version：
-                            <Input placeholder="请输入version" style={{width:"155px"}}/>
-                    </Col>
-                    <Col span={1}>
-                        <Button type="primary"><Icon type="search" /> 搜索</Button>
-                    </Col>
-                </Row>
+        const { getFieldDecorator } = this.props.form;
 
-            </Form>
+        return (
+            <div>
+                <Alert message="api包信息" type="info" style={{backgroundColor:'#c7e7ff',border:'0px'}}/>
+                <Form layout="inline"  className="ant-advanced-search-form p-xs pb-0" onSubmit={this.handleSearch}>
+                    <FormItem {...this.formItemLayout} label="groupId">
+                        {getFieldDecorator('groupId', {
+                            rules: [{ required: true, message: '请填写groupId!' }],
+                        })(
+                            <Input placeholder="请输入groupId"  onChange={this.inputChange.bind(this,'groupId')}/>
+                        )}
+                    </FormItem>
+                    <FormItem {...this.formItemLayout} label="artifactId">
+                        {getFieldDecorator('artifactId', {
+                            rules: [{ required: true, message: '请填写artifactId!' }],
+                        })(
+                            <Input placeholder="请输入artifactId"  onChange={this.inputChange.bind(this,'artifactId')}/>
+                        )}
+                    </FormItem>
+                    <FormItem {...this.formItemLayout} label="version">
+                        {getFieldDecorator('version', {
+                            rules: [{ required: true, message: '请选择version' }],
+                        })(
+                            <Input placeholder="请输入version" onChange={this.inputChange.bind(this,'version')}/>
+                        )}
+                    </FormItem>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" >
+                            <Icon type="search" /> 搜索
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </div>
         )
     }
 }

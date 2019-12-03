@@ -6,7 +6,7 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 
-@inject('ApiManagerStore')
+@inject('SceneManagerStore')
 @observer
 class SearchForm extends Component{
     constructor(props){
@@ -19,16 +19,16 @@ class SearchForm extends Component{
     }
 
     inputChange(n,e) {
-        this.props.ApiManagerStore.changeTableRequestData(n,e.target.value);
+        this.props.SceneManagerStore.changeTableRequestData(n,e.target.value);
     }
     optionChange(n,v) {
-        this.props.ApiManagerStore.changeTableRequestData(n,v || '');
+        this.props.SceneManagerStore.changeTableRequestData(n,v || '');
     }
 
     handleSubmit = (e) => {
         debugger
         e.preventDefault();
-        this.props.ApiManagerStore.initData(1);
+        this.props.SceneManagerStore.initData(1);
     }
     formItemLayout = {
         labelCol: { span: 5 },
@@ -39,39 +39,40 @@ class SearchForm extends Component{
             <Form  className="ant-advanced-search-form p-xs pb-0"  onSubmit={this.handleSubmit}>
                 <Row gutter={48}>
                     <Col span={7}>
-                        <FormItem {...this.formItemLayout} label="接口ID">
-                            <Input placeholder="请输入接口ID" onChange={this.inputChange.bind(this,'id')}/>
+                        <FormItem {...this.formItemLayout} label="场景ID">
+                            <Input placeholder="请输入场景ID" onChange={this.inputChange.bind(this,'id')}/>
                         </FormItem>
                     </Col>
                     <Col span={7}>
-                        <FormItem {...this.formItemLayout} label="接口名">
-                            <Input placeholder="请输入接口名" onChange={this.inputChange.bind(this,'name')}/>
+                        <FormItem {...this.formItemLayout} label="用例ID">
+                            <Input placeholder="请输入用例ID" onChange={this.inputChange.bind(this,'name')}/>
                         </FormItem>
                     </Col>
                     <Col span={7}>
-                        <FormItem {...this.formItemLayout} label="方法名">
-                            <Input placeholder="请输入方法名" onChange={this.inputChange.bind(this,'apiMethodName')}/>
+                        <FormItem {...this.formItemLayout} label="用例名">
+                            <Input placeholder="请输入用例名称" onChange={this.inputChange.bind(this,'name')}/>
                         </FormItem>
                     </Col>
                 </Row>
                 <Row gutter={48}>
                     <Col span={7}>
-                        <FormItem {...this.formItemLayout} label="创建人">
-                            <Select name="creator" allowClear={true}  showSearch
-                                    onChange={this.optionChange.bind(this,'creator')}>
-                                {this.props.creatorList.map(item => <Option key={item} value={item}>{item}</Option>)}
-                            </Select>
+                        <FormItem {...this.formItemLayout} label="接口ID">
+                            <Input placeholder="请输入接口ID" onChange={this.inputChange.bind(this,'name')}/>
                         </FormItem>
                     </Col>
                     <Col span={7}>
-                        <FormItem {...this.formItemLayout} label="标签">
-                            <Select name="tag" allowClear={true}  showSearch
-                                    onChange={this.optionChange.bind(this,'tag')}>
-                                {this.props.tagList.map(item => <Option key={item.id} value={item.id}>{item.value}</Option>)}
-                            </Select>
+                        <FormItem {...this.formItemLayout} label="接口名">
+                            <Input placeholder="请输入接口名称" onChange={this.inputChange.bind(this,'name')}/>
                         </FormItem>
                     </Col>
-                    <Col span={3}>
+                    <Col span={7}>
+                        <FormItem {...this.formItemLayout} label="创建人">
+                            <Input placeholder="请输入接口名称" onChange={this.inputChange.bind(this,'name')}/>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row gutter={48}>
+                    <Col span={3} style={{'marginLeft':'10px'}}>
                         <Form.Item>
                             <Button type="primary" htmlType="submit" >
                                 <Icon type="search" /> 搜索
@@ -80,7 +81,7 @@ class SearchForm extends Component{
                     </Col>
                     <Col span={3} >
                         <Form.Item>
-                            <Button type="primary"  onClick={()=>{window.location.href="/insert_api"}}><Icon type="plus" /> 新建接口</Button>
+                            <Button type="primary"  onClick={()=>{window.location.href="/insert_scene"}}><Icon type="plus" /> 添加场景</Button>
                         </Form.Item>
                     </Col>
                 </Row>
