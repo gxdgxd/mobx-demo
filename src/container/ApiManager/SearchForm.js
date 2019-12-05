@@ -67,7 +67,7 @@ class SearchForm extends Component{
                         <FormItem {...this.formItemLayout} label="标签">
                             <Select name="tag" allowClear={true}  showSearch
                                     onChange={this.optionChange.bind(this,'tag')}>
-                                {this.props.tagList.map(item => <Option key={item.id} value={item.id}>{item.value}</Option>)}
+                                {this.props.tagsSearch.map(item => <Option key={item.id} value={item.id}>{item.value}</Option>)}
                             </Select>
                         </FormItem>
                     </Col>
@@ -80,7 +80,7 @@ class SearchForm extends Component{
                     </Col>
                     <Col span={3} >
                         <Form.Item>
-                            <Button type="primary"  onClick={()=>{window.location.href="/insert_api"}}><Icon type="plus" /> 新建接口</Button>
+                            <Button type="primary"  onClick={()=>{window.location.href="/insert_api"}}><Icon type="plus" /> 添加接口</Button>
                         </Form.Item>
                     </Col>
                 </Row>

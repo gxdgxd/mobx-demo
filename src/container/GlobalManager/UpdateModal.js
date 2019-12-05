@@ -28,8 +28,7 @@ class InsertModal extends Component{
     inputChange(n,e) {
         let obj={};
         obj[n]=e.target.value;
-        this.setState(obj);
-        this.props.GlobalManagerStore.changeTableRequestData(n,e.target.value);
+        this.props.GlobalManagerStore.changeDetailData(n,e.target.value);
     }
 
     /**
@@ -40,7 +39,7 @@ class InsertModal extends Component{
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                this.props.GlobalManagerStore.insert(this.state);
+                this.props.GlobalManagerStore.update();
             }
         });
     }
@@ -82,11 +81,11 @@ class InsertModal extends Component{
                         )}
                     </FormItem>
                     <FormItem {...this.formItemLayout} label="参数类型">
-                        {getFieldDecorator('var_type', {
-                            initialValue: detailData.var_type,
+                        {getFieldDecorator('varType', {
+                            initialValue: detailData.varType,
                             rules: [{ required: true, message: '请选择参数类型!' }],
                         })(
-                            <Radio.Group onChange={this.inputChange.bind(this,'var_type')}>
+                            <Radio.Group onChange={this.inputChange.bind(this,'varType')}>
                                 <Radio value={0}>常量</Radio>
                                 <Radio value={1}>闭包</Radio>
                             </Radio.Group>

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Table,Input,Tree,Row, Col,Icon,Tag} from 'antd';
+import { Table,Input,Tree,Row, Col,Icon,Pagination} from 'antd';
 import {columns} from './config';
 import SearchForm from './SearchForm';
 import TreeModal from './TreeModal';
@@ -108,9 +108,12 @@ class ApiManagerList extends Component {
             })
         );
     };
-
+    onChangePage = page => {
+        console.log(page);
+        this.props.ApiManagerStore.initData(page);
+    };
     render(){
-        const {dataSource,treeModalVisible,tagList,creatorList} = this.props.ApiManagerStore
+        const {dataSource,treeModalVisible,tagsSearch,creatorList,pageNo,pageSize,totalCount} = this.props.ApiManagerStore
         const mydataSource = dataSource.toJS()
 
         const treeData = [
@@ -190,15 +193,15 @@ class ApiManagerList extends Component {
                         <TreeModal treeModalVisible={treeModalVisible}></TreeModal>
                     </Col>
                     <Col span={20}>
-                        <SearchForm tagList={tagList} creatorList={creatorList} />
+                        <SearchForm tagsSearch={tagsSearch} creatorList={creatorList} />
                         <Table
                             bordered
                             columns={columns(this)}
-                            dataSource={mydataSource}
+                            dataSource={mydataSource} pagination={false}
                         />
+                        <Pagination onChange={this.onChangePage} pageSize={pageSize} current={pageNo}  total={totalCount} style={{'marginTop':'6px','float':'right'}}/>
                     </Col>
                 </Row>
-
             </div>
         )
     }

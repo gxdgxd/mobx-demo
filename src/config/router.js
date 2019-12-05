@@ -19,10 +19,10 @@ const getRouters = (routers) => {
 const routers = [
     { path: '/api_manager', component: lazy(() => import('../container/ApiManager')), exact: true, title: '接口管理' },
     { path: '/insert_api', component: lazy(() => import('../container/ApiManager/Insert')), exact: true, title: '添加接口' },
-    { path: '/api_detail', component: lazy(() => import('../container/ApiManager/Detail')), exact: true, title: '接口详情' },
+    { path: '/update_api', component: lazy(() => import('../container/ApiManager/Update')), exact: true, title: '修改接口' },
 
     { path: '/testcase_manager', component: lazy(() => import('../container/TestCaseManager')), exact: true, title: '用例管理' },
-    { path: '/insert_testcase', component: lazy(() => import('../container/TestCaseManager/Insert')), exact: true, title: '添加接口' },
+    { path: '/edit_testcase', component: lazy(() => import('../container/TestCaseManager/Insert')), exact: true, title: '添加用例' },
 
     { path: '/scene_manager', component: lazy(() => import('../container/SceneManager')), exact: true, title: '场景管理' },
     { path: '/insert_scene', component: lazy(() => import('../container/SceneManager/Insert')), exact: true, title: '添加场景' },

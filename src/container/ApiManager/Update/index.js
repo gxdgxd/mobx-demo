@@ -15,6 +15,13 @@ const { TextArea } = Input;
 @inject('ApiManagerStore')
 @observer
 class DetailIndex extends Component{
+    componentDidMount() {
+        this.props.setBreadcrumb([
+            {name: '接口管理'},
+            {name: '修改接口'},
+        ]);
+        this.props.ApiManagerStore.getApiDetailData()
+    }
     constructor(props){
         super(props);
         this.state={
@@ -24,7 +31,8 @@ class DetailIndex extends Component{
         }
     }
     handleClose = removedTag => {
-        const tags = this.state.tags.filter(tag => tag !== removedTag);
+        debugger
+        const tags = this.props.ApiManagerStore.tags.filter(tag => tag.id !== removedTag);
         console.log(tags);
         this.setState({ tags });
     };
@@ -43,9 +51,8 @@ class DetailIndex extends Component{
         if (inputValue && tags.indexOf(inputValue) === -1) {
             tags = [...tags, inputValue];
         }
-        console.log(tags);
+        this.props.ApiManagerStore.insertTag(tags[0])
         this.setState({
-            tags,
             inputVisible: false,
             inputValue: '',
         });
@@ -62,22 +69,25 @@ class DetailIndex extends Component{
         let obj={};
         obj[n]=e.target.value;
         this.setState(obj);
-        this.props.ApiManagerStore.changeTableRequestData(n,e.target.value);
+        this.props.ApiManagerStore.changeDetailData(n,e.target.value);
     }
+    handleSubmit = (e) => {
 
+        e.preventDefault();
+        this.props.form.validateFieldsAndScroll((err, values) => {
+            if (!err) {
+                this.props.ApiManagerStore.updateApi(1);
+            }
+        });
+    }
     render(){
         const { getFieldDecorator } = this.props.form;
-        const { detailData} = this.props
-        const { inputVisible, inputValue } = this.state;
         debugger
-        let tags = []
-        if(typeof detailData.tags != "undefined"){
-            tags = toJS(detailData.tags)
-        }
+        const { detailData,tags} = this.props.ApiManagerStore
+        const { inputVisible, inputValue } = this.state;
+
         return (
-            <div>
-
-
+            <div  style={{'marginLeft':'15px'}}>
                 <Form  layout="inline" className="ant-advanced-search-form p-xs pb-0" onSubmit={this.handleSubmit}>
                     <Alert message="api包信息" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px'}}/>
                     <Row>
@@ -155,7 +165,7 @@ class DetailIndex extends Component{
                                 initialValue: detailData.apiClassName,
                                 rules: [{ required: true, message: '请填写接口路径!' }],
                             })(
-                                <Input disabled style={{ width: 823 }} value={detailData.apiClassName}/>
+                                <Input disabled style={{ width: 823 }} />
                             )}
                         </FormItem>
                     </Row>
@@ -165,15 +175,15 @@ class DetailIndex extends Component{
                                 initialValue: detailData.apiMethodName,
                                 rules: [{ required: true, message: '请填写方法名!' }],
                             })(
-                                <Input disabled style={{ width: 375 }} value={detailData.apiMethodName}/>
+                                <Input disabled style={{ width: 375 }} />
                             )}
                         </FormItem>
                         <FormItem {...this.formItemLayout} label="接口名">
                             {getFieldDecorator('name', {
                                 initialValue: detailData.name,
-                                rules: [{ required: true, message: '请填写name!' }],
+                                rules: [{ required: true, message: '请填写接口名!' }],
                             })(
-                                <Input style={{ width: 378 }} value={detailData.name}/>
+                                <Input style={{ width: 378 }} onChange={this.inputChange.bind(this,'name')} />
                             )}
                         </FormItem>
                     </Row>
@@ -181,9 +191,9 @@ class DetailIndex extends Component{
                         <FormItem {...this.formItemLayout} label="创建人">
                             {getFieldDecorator('creatorName', {
                                 initialValue: detailData.creatorName,
-                                rules: [{ required: true, message: '请填写name!' }],
+                                rules: [{ required: true, message: '请填写创建人!' }],
                             })(
-                                <Input disabled style={{ width: 145 }} value={detailData.creatorName}/>
+                                <Input disabled style={{ width: 145 }} />
                             )}
                         </FormItem>
                         <FormItem {...this.formItemLayout} label="标签">
@@ -191,12 +201,12 @@ class DetailIndex extends Component{
                                 {tags.map((tag, index) => {
                                     const isLongTag = tag.length > 20;
                                     const tagElem = (
-                                        <Tag key={tag.key} closable={index !== 0} onClose={() => this.handleClose(tag.value)}>
+                                        <Tag key={tag.id} closable onClose={() => this.handleClose(tag.id)}>
                                             {isLongTag ? `${tag.value.slice(0, 20)}...` : tag.value}
                                         </Tag>
                                     );
                                     return isLongTag ? (
-                                        <Tooltip title={tag.value} key={tag.key}>
+                                        <Tooltip title={tag.value} key={tag.id}>
                                             {tagElem}
                                         </Tooltip>
                                     ) : (
@@ -228,11 +238,18 @@ class DetailIndex extends Component{
                         <FormItem {...this.formItemLayout} label="描述">
                             {getFieldDecorator('desc', {
                                 initialValue: detailData.desc,
-                                rules: [{ required: true, message: '请填写描述!' }],
+                                rules: [{ required: false, message: '请填写描述!' }],
                             })(
                                 <TextArea rows={3} style={{ width: 852 }} value={detailData.desc} onChange={this.inputChange.bind(this,'desc')}/>
                             )}
                         </FormItem>
+                    </Row>
+                    <Row>
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit" >
+                                修改
+                            </Button>
+                        </Form.Item>
                     </Row>
                 </Form>
             </div>

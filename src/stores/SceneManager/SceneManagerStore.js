@@ -1,6 +1,7 @@
 import { observable, action, extendObservable } from 'mobx';
 import axios from 'axios';
 import { message } from 'antd';
+import {post} from '../../utils/http'
 
 
 class SceneManagerStore {
@@ -37,6 +38,12 @@ class SceneManagerStore {
                 id: '胡彦斌',
                 name: 32,
                 apiMethodName: '西湖区',
+            },
+            {
+                key: '2',
+                id: '胡彦dddd斌',
+                name: 32,
+                apiMethodName: '西22湖区',
             }
         ]
 

@@ -1,6 +1,7 @@
 import { observable, action, extendObservable } from 'mobx';
 import axios from 'axios';
 import { message } from 'antd';
+import {post} from '../../utils/http'
 
 
 class ExeRecordStore {

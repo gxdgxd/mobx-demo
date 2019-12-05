@@ -1,5 +1,6 @@
 import React  from 'react';
 import { Icon,Tag,Input,Tooltip,Popconfirm,Popover} from 'antd';
+import common from "../../style/common.css";
 
 export const columns = (context) => [
     {
@@ -17,13 +18,14 @@ export const columns = (context) => [
             var name = record.apiMethodName.length > 12 ? record.apiMethodName.substr(0,12) + '...' : record.apiMethodName;
             let str = <div>
                         <span>方法名：{record.apiMethodName}</span><br/>
+                        <span>创建人：{record.creatorName}</span><br/>
                         <span>接口路径：{record.apiClassName}</span><br/>
-                        <span>更新时间：{record.editTime}</span>
+                        <span>更新时间：{record.editTimeStr}</span>
                       </div>
             return (
                 <span>
                     <Popover content={str} >
-                        <font color="#0c8dbf">{name}</font>
+                        <font color="#d2a216">{name}</font>
                     </Popover>
                 </span>
             )
@@ -47,8 +49,8 @@ export const columns = (context) => [
     },
     {
         title: '应用名',
-        dataIndex: 'app_name',
-        key: 'app_name',
+        dataIndex: 'appName',
+        key: 'appName',
         width:'10%',
     },
     {
@@ -64,21 +66,20 @@ export const columns = (context) => [
         width:'13%',
     },
     {
-        title: '创建人',
-        dataIndex: 'creatorName',
-        key: 'creatorName',
-        width:'13%',
-    },
-    {
         title: '操作',
-        width: '6%',
+        width: '21%',
         key: 'operation',
         render:(row,record) => {
-            let href = "/api_detail?id=" + record.id
+            let updateHref = "/update_api?apiId=" + record.id
+            let searchCaseHref = "/testcase_manager?apiId=" + record.id
+            let insertCaseHref = "/edit_testcase?apiId=" + record.id
+
             return (
-                <div>
-                    <span><a href={href} target="_blank">编辑</a></span>
-                </div>
+                <span>
+                    <a href={updateHref} target="_blank">修改接口</a>&nbsp;
+                    <a href={searchCaseHref} target="_blank" className="vLine"> 查看用例</a>&nbsp;
+                    <a href={insertCaseHref} target="_blank" className="vLine"> 添加用例</a>
+                </span>
             )
         }
     }

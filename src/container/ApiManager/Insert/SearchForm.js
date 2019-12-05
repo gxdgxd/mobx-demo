@@ -29,7 +29,7 @@ class SearchForm extends Component{
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                this.props.ApiManagerStore.fetchApiByGAV(this.state);
+                this.props.ApiManagerStore.fetchApiByGAV(1);
             }
         });
     }
@@ -42,7 +42,7 @@ class SearchForm extends Component{
 
         return (
             <div>
-                <Alert message="api包信息" type="info" style={{backgroundColor:'#c7e7ff',border:'0px'}}/>
+                <Alert message="api包信息" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'5px'}}/>
                 <Form layout="inline"  className="ant-advanced-search-form p-xs pb-0" onSubmit={this.handleSearch}>
                     <FormItem {...this.formItemLayout} label="groupId">
                         {getFieldDecorator('groupId', {

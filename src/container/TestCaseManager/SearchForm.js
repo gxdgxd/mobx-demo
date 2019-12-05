@@ -17,7 +17,13 @@ class SearchForm extends Component{
     componentDidMount() {
     }
 
-    optionChange(n,v,Option) {
+    inputChange(n,e) {
+        this.props.TestCaseManagerStore.changeTableRequestData(n,e.target.value);
+    }
+
+    handleSearch = (e) => {
+        debugger
+        e.preventDefault();
         this.props.TestCaseManagerStore.initData(1);
     }
 
@@ -28,20 +34,24 @@ class SearchForm extends Component{
 
     render(){
         return (
-            <Form className="ant-advanced-search-form p-xs pb-0">
+            <Form className="ant-advanced-search-form p-xs pb-0"  onSubmit={this.handleSearch}>
                 <Row gutter={48}>
                     <Col span={7}>
                         <FormItem {...this.formItemLayout} label="接口ID">
-                            <Input placeholder="请输入接口ID" />
+                            <Input placeholder="请输入接口ID" onChange={this.inputChange.bind(this,'apiId')}/>
                         </FormItem>
                     </Col>
                     <Col span={7}>
                         <FormItem {...this.formItemLayout} label="用例名">
-                            <Input placeholder="请输入用例名" />
+                            <Input placeholder="请输入用例名" onChange={this.inputChange.bind(this,'name')}/>
                         </FormItem>
                     </Col>
                     <Col span={3} style={{'marginTop':'3px'}}>
-                        <Button type="primary"><Icon type="search" /> 搜索</Button>
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit" >
+                                <Icon type="search" /> 搜索
+                            </Button>
+                        </Form.Item>
                     </Col>
 
                 </Row>

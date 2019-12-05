@@ -4,8 +4,8 @@ import { Icon,Popconfirm} from 'antd';
 export const columns = (context) => [
     {
         title: '参数名',
-        dataIndex: 'key',
-        key: 'key',
+        dataIndex: 'name',
+        key: 'name',
     },
     {
         title: '参数值',
@@ -14,8 +14,8 @@ export const columns = (context) => [
     },
     {
         title: '参数类型',
-        dataIndex: 'var_type',
-        key: 'var_type',
+        dataIndex: 'varType',
+        key: 'varType',
         render: (row) => {
             return (
                 <span>{row == 0 ? "常量":"必包"}</span>
@@ -24,8 +24,8 @@ export const columns = (context) => [
     },
     {
         title: '更新时间',
-        dataIndex: 'edit_time',
-        key: 'edit_time',
+        dataIndex: 'editTimeStr',
+        key: 'editTimeStr',
     },
     {
         title: '操作',

@@ -6,8 +6,6 @@ import {columns} from './config';
 import InsertModal from './InsertModal';
 import UpdateModal from './UpdateModal';
 
-const { TextArea } = Input;
-const { TreeNode } = Tree;
 
 @inject('GlobalManagerStore')
 @observer
@@ -59,7 +57,7 @@ class GlobalManagerList extends Component {
                         <Table
                             bordered
                             columns={columns(this)}
-                            dataSource={mydataSource}  />
+                            dataSource={mydataSource} />
                     </Col>
                     <UpdateModal detailData={detailData} updateModalVisible={updateModalVisible} ></UpdateModal>
                 </Row>

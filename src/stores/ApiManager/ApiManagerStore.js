@@ -1,17 +1,22 @@
 import React  from 'react';
-import { observable, action, extendObservable } from 'mobx';
+import { observable, action, extendObservable,toJS} from 'mobx';
 import axios from 'axios';
 import { message,Tag } from 'antd';
 import { TweenOneGroup } from 'rc-tween-one';
 import {post} from '../../utils/http'
+import {getUrlParam} from "../../utils/common";
 
 class ApiManagerStore {
     @observable dataSource = [];
     @observable treeModalVisible = false;
-    @observable creatorList = ['张三','李四'];//创建人
-    @observable tagList = [{"id":1,"value":"米粒专用"},{"id":2,"value":"主流程"}];
+    @observable creatorList = ['张三','李四'];
+    @observable tags = [];
+    @observable tagsSearch = [];
     @observable insertDataSource = [];
     @observable detailData = {};
+    @observable totalCount = 0
+    @observable pageSize = 0
+    @observable pageNo = 0
     //查询条件
     @observable tableRequestData = {
         apiClassName:null,
@@ -26,23 +31,21 @@ class ApiManagerStore {
         this.tableRequestData[n]=v;
     }
     @action
-    async initFormData(){
-
+    changeDetailData(n,v){
+        this.detailData[n]=v;
     }
+
     @action
     async initData(pageNo) {
-        var testdata = {"query":{"apiClassName":this.tableRequestData.apiClassName,"apiMethodName":this.tableRequestData.apiMethodName,"appId":this.tableRequestData.appId,"creatorId":this.tableRequestData.creatorId,"id":this.tableRequestData.id,"moduleId":null,"pageNo":1,"pageSize":10,"tagIds":this.tableRequestData.tagIds}}
+
+        var testdata = {"query":{"apiClassName":this.tableRequestData.apiClassName,"apiMethodName":this.tableRequestData.apiMethodName,"appId":this.tableRequestData.appId,"creatorId":this.tableRequestData.creatorId,"id":this.tableRequestData.id,"moduleId":null,"pageNo":pageNo,"pageSize":10,"tagIds":this.tableRequestData.tagIds}}
         const result = await post("1.0.0/hipac.api.test.api.queryApi",testdata)
+
         console.log(result)
-        // this.dataSource = result.data;
-        this.dataSource = [{
-            id:1,
-            tags:[{"id":1,"value":"米粒22专用"}],
-            apiClassName:'abc',
-            apiMethodName:'aaa',
-            name:'abcaa'
-        }]
-        this.fetchApiByGAV({})
+        this.dataSource = result.data;
+        this.pageNo = result.pageNo;
+        this.pageSize = result.pageSize;
+        this.totalCount = result.totalCount;
     }
 
     /**
@@ -51,9 +54,14 @@ class ApiManagerStore {
      * @returns {Promise<void>}
      */
     @action
-    async update(data) {
+    async updateApi() {
         debugger
-        console.log(data)
+        const params = {"arg0":{"apiClassName":this.detailData.apiClassName,"apiMethodName":this.detailData.apiMethodName,"appId":1,"argsJsonFormat":this.detailData.argsJsonFormat,"argsTypeNames":this.detailData.argsTypeNames,"artifactId":this.detailData.artifactId,"creatorId":this.detailData.creatorId,"desc":this.detailData.desc,"groupId":this.detailData.groupId,"id":this.detailData.id,"moduleId":this.detailData.moduleId,"name":this.detailData.name,"resultJsonFormat":this.detailData.resultJsonFormat,"type":this.detailData.type}}
+        const result = await post("1.0.0/hipac.api.test.api.saveApi",params)
+        console.log(result)
+        if(result.code == 200){
+            message.success("修改接口成功")
+        }
     }
 
     /**
@@ -62,11 +70,10 @@ class ApiManagerStore {
      * @returns {Promise<void>}
      */
     @action
-    async fetchApiByGAV(data){
+    async fetchApiByGAV(pageNo){
         var testdata = {"gav":{"artifactId":"pay-api","groupId":"com.yangt.pay","version":"1.0.20"}}
         const result = await post("1.0.0/hipac.api.test.api.fetchApiByGAV",testdata)
         const result_data = result.data;
-        // let array = [{id:1,apiClassName:'111',tags:['Unremovable', 'Tag 2', 'Tag 3']}]
         let array = []
         for (let i = 0; i < result_data.length ; i++) {
             let obj = {}
@@ -120,8 +127,6 @@ class ApiManagerStore {
             array.push(obj)
         }
         const params = {"saveForms":array,"gav":{"artifactId":this.tableRequestData.artifactId,"groupId":this.tableRequestData.groupId,"version":this.tableRequestData.version},"appId":1,"moduleId":1}
-        console.log(JSON.stringify(params))
-        debugger
         const result = await post("1.0.0/hipac.api.test.api.batchAddApi",params)
         console.log(result)
         if(result.code == 200){
@@ -135,9 +140,16 @@ class ApiManagerStore {
      * @returns {Promise<void>}
      */
     @action
-    async getDetailData(record) {
-        console.log("getDetailData:" + record)
-        this.detailData = record;
+    async getApiDetailData() {
+        var apiID = getUrlParam('apiID',window.location.search);
+        const result = await post("1.0.0/hipac.api.test.api.info",{id:apiID})
+        this.detailData = result.data;
+        let tags = []
+        if(typeof result.data.tags != "undefined" && result.data.tags != null){
+            tags = toJS(result.data.tags)
+        }
+        // this.tags = tags
+        this.tags = [{"id":1,"value":'123'}]
     }
 
     @action
@@ -153,6 +165,13 @@ class ApiManagerStore {
     @action
     saveTreeData(){
         this.treeModalVisible = false;
+    }
+
+    @action
+    async insertTag(value) {
+        const result = await post("1.0.0/hipac.api.test.tag.saveTag",{value:value})
+        let obj = {'id':result.data,'value':value}
+        this.tags.push(obj)
     }
 }
 

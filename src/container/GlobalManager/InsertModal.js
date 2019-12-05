@@ -40,7 +40,7 @@ class InsertModal extends Component{
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                this.props.GlobalManagerStore.insert(this.state);
+                this.props.GlobalManagerStore.insert();
             }
         });
     }

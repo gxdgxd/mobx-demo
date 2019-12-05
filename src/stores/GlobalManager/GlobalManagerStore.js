@@ -1,6 +1,7 @@
 import { observable, action, extendObservable } from 'mobx';
 import axios from 'axios';
 import { message } from 'antd';
+import {post} from '../../utils/http'
 
 
 class GlobalManagerStore {
@@ -11,8 +12,16 @@ class GlobalManagerStore {
     @observable tableRequestData = {
         name:'',
         value:'',
-        var_type:''
+        var_type:0
     };
+    @action
+    changeDetailData(n,v){
+        this.detailData[n]=v;
+    }
+    @action
+    changeTableRequestData(n,v){
+        this.tableRequestData[n]=v;
+    }
 
     /**
      * 初始化table数据
@@ -21,29 +30,9 @@ class GlobalManagerStore {
      */
     @action
     async initData(pageNo) {
-        this.dataSource = [
-            {
-                key: '1',
-                name: '胡彦斌',
-                value: 32,
-                var_type: 0,
-                edit_time:'2019/01/10 12:00:00'
-            },
-            {
-                key: '2',
-                name: '胡彦祖',
-                value: 42,
-                var_type: 1,
-                edit_time:'2019/01/10 12:00:00'
-            },
-            {
-                key: '2',
-                name: '胡彦祖',
-                value: 42,
-                var_type: 1,
-                edit_time:'2019/01/10 12:00:00'
-            }
-        ];
+        const result = await post("1.0.0/hipac.api.test.var.userVars",{})
+        console.log(result)
+        this.dataSource = result.data;
     }
 
     @action
@@ -58,10 +47,7 @@ class GlobalManagerStore {
             this.updateModalVisible = false;
         }
     }
-    @action
-    changeTableRequestData(n,v){
-        this.tableRequestData[n]=v;
-    }
+
 
     @action
     async getDetailData(record) {
@@ -77,25 +63,14 @@ class GlobalManagerStore {
      * @returns {Promise<void>}
      */
     @action
-    async insert(data) {
-
-        let defaultData = {
-            name:this.tableRequestData.name,
-            value:this.tableRequestData.value,
-            var_type:this.tableRequestData.var_type
-        };
-        extendObservable(defaultData,data);
-        const result = await axios({
-            method:"get",
-            url:"userfeedback/insertUserFeedback?",
-            params: defaultData
-        });
+    async insert() {
+        const params = {"saveForm":{"ownerId":"","domain":1,"name":this.tableRequestData.name,"value":this.tableRequestData.value,"varType":this.tableRequestData.varType}}
+        const result = await post("1.0.0/hipac.api.test.var.saveVar",params)
 
         if(result.code == "200"){
-            message.success('添加变量成功');
-        }else{
-            message.error('添加变量失败，请重试！');
+            message.success('添加参数成功');
         }
+        this.initData(1)
         this.modalVisible = false;
     }
 
@@ -105,7 +80,14 @@ class GlobalManagerStore {
      * @returns {Promise<void>}
      */
     @action
-    async update(data) {
+    async update() {
+        const params = {"saveForm":{"id":this.detailData.id,"ownerId":"","domain":1,"name":this.detailData.name,"value":this.detailData.value,"varType":this.detailData.varType}}
+        const result = await post("1.0.0/hipac.api.test.var.saveVar",params)
+
+        if(result.code == "200"){
+            message.success('修改参数成功');
+        }
+        this.initData(1)
         this.updateModalVisible = false;
     }
 
@@ -116,6 +98,13 @@ class GlobalManagerStore {
      */
     @action
     async delete(data) {
+        debugger
+        const result = await post("1.0.0/hipac.api.test.var.delVar",{id:data.id})
+
+        if(result.code == "200"){
+            message.success('删除参数成功');
+        }
+        this.initData(1)
         this.updateModalVisible = false;
     }
 }

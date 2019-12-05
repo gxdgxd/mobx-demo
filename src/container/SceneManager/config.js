@@ -1,5 +1,6 @@
 import React  from 'react';
 import { Icon,Popconfirm} from 'antd';
+import common from "../../style/common.css";
 
 export const columns = (context) => [
     {
@@ -46,8 +47,8 @@ export const columns = (context) => [
             return (
                 <div>
                     <span>
-                        <a href={href} target="_blank">详情</a> &nbsp;
-                        <a href={href} target="_blank">执行</a>
+                        <a href={href} target="_blank">详情</a>&nbsp;
+                        <a href={href} target="_blank" className="vLine"> 执行</a>
                     </span>
                 </div>
             )
@@ -95,10 +96,10 @@ export const insertColumns = (context) => [
             return (
                 <div>
                     <span>
-                        <a href={href} target="_blank">详情</a> &nbsp;
-                        <a href={href} target="_blank">执行</a> &nbsp;
+                        <a href={href} target="_blank">详情</a>&nbsp;
+                        <a href={href} target="_blank" className="vLine"> 执行</a>
                         <Popconfirm title="确定删除此参数吗？" onConfirm={() => context.delete(record)} >
-                            &nbsp;&nbsp; <a href="#" >删除</a>
+                           &nbsp;<a href="#" className="vLine"> 删除</a>
                         </Popconfirm>
                     </span>
                 </div>
