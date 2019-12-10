@@ -15,7 +15,10 @@ class ExeRecordStore {
     @observable tableRequestData = {
 
     };
-
+    @action
+    changeTableRequestData(n,v){
+        this.tableRequestData[n]=v;
+    }
     /**
      * 初始化table数据
      * @param pageNo
@@ -24,7 +27,7 @@ class ExeRecordStore {
     @action
     async initData(pageNo) {
 
-        var testdata = {"arg0":{"env":this.tableRequestData.env,"exeTimeAfter":"","exeTimeBefore":"","finishTimeAfter":"","finishTimeBefore":"","pageNo":pageNo,"pageSize":10,"status":0,"testSceneId":this.tableRequestData.testSceneId}}
+        var testdata = {"arg0":{'operatorId':this.tableRequestData.operatorId,"env":this.tableRequestData.env,"exeTimeBefore":this.tableRequestData.exeTimeBefore,"finishTimeAfter":this.tableRequestData.finishTimeAfter,"pageNo":pageNo,"pageSize":10,"status":0,"testSceneId":this.tableRequestData.testSceneId}}
         const result = await post("1.0.0/hipac.api.test.exe.record.query",testdata)
 
         this.dataSource = result.data;

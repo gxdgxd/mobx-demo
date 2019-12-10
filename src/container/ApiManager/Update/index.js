@@ -31,7 +31,6 @@ class DetailIndex extends Component{
         }
     }
     handleClose = removedTag => {
-        debugger
         const tags = this.props.ApiManagerStore.tags.filter(tag => tag.id !== removedTag);
         console.log(tags);
         this.setState({ tags });
@@ -82,7 +81,6 @@ class DetailIndex extends Component{
     }
     render(){
         const { getFieldDecorator } = this.props.form;
-        debugger
         const { detailData,tags} = this.props.ApiManagerStore
         const { inputVisible, inputValue } = this.state;
 
@@ -120,36 +118,7 @@ class DetailIndex extends Component{
                                 </Select>
                             )}
                         </FormItem>
-                        <FormItem {...this.formItemLayout} label="一级模块">
-                            {getFieldDecorator('version', {
-                                initialValue: detailData.version,
-                                rules: [{ required: false, message: '请填写version!' }],
-                            })(
-                                <Select style={{ width: 145 }}  showSearch >
-                                    <Option key="1" value="1">1</Option>
-                                </Select>
-                            )}
-                        </FormItem>
-                        <FormItem {...this.formItemLayout} label="二级模块">
-                            {getFieldDecorator('version', {
-                                initialValue: detailData.version,
-                                rules: [{ required: false, message: '请填写version!' }],
-                            })(
-                                <Select style={{ width: 145 }}  showSearch >
-                                    <Option key="1" value="1">1</Option>
-                                </Select>
-                            )}
-                        </FormItem>
-                        <FormItem {...this.formItemLayout} label="三级模块">
-                            {getFieldDecorator('version', {
-                                initialValue: detailData.version,
-                                rules: [{ required: false, message: '请填写version!' }],
-                            })(
-                                <Select style={{ width: 145 }}  showSearch >
-                                    <Option key="1" value="1">1</Option>
-                                </Select>
-                            )}
-                        </FormItem>
+
                     </Row>
                     <Row>
                         <FormItem {...this.formItemLayout} label="接口路径">

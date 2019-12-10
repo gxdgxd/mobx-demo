@@ -16,7 +16,6 @@ class ApiManagerList extends Component {
         ]);
         this.props.ApiManagerStore.initData(1);
         this.props.CommonStore.getAllTags();
-        this.props.CommonStore.getAllCreators();
     }
     constructor(props){
         super(props);

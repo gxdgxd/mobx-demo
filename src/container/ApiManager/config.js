@@ -20,7 +20,9 @@ export const columns = (context) => [
                         <span>方法名：{record.apiMethodName}</span><br/>
                         <span>创建人：{record.creatorName}</span><br/>
                         <span>接口路径：{record.apiClassName}</span><br/>
-                        <span>更新时间：{record.editTimeStr}</span>
+                        <span>更新时间：{record.editTimeStr}</span><br/>
+                        <span>应用：{record.appName}</span><br/>
+                        <span>模块：{record.moduleName}</span>
                       </div>
             return (
                 <span>

@@ -162,8 +162,8 @@ class ApiManagerStore {
         if(typeof result.data.tags != "undefined" && result.data.tags != null){
             tags = toJS(result.data.tags)
         }
-        // this.tags = tags
-        this.tags = [{"id":1,"value":'123'}]
+        this.tags = tags
+        // this.tags = [{"id":1,"value":'123'}]
     }
 
     @action

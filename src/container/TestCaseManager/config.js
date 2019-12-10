@@ -31,6 +31,8 @@ export const columns = (context) => [
                         <span>接口路径：{record.testApi.apiClassName}</span><br/>
                         <span>方法名：{record.testApi.apiMethodName}</span><br/>
                         <span>接口名：{record.testApi.name}</span><br/>
+                        <span>应用：{record.appName}</span><br/>
+                        <span>模块：{record.moduleName}</span>
                       </div>
             return (
                 <span  >

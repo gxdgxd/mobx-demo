@@ -1,15 +1,11 @@
 import React, {Component} from 'react';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Table,Input,Tree,Row, Pagination} from 'antd';
+import { Table,Row, Pagination} from 'antd';
 import {columns} from './config';
 import SearchForm from './SearchForm';
 
-
-const { TextArea } = Input;
-const { TreeNode } = Tree;
-
-@inject('SceneManagerStore')
+@inject('SceneManagerStore','CommonStore')
 @observer
 class SceneManagerList extends Component {
     componentDidMount() {
@@ -18,6 +14,7 @@ class SceneManagerList extends Component {
             {name: '添加场景'}
         ]);
         this.props.SceneManagerStore.initData(1);
+        this.props.CommonStore.getAllCreators();
     }
     constructor(props){
         super(props);
@@ -30,11 +27,11 @@ class SceneManagerList extends Component {
     render(){
         const {dataSource,pageNo,pageSize,totalCount} = this.props.SceneManagerStore
         const mydataSource = dataSource.toJS()
-
+        const {allCreators} = this.props.CommonStore
         return(
             <div className="container-bg">
                 <Row>
-                    <SearchForm/>
+                    <SearchForm allCreators={allCreators}/>
                     <Table
                         bordered
                         columns={columns(this)} pagination={false}

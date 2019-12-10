@@ -46,7 +46,7 @@ export const initHttp = () => {
 
     HR.set({
         // 仅本地开发环境，使用自定义的env
-        //forceEnv: process.env.NODE_ENV === "development" ? env : undefined,
+        forceEnv: process.env.NODE_ENV === "development" ? env : undefined,
         domain: bizDomain,
         appKey,
         secretKey,

@@ -5,12 +5,14 @@ import { Button, Select,Icon, Row, Col, Form, Input } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-@inject('ApiManagerStore')
+@inject('ApiManagerStore','CommonStore')
 @observer
 class SearchForm extends Component{
     constructor(props){
         super(props);
         this.state={
+            data: [],
+            value: undefined,
         }
     }
 
@@ -23,7 +25,18 @@ class SearchForm extends Component{
     optionChange(n,v) {
         this.props.ApiManagerStore.changeTableRequestData(n,v || '');
     }
+    handleCreatorSearch = value => {
+        if (value) {
+            this.props.CommonStore.getAllCreators(value)
+        } else {
+            this.setState({ data: [] });
+        }
+    };
 
+    handleCreatorChange = value => {
+        this.setState({ value });
+        this.props.ApiManagerStore.changeTableRequestData('creatorId',value);
+    };
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.ApiManagerStore.initData(1);
@@ -33,6 +46,7 @@ class SearchForm extends Component{
         wrapperCol: { span: 19 },
     }
     render(){
+        const {allCreators} = this.props.CommonStore
         return (
             <Form  className="ant-advanced-search-form p-xs pb-0"  onSubmit={this.handleSubmit}>
                 <Row gutter={48}>
@@ -55,9 +69,19 @@ class SearchForm extends Component{
                 <Row gutter={48}>
                     <Col span={7}>
                         <FormItem {...this.formItemLayout} label="创建人">
-                            <Select name="creatorId" allowClear={true}  placeholder="请选择创建人搜索"
-                                    onChange={this.optionChange.bind(this,'creatorId')}>
-                                {this.props.allCreators.map(item => <Option key={item.id} value={item.value}>{item.value}</Option>)}
+                            <Select
+                                showSearch
+                                value={this.state.value}
+                                placeholder="请输入真名搜索(非花名)"
+                                style={this.props.style}
+                                defaultActiveFirstOption={false}
+                                showArrow={false}
+                                filterOption={false}
+                                onSearch={this.handleCreatorSearch}
+                                onChange={this.handleCreatorChange}
+                                notFoundContent={null}
+                            >
+                                {allCreators.map(d => <Option key={d.userId}>{d.realName}</Option>)}
                             </Select>
                         </FormItem>
                     </Col>

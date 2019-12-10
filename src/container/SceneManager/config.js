@@ -133,20 +133,14 @@ export const insertCaseColumns = (context) => [
         }
     },
     {
-        title: '创建人',
-        dataIndex: 'creatorName',
-        key: 'creatorName',
-        width:'12%'
-    },
-    {
         title: '更新时间',
         dataIndex: 'editTimeStr',
         key: 'editTimeStr',
-        width:'15%'
+        width:'17%'
     },
     {
         title: '操作',
-        width: '17%',
+        width: '18%',
         key: 'operation',
         render:(row,record) => {
             let updateHref = '/edit_testcase?apiId=' + record.apiId + "&caseId=" + record.id
@@ -154,10 +148,10 @@ export const insertCaseColumns = (context) => [
             return (
                 <span>
                     <Popconfirm title="确定从此场景中移除此用例吗？" onConfirm={() => context.deleteSceneCase(record.id)} >
-                      <a href="#">移除</a>&nbsp;
+                      <a href="#">移除用例</a>&nbsp;
                     </Popconfirm>
                     <a href={updateHref} target="_blank"  className="vLine"> 修改用例</a>&nbsp;
-                    <a href={apiHref} target="_blank"  className="vLine"> 接口</a>
+                    <a href={apiHref} target="_blank"  className="vLine"> 查看接口</a>
                 </span>
             )
         }
@@ -193,6 +187,7 @@ export const caseColumns = (context) => [
                 <span>接口路径：{record.testApi.apiClassName}</span><br/>
                 <span>方法名：{record.testApi.apiMethodName}</span><br/>
                 <span>接口名：{record.testApi.name}</span><br/>
+                <span>接口名：{record.moduleName}</span><br/>
             </div>
             return (
                 <span  >

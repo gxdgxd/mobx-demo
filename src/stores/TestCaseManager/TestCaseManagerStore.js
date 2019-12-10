@@ -46,7 +46,7 @@ class TestCaseManagerStore{
     @action
     async initData(pageNo,appId,moduleId) {
         this.treeParams = {'appId':appId,'moduleId':moduleId}
-        const params = {"query":{"apiId":this.tableRequestData.apiId,"appId":this.treeParams.appId,"moduleId":this.treeParams.moduleId,"name":this.tableRequestData.name,"pageNo":pageNo,"pageSize":10,"tagId":this.tableRequestData.tagId}}
+        const params = {"query":{"creatorId":this.tableRequestData.creatorId,"apiId":this.tableRequestData.apiId,"appId":this.treeParams.appId,"moduleId":this.treeParams.moduleId,"name":this.tableRequestData.name,"pageNo":pageNo,"pageSize":10,"tagId":this.tableRequestData.tagId}}
         console.log(JSON.stringify(params))
         const result = await post("1.0.0/hipac.api.test.case.queryCase",params)
         this.dataSource = result.data;

@@ -119,40 +119,10 @@ class InsertIndex extends Component {
                     <Alert message="接口信息" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px'}}/>
                     <Row>
                         <FormItem {...this.formItemLayout} label="应用名">
-                            {getFieldDecorator('version', {
-                                rules: [{ required: false, message: '请填写应用名!' }],
-                            })(
-                                <Select style={{ width: 145 }}  showSearch >
-                                    <Option key="1" value="1">1</Option>
-                                </Select>
-                            )}
+                            {detailData.appName}
                         </FormItem>
-                        <FormItem {...this.formItemLayout} label="一级模块">
-                            {getFieldDecorator('version', {
-                                rules: [{ required: false, message: '请填写一级模块!' }],
-                            })(
-                                <Select style={{ width: 145 }}  showSearch >
-                                    <Option key="1" value="1">1</Option>
-                                </Select>
-                            )}
-                        </FormItem>
-                        <FormItem {...this.formItemLayout} label="二级模块">
-                            {getFieldDecorator('version', {
-                                rules: [{ required: false, message: '请填写二级模块!' }],
-                            })(
-                                <Select style={{ width: 145 }}  showSearch >
-                                    <Option key="1" value="1">1</Option>
-                                </Select>
-                            )}
-                        </FormItem>
-                        <FormItem {...this.formItemLayout} label="三级模块">
-                            {getFieldDecorator('version', {
-                                rules: [{ required: false, message: '请填写三级模块!' }],
-                            })(
-                                <Select style={{ width: 145 }}  showSearch >
-                                    <Option key="1" value="1">1</Option>
-                                </Select>
-                            )}
+                        <FormItem {...this.formItemLayout} label="模块">
+                            {detailData.moduleName}
                         </FormItem>
                     </Row>
                     <Row>

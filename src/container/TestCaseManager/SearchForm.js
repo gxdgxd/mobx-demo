@@ -5,15 +5,19 @@ import {  Button, Select,Icon, Row, Col, Form, Input } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-@inject('TestCaseManagerStore')
+@inject('TestCaseManagerStore','CommonStore')
 @observer
 class SearchForm extends Component{
     constructor(props){
         super(props);
         this.state={
+            data: [],
+            value: undefined,
         }
     }
-
+    componentDidMount() {
+        this.props.CommonStore.getAllTags();
+    }
 
     inputChange(n,e) {
         this.props.TestCaseManagerStore.changeTableRequestData(n,e.target.value);
@@ -21,20 +25,31 @@ class SearchForm extends Component{
     optionChange(n,v) {
         this.props.TestCaseManagerStore.changeTableRequestData(n,v || '');
     }
-    handleSearch = (e) => {
-        e.preventDefault();
+    handleSearch = () => {
         this.props.TestCaseManagerStore.initData(1);
     }
+    handleCreatorSearch = value => {
+        if (value) {
+            this.props.CommonStore.getAllCreators(value)
+        } else {
+            this.setState({ data: [] });
+        }
+    };
 
+    handleCreatorChange = value => {
+        this.setState({ value });
+        this.props.TestCaseManagerStore.changeTableRequestData('creatorId',value);
+    };
     formItemLayout = {
         labelCol: { span: 5 },
         wrapperCol: { span: 19 },
     }
 
     render(){
+        const {allTags,allCreators} = this.props.CommonStore
 
         return (
-            <Form className="ant-advanced-search-form p-xs pb-0"  onSubmit={this.handleSearch}>
+            <Form className="ant-advanced-search-form p-xs pb-0" >
                 <Row gutter={48}>
                     <Col span={7}>
                         <FormItem {...this.formItemLayout} label="接口ID">
@@ -50,7 +65,7 @@ class SearchForm extends Component{
                         <FormItem {...this.formItemLayout} label="标签">
                             <Select name="tagId" allowClear={true} placeholder="请选择标签搜索"
                                     onChange={this.optionChange.bind(this,'tagId')}>
-                                {this.props.allTags.map(item => <Option key={item.id} value={item.id}>{item.value}</Option>)}
+                                {allTags.map(item => <Option key={item.id} value={item.id}>{item.value}</Option>)}
                             </Select>
                         </FormItem>
                     </Col>
@@ -58,9 +73,19 @@ class SearchForm extends Component{
                 <Row gutter={48}>
                     <Col span={7}>
                         <FormItem {...this.formItemLayout} label="创建人">
-                            <Select name="creatorId" allowClear={true}  placeholder="请选择创建人搜索"
-                                    onChange={this.optionChange.bind(this,'creatorId')}>
-                                {this.props.allCreators.map(item => <Option key={item.id} value={item.value}>{item.value}</Option>)}
+                            <Select
+                                showSearch
+                                value={this.state.value}
+                                placeholder="请输入真名搜索(非花名)"
+                                style={this.props.style}
+                                defaultActiveFirstOption={false}
+                                showArrow={false}
+                                filterOption={false}
+                                onSearch={this.handleCreatorSearch}
+                                onChange={this.handleCreatorChange}
+                                notFoundContent={null}
+                            >
+                                {allCreators.map(d => <Option key={d.userId}>{d.realName}</Option>)}
                             </Select>
                         </FormItem>
                     </Col>
@@ -75,11 +100,9 @@ class SearchForm extends Component{
                         </FormItem>
                     </Col>
                     <Col span={3} style={{'marginTop':'3px'}}>
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit" >
-                                <Icon type="search" /> 搜索
-                            </Button>
-                        </Form.Item>
+                        <Button type="primary"  onClick={this.handleSearch}>
+                            <Icon type="search" /> 搜索
+                        </Button>
                     </Col>
                 </Row>
             </Form>

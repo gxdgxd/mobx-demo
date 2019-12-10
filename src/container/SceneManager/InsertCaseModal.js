@@ -7,8 +7,7 @@ import common from "../../style/common.css";
 import {message} from "antd/lib/index";
 const FormItem = Form.Item;
 
-@inject('TestCaseManagerStore')
-@inject('SceneManagerStore')
+@inject('SceneManagerStore','TestCaseManagerStore')
 @observer
 class InsertCaseModal extends Component{
     componentDidMount() {
