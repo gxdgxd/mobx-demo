@@ -36,7 +36,7 @@
     "build-dev": "echo '请输入版本号' && read bv && yt-react-scripts build --env=dev --bv=${bv}",
     "test": "yt-react-scripts test",
     "eject": "yt-react-scripts eject",
-    "lint-es": "eslint --max-warnings 0 --ext .js,.jsx,.ts,.tsx ./src"
+    "lint-es": "eslint --ext .js,.jsx,.ts,.tsx ./src"
   },
   "eslintConfig": {
     "extends": "react-app"
