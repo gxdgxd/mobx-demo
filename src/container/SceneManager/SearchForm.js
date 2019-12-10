@@ -81,7 +81,7 @@ class SearchForm extends Component{
                     </Col>
                     <Col span={3} >
                         <Form.Item>
-                            <Button type="primary"  onClick={()=>{window.location.href="/insert_scene"}}><Icon type="plus" /> 添加场景</Button>
+                            <Button type="primary"  onClick={()=>{window.open("/insert_scene")}}><Icon type="plus" /> 添加场景</Button>
                         </Form.Item>
                     </Col>
                 </Row>

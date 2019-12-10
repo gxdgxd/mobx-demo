@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Table,Input,Tree,Row, Col} from 'antd';
+import { Table,Input,Tree,Row, Pagination} from 'antd';
 import {columns} from './config';
 import SearchForm from './SearchForm';
 
@@ -23,23 +23,23 @@ class SceneManagerList extends Component {
         super(props);
         this.state= {
         }
-
     }
-
+    onChangePage = page => {
+        this.props.SceneManagerStore.initData(page);
+    };
     render(){
-        const {dataSource} = this.props.SceneManagerStore
+        const {dataSource,pageNo,pageSize,totalCount} = this.props.SceneManagerStore
         const mydataSource = dataSource.toJS()
 
         return(
             <div className="container-bg">
                 <Row>
-
-                        <SearchForm/>
-                        <Table
-                            bordered
-                            columns={columns(this)}
-                            dataSource={mydataSource}  />
-
+                    <SearchForm/>
+                    <Table
+                        bordered
+                        columns={columns(this)} pagination={false}
+                        dataSource={mydataSource}  />
+                    <Pagination onChange={this.onChangePage} pageSize={pageSize} current={pageNo}  total={totalCount} style={{'marginTop':'6px','float':'right'}}/>
                 </Row>
             </div>
         )

@@ -14,9 +14,6 @@ class SearchForm extends Component{
     constructor(props){
         super(props);
         this.state={
-            groupId:'',
-            artifactId:'',
-            version:''
         }
     }
 
@@ -25,7 +22,6 @@ class SearchForm extends Component{
     }
 
     handleSearch = (e) => {
-
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {

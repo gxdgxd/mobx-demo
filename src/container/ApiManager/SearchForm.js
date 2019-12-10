@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Table, Button, Radio, Select,Icon, Row, Col, Form, DatePicker, Input, Modal } from 'antd';
+import { Button, Select,Icon, Row, Col, Form, Input } from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-
 
 @inject('ApiManagerStore')
 @observer
@@ -26,7 +25,6 @@ class SearchForm extends Component{
     }
 
     handleSubmit = (e) => {
-        debugger
         e.preventDefault();
         this.props.ApiManagerStore.initData(1);
     }
@@ -57,17 +55,17 @@ class SearchForm extends Component{
                 <Row gutter={48}>
                     <Col span={7}>
                         <FormItem {...this.formItemLayout} label="创建人">
-                            <Select name="creator" allowClear={true}  showSearch
-                                    onChange={this.optionChange.bind(this,'creator')}>
-                                {this.props.creatorList.map(item => <Option key={item} value={item}>{item}</Option>)}
+                            <Select name="creatorId" allowClear={true}  placeholder="请选择创建人搜索"
+                                    onChange={this.optionChange.bind(this,'creatorId')}>
+                                {this.props.allCreators.map(item => <Option key={item.id} value={item.value}>{item.value}</Option>)}
                             </Select>
                         </FormItem>
                     </Col>
                     <Col span={7}>
                         <FormItem {...this.formItemLayout} label="标签">
-                            <Select name="tag" allowClear={true}  showSearch
-                                    onChange={this.optionChange.bind(this,'tag')}>
-                                {this.props.tagsSearch.map(item => <Option key={item.id} value={item.id}>{item.value}</Option>)}
+                            <Select name="tagId" allowClear={true} placeholder="请选择标签搜索"
+                                    onChange={this.optionChange.bind(this,'tagId')}>
+                                {this.props.allTags.map(item => <Option key={item.id} value={item.id}>{item.value}</Option>)}
                             </Select>
                         </FormItem>
                     </Col>
@@ -80,7 +78,7 @@ class SearchForm extends Component{
                     </Col>
                     <Col span={3} >
                         <Form.Item>
-                            <Button type="primary"  onClick={()=>{window.location.href="/insert_api"}}><Icon type="plus" /> 添加接口</Button>
+                            <Button type="primary"  onClick={()=>{window.open("/insert_api")}}><Icon type="plus" /> 添加接口</Button>
                         </Form.Item>
                     </Col>
                 </Row>

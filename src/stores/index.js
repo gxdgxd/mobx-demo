@@ -3,11 +3,15 @@ import TestCaseManagerStore from './TestCaseManager/TestCaseManagerStore';
 import GlobalManagerStore from './GlobalManager/GlobalManagerStore';
 import SceneManagerStore from './SceneManager/SceneManagerStore';
 import ExeRecordStore from './ExeRecord/ExeRecordStore';
+import CommonStore from './Common/CommonStore'
+import TreeManagerStore from './TreeManager/TreeManagerStore'
 
 export {
     ApiManagerStore,
     TestCaseManagerStore,
     GlobalManagerStore,
     SceneManagerStore,
-    ExeRecordStore
+    ExeRecordStore,
+    CommonStore,
+    TreeManagerStore
 }

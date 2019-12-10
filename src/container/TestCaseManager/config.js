@@ -45,13 +45,13 @@ export const columns = (context) => [
         title: '优先级',
         dataIndex: 'priority',
         key: 'priority',
-        width:'7%'
+        width:'8%'
     },
     {
         title: '接口ID',
         dataIndex: 'apiId',
         key: 'apiId',
-        width:'7%',
+        width:'8%',
     },
     {
         title: '方法名称',
@@ -67,22 +67,15 @@ export const columns = (context) => [
             )
         }
     },
-
-    {
-        title: '创建人',
-        dataIndex: 'creatorName',
-        key: 'creatorName',
-        width:'8%'
-    },
     {
         title: '更新时间',
         dataIndex: 'editTimeStr',
         key: 'editTimeStr',
-        width:'10%'
+        width:'20%'
     },
     {
         title: '操作',
-        width: '20%',
+        width: '23%',
         key: 'operation',
         render:(row,record) => {
             let insertHref = '/edit_testcase?apiId=' + record.apiId

@@ -38,3 +38,11 @@
 .vLine {
     border-left: solid 2px #ccc;
 }
+.ant-modal-footer{
+    margin-top: 26px;
+    padding: 8px 16px;
+    text-align: right;
+    background: transparent;
+    border-top: 1px solid #e8e8e8;
+    border-radius: 0 0 4px 4px;
+}

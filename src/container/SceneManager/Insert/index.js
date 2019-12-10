@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Table, Button, Tag, Select,Icon, Row, Col, Form, Input, Modal } from 'antd';
-import { DndProvider, DragSource, DropTarget } from 'react-dnd';
+import { Table, Button, Tag, Select,Icon, Row, Col, Form, Input } from 'antd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import update from 'immutability-helper';
+import { DndProvider} from 'react-dnd';
 
-import {insertColumns} from '../config';
+import update from 'immutability-helper';
+import InsertCaseModal from '../InsertCaseModal'
+import {DragableBodyRow} from '../DragableBodyRow'
+import {insertCaseColumns} from '../config';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-
-const { TextArea } = Input;
 @inject('TestCaseManagerStore')
 @inject('SceneManagerStore')
 @observer
@@ -21,11 +21,6 @@ class InsertIndex extends Component {
             {name: '场景管理'},
             {name: '添加场景'}
         ]);
-        this.props.SceneManagerStore.initData(1);
-
-        this.setState({
-            data:this.props.SceneManagerStore.insertDataSource.toJS()
-        })
     }
     constructor(props){
         super(props);
@@ -45,29 +40,32 @@ class InsertIndex extends Component {
      */
     moveRow = (dragIndex, hoverIndex) => {
         debugger
-        const data = this.state.data
+        const data = this.props.SceneManagerStore.caseDataSource.toJS()
         const dragRow = data[dragIndex];
-
-        this.setState(
-            update(this.state, {
-                data: {
-                    $splice: [[dragIndex, 1], [hoverIndex, 0, dragRow]],
-                },
-            }),
-        );
+        const newData =  update(data,  {$splice: [[dragIndex, 1], [hoverIndex, 0, dragRow]]});
+        this.props.SceneManagerStore.orderCase(newData)
     };
     inputChange(n,e) {
         this.props.SceneManagerStore.changeTableRequestData(n,e.target.value);
     }
-
+    optionChange(n,v,Option) {
+        this.props.SceneManagerStore.changeTableRequestData(n,v.toString() || '');
+    }
     handleSubmit = (e) => {
         debugger
         e.preventDefault();
-        this.props.SceneManagerStore.initData(1);
+        this.props.form.validateFieldsAndScroll((err, values) => {
+            if (!err) {
+                this.props.SceneManagerStore.insertScene();
+            }
+        });
     }
 
     showInsertCaseModal(){
         this.props.SceneManagerStore.showInsertCaseModal()
+    }
+    deleteSceneCase(caseId){
+        this.props.SceneManagerStore.deleteSceneCase(caseId)
     }
     formItemLayout = {
         labelCol: { span: 5 },
@@ -75,49 +73,68 @@ class InsertIndex extends Component {
     }
 
     render(){
-        const {insertDataSource,insertCaseModalVisible} = this.props.SceneManagerStore
-        const {dataSource} = this.props.TestCaseManagerStore
-        const mydataSource = insertDataSource.toJS()
-
+        const {insertCaseModalVisible,caseDataSource} = this.props.SceneManagerStore
+        const { getFieldDecorator } = this.props.form;
         return(
             <div style={{width:'96%',marginLeft:'25px'}}>
                 <Form  className="ant-advanced-search-form p-xs pb-0"  onSubmit={this.handleSubmit}>
                     <Row gutter={48}>
                         <Col span={7}>
                             <FormItem {...this.formItemLayout} label="场景名">
-                                <Input placeholder="请输入场景名" onChange={this.inputChange.bind(this,'name')}/>
+                                {getFieldDecorator('name', {
+                                    rules: [{ required: true, message: '请输入场景名!' }],
+                                })(
+                                    <Input placeholder="请输入场景名"  style={{ width: 200 }} onChange={this.inputChange.bind(this,'name')}/>
+                                )}
                             </FormItem>
                         </Col>
                         <Col span={7}>
-                            <FormItem {...this.formItemLayout} label="场景环境">
-                                <Input placeholder="请输入场景环境" onChange={this.inputChange.bind(this,'env')}/>
+                            <FormItem {...this.formItemLayout} label="环境">
+                                {getFieldDecorator('env', {
+                                    rules: [{ required: true, message: '请输入环境!' }],
+                                })(
+                                    <Input placeholder="请输入场景环境"  style={{ width: 200 }}  onChange={this.inputChange.bind(this,'env')}/>
+                                )}
+
                             </FormItem>
                         </Col>
-                        <Col span={7}>
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit" >
-                                    添加场景
-                                </Button> &nbsp; &nbsp; &nbsp;
-                                <Button type="primary" >
-                                    执行场景
-                                </Button>  &nbsp; &nbsp; &nbsp;
-                                <Button  onClick={()=>{window.location.href="/testcase_manager"}}>追加用例</Button>
-                            </Form.Item>
+                        <Col span={8}>
+                            <FormItem {...this.formItemLayout} label="执行方式">
+                                <Select defaultValue="顺序执行" style={{ width: 130 }} onChange={this.optionChange.bind(this,'scheduleType')}>
+                                    <Option value="0">顺序执行</Option>
+                                    <Option value="1">并行执行</Option>
+                                </Select>
+                               &nbsp; &nbsp;
+                                <Button type="primary" onClick={this.showInsertCaseModal.bind(this)} >追加用例</Button>
+                                <InsertCaseModal insertCaseModalVisible={insertCaseModalVisible}></InsertCaseModal>
+                            </FormItem>
                         </Col>
                     </Row>
-                    <Row gutter={48}>
-                        <Tag color="purple" style={{'marginBottom':'8px'}}> <Icon type="smile" /> 上下拖拽可以移动表格中用例顺序 </Tag>
 
+                    <Row gutter={48}>
+                        <Tag color="purple" style={{'marginBottom':'8px'}}>  <Icon type="smile" /> 上下拖拽可以移动表格中用例顺序哦～  </Tag>
                         <DndProvider backend={HTML5Backend}>
                             <Table
                                 bordered
-                                columns={insertColumns(this)}
-                                dataSource={this.state.data} components={this.components}
+                                columns={insertCaseColumns(this)}
+                                dataSource={caseDataSource.toJS()} components={this.components}
                                 onRow={(record, index) => ({
                                     index,
                                     moveRow: this.moveRow,
                                 })} />
                         </DndProvider>
+                    </Row>
+                    <Row style={{'marginTop':'6px'}}>
+                        <Col span={7}>
+                            <Form.Item>
+                                <Button type="primary" htmlType="submit" >
+                                    保存此场景数据
+                                </Button> &nbsp; &nbsp; &nbsp;
+                                <Button type="primary" >
+                                    执行场景
+                                </Button>  &nbsp; &nbsp; &nbsp;
+                            </Form.Item>
+                        </Col>
                     </Row>
                 </Form>
             </div>
@@ -126,64 +143,3 @@ class InsertIndex extends Component {
 }
 
 export default Form.create()(InsertIndex)
-
-let dragingIndex = -1;
-class BodyRow extends React.Component {
-    render() {
-        const { isOver, connectDragSource, connectDropTarget, moveRow, ...restProps } = this.props;
-        const style = { ...restProps.style, cursor: 'move' };
-
-        let { className } = restProps;
-        if (isOver) {
-            if (restProps.index > dragingIndex) {
-                className += ' drop-over-downward';
-            }
-            if (restProps.index < dragingIndex) {
-                className += ' drop-over-upward';
-            }
-        }
-
-        return connectDragSource(
-            connectDropTarget(<tr {...restProps} className={className} style={style} />),
-        );
-    }
-}
-
-const rowSource = {
-    beginDrag(props) {
-        dragingIndex = props.index;
-        return {
-            index: props.index,
-        };
-    },
-};
-
-const rowTarget = {
-    drop(props, monitor) {
-        const dragIndex = monitor.getItem().index;
-        const hoverIndex = props.index;
-
-        // Don't replace items with themselves
-        if (dragIndex === hoverIndex) {
-            return;
-        }
-
-        // Time to actually perform the action
-        props.moveRow(dragIndex, hoverIndex);
-
-        // Note: we're mutating the monitor item here!
-        // Generally it's better to avoid mutations,
-        // but it's good here for the sake of performance
-        // to avoid expensive index searches.
-        monitor.getItem().index = hoverIndex;
-    },
-};
-
-const DragableBodyRow = DropTarget('row', rowTarget, (connect, monitor) => ({
-    connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
-}))(
-    DragSource('row', rowSource, connect => ({
-        connectDragSource: connect.dragSource(),
-    }))(BodyRow),
-);

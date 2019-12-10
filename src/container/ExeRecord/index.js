@@ -40,7 +40,7 @@ class ExeRecordIndex extends Component {
             <div className="container-bg">
                 <Form  className="ant-advanced-search-form p-xs pb-0"  onSubmit={this.handleSubmit}>
                     <Row gutter={48}>
-                        <Col span={8}>
+                        <Col span={9}>
                             时间：
                                 <RangePicker
                                     ranges={{
@@ -50,8 +50,11 @@ class ExeRecordIndex extends Component {
                                     onChange={this.onChange}
                                 />
                         </Col>
-                        <Col span={8}>
-                            创建人：
+                        <Col span={5}>
+                            场景ID：<Input placeholder="请输入场景ID" style={{'width':'130px'}} onChange={this.inputChange.bind(this,'testSceneId')}/>
+                        </Col>
+                        <Col span={5}>
+                            执行环境：<Input placeholder="请输入执行环境" style={{'width':'130px'}}onChange={this.inputChange.bind(this,'env')}/>
                         </Col>
                         <Col span={3}>
                             <Button type="primary" htmlType="submit" >

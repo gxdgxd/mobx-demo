@@ -22,10 +22,11 @@ const routers = [
     { path: '/update_api', component: lazy(() => import('../container/ApiManager/Update')), exact: true, title: '修改接口' },
 
     { path: '/testcase_manager', component: lazy(() => import('../container/TestCaseManager')), exact: true, title: '用例管理' },
-    { path: '/edit_testcase', component: lazy(() => import('../container/TestCaseManager/Insert')), exact: true, title: '添加用例' },
+    { path: '/edit_testcase', component: lazy(() => import('../container/TestCaseManager/Insert')), exact: true, title: '编辑用例' },
 
     { path: '/scene_manager', component: lazy(() => import('../container/SceneManager')), exact: true, title: '场景管理' },
     { path: '/insert_scene', component: lazy(() => import('../container/SceneManager/Insert')), exact: true, title: '添加场景' },
+    { path: '/update_scene', component: lazy(() => import('../container/SceneManager/Update')), exact: true, title: '修改场景' },
 
     { path: '/global_manager', component: lazy(() => import('../container/GlobalManager')), exact: true, title: '变量管理' },
 

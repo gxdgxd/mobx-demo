@@ -4,11 +4,10 @@ import axios from 'axios';
 import { message,Tag } from 'antd';
 import { TweenOneGroup } from 'rc-tween-one';
 import {post} from '../../utils/http'
-import {getUrlParam} from "../../utils/common";
+import {getUrlParam,removeUrlParam} from "../../utils/common";
 
 class ApiManagerStore {
     @observable dataSource = [];
-    @observable treeModalVisible = false;
     @observable creatorList = ['张三','李四'];
     @observable tags = [];
     @observable tagsSearch = [];
@@ -17,6 +16,8 @@ class ApiManagerStore {
     @observable totalCount = 0
     @observable pageSize = 0
     @observable pageNo = 0
+    @observable treeParams = {'appId':'','moduleId':'','appName':'','moduleName':''}
+
     //查询条件
     @observable tableRequestData = {
         apiClassName:null,
@@ -36,9 +37,13 @@ class ApiManagerStore {
     }
 
     @action
-    async initData(pageNo) {
-
-        var testdata = {"query":{"apiClassName":this.tableRequestData.apiClassName,"apiMethodName":this.tableRequestData.apiMethodName,"appId":this.tableRequestData.appId,"creatorId":this.tableRequestData.creatorId,"id":this.tableRequestData.id,"moduleId":null,"pageNo":pageNo,"pageSize":10,"tagIds":this.tableRequestData.tagIds}}
+    async initData(pageNo,appId,moduleId) {
+        this.treeParams = {'appId':appId,'moduleId':moduleId}
+        let apiId = getUrlParam('apiId',window.location.search);
+        if(apiId != ""){
+            this.tableRequestData.id = apiId
+        }
+        var testdata = {"query":{"name":this.tableRequestData.name,"creatorId":this.tableRequestData.creatorId,"apiMethodName":this.tableRequestData.apiMethodName,"appId":this.treeParams.appId,"id":this.tableRequestData.id,"moduleId":this.treeParams.moduleId,"pageNo":pageNo,"pageSize":10,"tagId":this.tableRequestData.tagId}}
         const result = await post("1.0.0/hipac.api.test.api.queryApi",testdata)
 
         console.log(result)
@@ -46,6 +51,7 @@ class ApiManagerStore {
         this.pageNo = result.pageNo;
         this.pageSize = result.pageSize;
         this.totalCount = result.totalCount;
+        removeUrlParam("apiId")
     }
 
     /**
@@ -110,7 +116,14 @@ class ApiManagerStore {
     @action
     async insertApi(data){
 
-        console.log(data)
+        if(this.treeParams.appId == ""){
+            message.warn("请在左侧树状菜单中选择该接口归属的应用")
+            return
+        }
+        if(typeof this.treeParams.moduleId == "undefined"){
+            message.warn("请在左侧树状菜单中选择该接口归属的模块")
+            return
+        }
         var array = []
         for (let i = 0; i < data.length; i++) {
             if(data[i].name == "" || data[i].name == null){
@@ -126,7 +139,8 @@ class ApiManagerStore {
             obj.type = data[i].type
             array.push(obj)
         }
-        const params = {"saveForms":array,"gav":{"artifactId":this.tableRequestData.artifactId,"groupId":this.tableRequestData.groupId,"version":this.tableRequestData.version},"appId":1,"moduleId":1}
+
+        const params = {"saveForms":array,"appId":this.treeParams.appId,"moduleId":this.treeParams.moduleId,"gav":{"artifactId":this.tableRequestData.artifactId,"groupId":this.tableRequestData.groupId,"version":this.tableRequestData.version}}
         const result = await post("1.0.0/hipac.api.test.api.batchAddApi",params)
         console.log(result)
         if(result.code == 200){
@@ -153,25 +167,15 @@ class ApiManagerStore {
     }
 
     @action
-    hideTreeModal (){
-        this.treeModalVisible = false;
-    }
-
-    @action
-    showTreeModal (){
-        debugger
-        this.treeModalVisible = true;
-    }
-    @action
-    saveTreeData(){
-        this.treeModalVisible = false;
-    }
-
-    @action
     async insertTag(value) {
         const result = await post("1.0.0/hipac.api.test.tag.saveTag",{value:value})
         let obj = {'id':result.data,'value':value}
         this.tags.push(obj)
+    }
+
+    @action
+    async setTreeParams(appId,moduleId,appName,moduleName) {
+        this.treeParams = {'appId':appId,'moduleId':moduleId,'appName':appName,'moduleName':moduleName}
     }
 }
 

@@ -13,7 +13,11 @@ class InsertModal extends Component{
     }
 
     okModal(){
-        this.props.GlobalManagerStore.update(this.state);
+        this.props.form.validateFieldsAndScroll((err, values) => {
+            if (!err) {
+                this.props.GlobalManagerStore.update();
+            }
+        });
     }
 
     hideModal(){
@@ -31,18 +35,6 @@ class InsertModal extends Component{
         this.props.GlobalManagerStore.changeDetailData(n,e.target.value);
     }
 
-    /**
-     * 修改参数
-     * @param e
-     */
-    handleSubmit = (e) => {
-        e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
-                this.props.GlobalManagerStore.update();
-            }
-        });
-    }
 
     formItemLayout = {
         labelCol: { span: 5 },

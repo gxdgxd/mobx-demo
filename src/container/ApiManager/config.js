@@ -67,7 +67,7 @@ export const columns = (context) => [
     },
     {
         title: '操作',
-        width: '21%',
+        width: '22%',
         key: 'operation',
         render:(row,record) => {
             let updateHref = "/update_api?apiId=" + record.id
@@ -105,7 +105,17 @@ export const insertColumns = (context) => [
         title: '方法名',
         dataIndex: 'apiMethodName',
         key: 'apiMethodName',
-        width:'19%'
+        width:'16%',
+        render:function(text, record){
+            var name = record.apiMethodName.length > 14 ? record.apiMethodName.substr(0,14) + '...' : record.apiMethodName;
+            return (
+                <span  >
+                    <Popover content={record.apiMethodName} >
+                        {name}
+                    </Popover>
+                </span>
+            )
+        }
     },
     {
         title: '接口名',

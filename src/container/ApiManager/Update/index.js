@@ -107,14 +107,6 @@ class DetailIndex extends Component{
                                 <Input disabled style={{ width: 190 }} value={detailData.groupId}/>
                             )}
                         </FormItem>
-                        <FormItem {...this.formItemLayout} label="version">
-                            {getFieldDecorator('version', {
-                                initialValue: detailData.version,
-                                rules: [{ required: true, message: '请填写version!' }],
-                            })(
-                                <Input disabled style={{ width: 190 }} value={detailData.version}/>
-                            )}
-                        </FormItem>
                     </Row>
                     <Alert message="接口信息" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px'}}/>
                     <Row>

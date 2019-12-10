@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Table, Button,Tag, Alert,Tree, message, Row, Col, Form, DatePicker, Input, Modal,Icon,Upload, } from 'antd';
+import { Table, Button,Tag, Alert, message, Row, Col, Form, Input,Icon, } from 'antd';
 import SearchForm from './SearchForm';
 import {insertColumns} from "../config";
+import TreeManager from '../../TreeManager/TreeManager';
 
-const { TreeNode } = Tree;
 const FormItem = Form.Item;
 
 message.config({
@@ -109,8 +109,6 @@ class Index extends Component{
     }
 
     render(){
-        const {insertDataSource} = this.props.ApiManagerStore
-
         //可编辑单元格
         const components = {
             body: {
@@ -147,30 +145,25 @@ class Index extends Component{
             }
         };
 
-        return (
+        const {insertDataSource,treeParams} = this.props.ApiManagerStore
 
+        console.log(treeParams.appId)
+        return (
             <div className="container-bg">
                 <Row>
                     <Col span={4}>
-                        <Tree
-                            defaultExpandedKeys={['0-0-0', '0-0-1']}
-                            defaultSelectedKeys={['0-0-0', '0-0-1']}
-                            defaultCheckedKeys={['0-0-0', '0-0-1']}
-                            onSelect={this.onSelect}
-                            onCheck={this.onCheck}
-                            >
-                            <TreeNode title="parent 1" key="0-0">
-                                <TreeNode title="parent 1-0" key="0-0-0" >
-                                    <TreeNode title="leaf" key="0-0-0-0"  />
-                                    <TreeNode title="leaf" key="0-0-0-1" />
-                                </TreeNode>
-                            </TreeNode>
-                        </Tree>
+                        <TreeManager pageType="insertApi" maxHeight="870px"/>
                     </Col>
                     <Col span={20}>
                         <SearchForm/>
                         <Alert message="接口信息" type="info" style={{backgroundColor:'#c7e7ff',border:'0px',marginBottom:'13px'}}/>
                         <Button type="primary" style={{marginBottom:'10px'}}   onClick={() => this.batchInsertApi()}><Icon type="plus" /> 批量添加</Button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <Tag color="geekblue" style={{display: treeParams.appName != "" && typeof treeParams.appName != 'undefined'  ? "" : "none"}}>
+                            <span style={{display: treeParams.appName != "" && typeof treeParams.appName != 'undefined'  ? "" : "none"}}>接口归属应用：{treeParams.appName}</span>
+                            <span style={{display: treeParams.moduleName != ""  && typeof treeParams.moduleName != 'undefined' ? "" : "none"}}>，接口归属模块：{treeParams.moduleName}</span>
+                            <span>（点击左侧切换筛选）</span>
+                        </Tag>
                         <Table components={components} rowClassName={() => 'editable-row'}
                             bordered
                             columns={columnsValue}
@@ -218,7 +211,6 @@ class EditableCellForm extends React.Component {
                 return;
             }
             this.toggleEdit();
-            debugger
             handleSave({ ...record, ...values });
         });
     };

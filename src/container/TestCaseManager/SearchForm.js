@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Table, Button, Radio, Select,Icon, Row, Col, Form, DatePicker, Input, Modal } from 'antd';
+import {  Button, Select,Icon, Row, Col, Form, Input } from 'antd';
 
 const FormItem = Form.Item;
-
+const Option = Select.Option;
 
 @inject('TestCaseManagerStore')
 @observer
@@ -14,15 +14,14 @@ class SearchForm extends Component{
         }
     }
 
-    componentDidMount() {
-    }
 
     inputChange(n,e) {
         this.props.TestCaseManagerStore.changeTableRequestData(n,e.target.value);
     }
-
+    optionChange(n,v) {
+        this.props.TestCaseManagerStore.changeTableRequestData(n,v || '');
+    }
     handleSearch = (e) => {
-        debugger
         e.preventDefault();
         this.props.TestCaseManagerStore.initData(1);
     }
@@ -33,6 +32,7 @@ class SearchForm extends Component{
     }
 
     render(){
+
         return (
             <Form className="ant-advanced-search-form p-xs pb-0"  onSubmit={this.handleSearch}>
                 <Row gutter={48}>
@@ -46,6 +46,34 @@ class SearchForm extends Component{
                             <Input placeholder="请输入用例名" onChange={this.inputChange.bind(this,'name')}/>
                         </FormItem>
                     </Col>
+                    <Col span={7}>
+                        <FormItem {...this.formItemLayout} label="标签">
+                            <Select name="tagId" allowClear={true} placeholder="请选择标签搜索"
+                                    onChange={this.optionChange.bind(this,'tagId')}>
+                                {this.props.allTags.map(item => <Option key={item.id} value={item.id}>{item.value}</Option>)}
+                            </Select>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row gutter={48}>
+                    <Col span={7}>
+                        <FormItem {...this.formItemLayout} label="创建人">
+                            <Select name="creatorId" allowClear={true}  placeholder="请选择创建人搜索"
+                                    onChange={this.optionChange.bind(this,'creatorId')}>
+                                {this.props.allCreators.map(item => <Option key={item.id} value={item.value}>{item.value}</Option>)}
+                            </Select>
+                        </FormItem>
+                    </Col>
+                    <Col span={7}>
+                        <FormItem {...this.formItemLayout} label="优先级">
+                            <Select  placeholder="请选择优先级搜索" onChange={this.optionChange.bind(this,'priority')}>
+                                <Option value="1">1</Option>
+                                <Option value="2">2</Option>
+                                <Option value="3">3</Option>
+                                <Option value="4">4</Option>
+                            </Select>
+                        </FormItem>
+                    </Col>
                     <Col span={3} style={{'marginTop':'3px'}}>
                         <Form.Item>
                             <Button type="primary" htmlType="submit" >
@@ -53,11 +81,6 @@ class SearchForm extends Component{
                             </Button>
                         </Form.Item>
                     </Col>
-
-                </Row>
-                <Row gutter={48}>
-
-
                 </Row>
             </Form>
         )

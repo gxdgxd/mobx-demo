@@ -13,7 +13,11 @@ class InsertModal extends Component{
     }
 
     okModal(){
-        this.props.GlobalManagerStore.insert(this.state);
+        this.props.form.validateFieldsAndScroll((err, values) => {
+            if (!err) {
+                this.props.GlobalManagerStore.insert();
+            }
+        });
     }
 
     hideModal(){
@@ -28,22 +32,9 @@ class InsertModal extends Component{
     inputChange(n,e) {
         let obj={};
         obj[n]=e.target.value;
-        this.setState(obj);
         this.props.GlobalManagerStore.changeTableRequestData(n,e.target.value);
     }
 
-    /**
-     * 添加参数
-     * @param e
-     */
-    handleSubmit = (e) => {
-        e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
-                this.props.GlobalManagerStore.insert();
-            }
-        });
-    }
 
     formItemLayout = {
         labelCol: { span: 5 },
@@ -64,7 +55,7 @@ class InsertModal extends Component{
                 okText="保存"
                 cancelText="取消"
                 className="model">
-                <Form  className="ant-advanced-search-form p-xs pb-0" onSubmit={this.handleSubmit}>
+                <Form  className="ant-advanced-search-form p-xs pb-0" >
                     <FormItem {...this.formItemLayout} label="参数名">
                         {getFieldDecorator('name', {
                             rules: [{ required: true, message: '请填写参数名!' }],
@@ -80,11 +71,11 @@ class InsertModal extends Component{
                         )}
                     </FormItem>
                     <FormItem {...this.formItemLayout} label="参数类型">
-                        {getFieldDecorator('var_type', {
+                        {getFieldDecorator('varType', {
                             initialValue: 0,
                             rules: [{ required: true, message: '请选择参数类型!' }],
                         })(
-                            <Radio.Group onChange={this.inputChange.bind(this,'var_type')}>
+                            <Radio.Group onChange={this.inputChange.bind(this,'varType')}>
                                 <Radio value={0}>常量</Radio>
                                 <Radio value={1}>闭包</Radio>
                             </Radio.Group>

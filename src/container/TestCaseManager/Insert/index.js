@@ -23,6 +23,10 @@ class InsertIndex extends Component {
         if(caseId != ""){
             this.props.TestCaseManagerStore.getDetailData()
         }
+        // this.setState({
+        //     json_str:this.props.TestCaseManagerStore.caseDetailData.paramScript
+        // })
+
     }
     constructor(props) {
         super(props);
@@ -95,14 +99,14 @@ class InsertIndex extends Component {
      * @param add
      */
     handleAdd = (add) => {
-        this.props.TestCaseManagerStore.changeDetailData("paramScript",add.updated_src);
+        this.props.TestCaseManagerStore.changeDetailData("paramScript",JSON.stringify(add.updated_src));
     }
     handleEdit = (add) => {
         debugger
-        this.props.TestCaseManagerStore.changeDetailData("paramScript",add.updated_src);
+        this.props.TestCaseManagerStore.changeDetailData("paramScript",JSON.stringify(add.updated_src));
     }
     handleDelete = (add) => {
-        this.props.TestCaseManagerStore.changeDetailData("paramScript",add.updated_src);
+        this.props.TestCaseManagerStore.changeDetailData("paramScript",JSON.stringify(add.updated_src));
     }
     render(){
         const { getFieldDecorator} = this.props.form;
@@ -251,7 +255,9 @@ class InsertIndex extends Component {
                             <ReactJson src={detailData.argsJsonFormat} onAdd={this.handleAdd} onEdit={this.handleEdit} onDelete={this.handleDelete}   theme="google" style={{border:'1px solid #ccc','maxHeight':'325px','overflow-y':'auto' }}/>
                         </div>
                         <div style={{float:'right',width:'49%'}}>
-                            <TextArea value={JSON.stringify(detailData.argsJsonFormat)} disabled  rows={15} style={{'width':'1300px'}} />
+
+                            <TextArea value={caseDetailData.paramScript}  rows={15} style={{'width':'1300px'}} onChange={this.inputChange.bind(this,'paramScript')}/>
+
                         </div>
                     </Row>
                     <Alert message="其他参数（dubbo rpc parameter）" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px'}}/>
@@ -272,7 +278,7 @@ class InsertIndex extends Component {
                                 initialValue: caseDetailData.validScript,
                                 rules: [{ required: true, message: '请填写用例校验规则!' }],
                             })(
-                                <TextArea rows={3} style={{ width: 1210 }} placeholder="如：result != null  && result.data != null && result.data.size() > 0 && result.data.id == $p.result.id" onChange={this.inputChange.bind(this,'validScript')}/>
+                                <TextArea rows={4} style={{ width: 1210 }} placeholder="如：result != null  && result.data != null && result.data.size() > 0 && result.data.id == $p.result.id" onChange={this.inputChange.bind(this,'validScript')}/>
                             )}
                         </FormItem>
                     </Row>
@@ -287,7 +293,7 @@ class InsertIndex extends Component {
                             <Button type="primary" htmlType="submit" style={{marginBottom:'8px'}} onClick={()=>{window.open("/edit_testcase?type=copy&apiId=" + apiId + "&caseId=" + caseId)}}>复制用例</Button>
                         </FormItem>
                         <FormItem {...this.formItemLayout} label="">
-                            <Button type="primary" htmlType="submit" style={{marginBottom:'8px'}}>只测试不保存</Button>
+                            <Button type="primary" htmlType="submit"  style={{marginBottom:'8px'}}>只测试不保存</Button>
                         </FormItem>
                         <FormItem {...this.formItemLayout} label="">
                             <Input style={{ width: 280 }} placeholder="请输入测试用的dubbo分组"/>
