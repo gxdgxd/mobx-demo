@@ -4,23 +4,18 @@ import ReactJson from 'react-json-view'
 export const columns = (context) => [
     {
         title: 'ID',
-        dataIndex: 'id',
-        key: 'id',
+        dataIndex: 'testSceneId',
+        key: 'testSceneId',
     },
     {
         title: '场景名称',
-        dataIndex: 'name',
-        key: 'name'
-    },
-    {
-        title: '用例组',
-        dataIndex: 'apiMethodName',
-        key: 'apiMethodName',
+        dataIndex: 'testSceneName',
+        key: 'testSceneName'
     },
     {
         title: '执行时间',
-        dataIndex: 'apiMethodName',
-        key: 'apiMethodName',
+        dataIndex: 'exeTimeStr',
+        key: 'exeTimeStr',
     },
     {
         title: '环境',
@@ -29,23 +24,41 @@ export const columns = (context) => [
     },
     {
         title: '总用例数',
-        dataIndex: 'env',
-        key: 'env',
+        dataIndex: 'testCaseCount',
+        key: 'testCaseCount',
     },
     {
         title: '成功数',
-        dataIndex: 'env',
-        key: 'env',
+        dataIndex: 'succeedCount',
+        key: 'succeedCount',
     },
     {
         title: '失败数',
-        dataIndex: 'env',
-        key: 'env',
+        dataIndex: 'failedCount',
+        key: 'failedCount',
     },
     {
-        title: '创建人',
-        dataIndex: 'creatorName',
-        key: 'creatorName',
+        title: '操作人',
+        dataIndex: 'operatorName',
+        key: 'operatorName',
+    },
+    {
+        title: '执行状态',
+        dataIndex: 'status',
+        key: 'status',
+        render: (row) => {
+            let name = ""
+            if(row == "0"){
+                name = "待执行"
+            }else if(row == "1"){
+                name = "执行中"
+            }else if(row == "2"){
+                name = "已完成"
+            }
+            return (
+                <span>{name}</span>
+            )
+        }
     },
     {
         title: '操作',

@@ -92,7 +92,7 @@ class ExeRecordIndex extends Component {
                     </Row>
                     <Row gutter={48}>
                         <Col span={8}>
-                            <FormItem {...this.formItemLayout} label="创建人">
+                            <FormItem {...this.formItemLayout} label="操作人">
                                 <Select
                                     showSearch
                                     value={this.state.value}
