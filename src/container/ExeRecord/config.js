@@ -1,5 +1,5 @@
 import React  from 'react';
-import { Icon,Popconfirm,Popover} from 'antd';
+import { Icon,Popconfirm,Popover,Tag} from 'antd';
 import ReactJson from 'react-json-view'
 export const columns = (context) => [
     {
@@ -50,14 +50,20 @@ export const columns = (context) => [
             let name = ""
             if(row == "0"){
                 name = "待执行"
+                return (
+                    <span><Tag color="orange">{name}</Tag></span>
+                )
             }else if(row == "1"){
                 name = "执行中"
+                return (
+                    <span><Tag color="blue">{name}</Tag></span>
+                )
             }else if(row == "2"){
                 name = "已完成"
+                return (
+                    <span><Tag color="green">{name}</Tag></span>
+                )
             }
-            return (
-                <span>{name}</span>
-            )
         }
     },
     {
@@ -65,11 +71,10 @@ export const columns = (context) => [
         width: '10%',
         key: 'operation',
         render:(row,record) => {
-            let href = "/api_detail?id=" + record.id
             return (
                 <div>
                     <span>
-                        <a onClick={context.showModal.bind(context,record)}>详情</a> &nbsp;
+                        <a onClick={context.showModal.bind(context,record.id)}>详情</a> &nbsp;
                     </span>
                 </div>
             )

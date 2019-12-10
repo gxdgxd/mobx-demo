@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Table,Input,Tree,Form,Row, Col,Button,Modal,DatePicker} from 'antd';
-import {columns} from "./config";
+import {detailColumns} from "./config";
 
 
 @inject('ExeRecordStore')
@@ -16,7 +16,8 @@ class DetailModal extends Component {
     }
 
     render(){
-        const {modalVisible} = this.props
+        const {modalVisible,detailData} = this.props
+        // let caseData = detailData.caseExeRecords
         return(
             <div className="container-bg">
                 <Modal
@@ -27,8 +28,11 @@ class DetailModal extends Component {
                     okText="保存"
                     cancelText="取消"
                     className="model">
-                    sss
-
+                    <Row gutter={48}>
+                        <Col span={7}>
+                           执行结果：{detailData.status}
+                        </Col>
+                    </Row>
                 </Modal>
             </div>
         )

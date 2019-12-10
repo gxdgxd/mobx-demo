@@ -31,8 +31,8 @@ class ExeRecordIndex extends Component {
     optionChange(n,v) {
         this.props.ExeRecordStore.changeTableRequestData(n,v || '');
     }
-    showModal(record){
-        this.props.ExeRecordStore.getDetailData(record)
+    showModal(id){
+        this.props.ExeRecordStore.getDetailData(id)
     }
     onChangePage = page => {
         this.props.ExeRecordStore.initData(page);
@@ -61,7 +61,7 @@ class ExeRecordIndex extends Component {
         this.props.ExeRecordStore.changeTableRequestData('operatorId',value);
     };
     render(){
-        const {dataSource,modalVisible,pageNo,pageSize,totalCount} = this.props.ExeRecordStore
+        const {dataSource,modalVisible,pageNo,pageSize,totalCount,detailData} = this.props.ExeRecordStore
         const {allCreators} = this.props.CommonStore
         const mydataSource = dataSource.toJS()
         return(
@@ -132,7 +132,7 @@ class ExeRecordIndex extends Component {
                         dataSource={mydataSource} />
                     <Pagination onChange={this.onChangePage} pageSize={pageSize} current={pageNo}  total={totalCount} style={{'marginTop':'6px','float':'right'}}/>
 
-                    <DetailModal modalVisible={modalVisible}/>
+                    <DetailModal modalVisible={modalVisible} detailData={detailData}/>
 
                 </Row>
             </div>
