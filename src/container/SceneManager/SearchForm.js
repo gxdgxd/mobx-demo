@@ -83,7 +83,7 @@ class SearchForm extends Component{
                 <Row gutter={48}>
                     <Col span={7}>
                         <FormItem {...this.formItemLayout} label="执行方式">
-                            <Select defaultValue="顺序执行"  onChange={this.optionChange.bind(this,'scheduleType')}>
+                            <Select   placeholder="请选择执行方式"  allowClear={true} onChange={this.optionChange.bind(this,'scheduleType')}>
                                 <Option value="0">顺序执行</Option>
                                 <Option value="1">并行执行</Option>
                             </Select>

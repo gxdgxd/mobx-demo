@@ -32,10 +32,19 @@ class TestCaseManagerList extends Component {
     batchExeCase = () => {
         if(this.state.selectedRowKeys.length <= 0){
             message.warn("请先勾选需要执行的用例")
-        }else{
-            this.props.SceneManagerStore.insertCase(this.state.selectedRows);
-            this.props.history.push("/insert_scene")
+            return
         }
+        let rows = this.state.selectedRows
+        let caseIds = []
+        for (let i = 0; i < rows.length ; i++) {
+            caseIds.push(rows[i].id)
+        }
+        this.showExeCaseModal(caseIds)
+        // let params =  {"id":null,"caseIds":this.props.caseIds,"scheduleType":1,"env":this.state.env}
+        // this.props.TestCaseManagerStore.exeCase(params,"case");
+        // this.props.SceneManagerStore.insertCase(this.state.selectedRows);
+        // this.props.history.push("/insert_scene")
+
     }
     onChangePage = page => {
         this.props.TestCaseManagerStore.initData(page);
@@ -63,7 +72,7 @@ class TestCaseManagerList extends Component {
                     </Col>
                     <Col span={20}>
                         <SearchForm/>
-                        <Button type="primary" style={{'marginBottom':'7px'}} onClick={this.batchExeCase} >
+                        <Button type="primary" style={{'marginBottom':'7px'}} onClick={this.batchExeCase.bind(this)} >
                             批量执行
                         </Button>
 

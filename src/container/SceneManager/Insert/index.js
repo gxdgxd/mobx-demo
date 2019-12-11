@@ -88,7 +88,7 @@ class InsertIndex extends Component {
                             </FormItem>
                         </Col>
                         <Col span={7}>
-                            <FormItem {...this.formItemLayout} label="执行环境">
+                            <FormItem {...this.formItemLayout} label="环境">
                                 {getFieldDecorator('env', {
                                     rules: [{ required: true, message: '请输入执行环境!' }],
                                 })(

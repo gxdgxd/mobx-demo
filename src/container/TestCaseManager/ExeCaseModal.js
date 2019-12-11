@@ -65,7 +65,6 @@ class ExeCaseModal extends Component{
                             </Select>
                         )}
                     </FormItem>
-
                 </Form>
             </Modal>
         )

@@ -111,7 +111,7 @@ class ExeRecordIndex extends Component {
                         </Col>
                         <Col span={7}>
                             <FormItem {...this.formItemLayout} label="执行状态">
-                                <Select placeholder="请选择执行状态"   onChange={this.optionChange.bind(this,'status')}>
+                                <Select placeholder="请选择执行状态"  allowClear={true}  onChange={this.optionChange.bind(this,'status')}>
                                     <Option value="0">待执行</Option>
                                     <Option value="1">执行中</Option>
                                     <Option value="2">已完成</Option>

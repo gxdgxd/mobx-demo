@@ -1,7 +1,9 @@
 import React  from 'react';
-import { Icon,Popconfirm,Popover,Tag} from 'antd';
-import ReactJson from 'react-json-view'
+import {Input,Icon,Popover,Tag} from 'antd';
 import common from "../../style/common.css";
+
+const TextArea  = Input;
+
 
 export const columns = (context) => [
     {
@@ -161,13 +163,13 @@ export const detailColumns = (context) => [
         title: '信息',
         dataIndex: 'message',
         key: 'message',
-        width:'25%',
+        width:'6%',
         render:function(text, record){
-            var message = record.message.length > 25 ? record.message.substr(0,25) + '...' : record.message;
+            let message = <div>{record.message}</div>
             return (
                 <span>
-                     <Popover content={record.message} >
-                        {message}
+                     <Popover content={message} >
+                       <Icon type="message" />
                      </Popover>
                 </span>
             )
