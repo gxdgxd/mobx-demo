@@ -12,7 +12,7 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 
-@inject('SceneManagerStore')
+@inject('SceneManagerStore','TestCaseManagerStore')
 @observer
 class UpdateIndex extends Component {
     componentDidMount() {

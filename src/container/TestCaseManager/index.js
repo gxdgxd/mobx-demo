@@ -33,7 +33,6 @@ class TestCaseManagerList extends Component {
         if(this.state.selectedRowKeys.length <= 0){
             message.warn("请先勾选需要执行的用例")
         }else{
-            // this.props.TestCaseManagerStore.batchExeCase(this.state.selectedRows)
             this.props.SceneManagerStore.insertCase(this.state.selectedRows);
             this.props.history.push("/insert_scene")
         }
