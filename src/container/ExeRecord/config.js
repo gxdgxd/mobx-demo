@@ -190,6 +190,7 @@ export const detailColumns = (context) => [
         key: 'message',
         width:'6%',
         render:function(text, record){
+            // let message=
             return (
                 <span>
                      <Tooltip title={record.message} >

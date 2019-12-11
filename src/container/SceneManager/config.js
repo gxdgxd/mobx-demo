@@ -58,7 +58,9 @@ export const columns = (context) => [
                 <div>
                     <span>
                         <a href={href} target="_blank">修改场景</a>&nbsp;
-                        <a href="#" onClick={context.exeCase.bind(context,record)} className="vLine"> 执行场景</a>
+                        <Popconfirm title="确定执行此场景吗？" onConfirm={() => context.exeCase(record)} >
+                            <a href="#"  className="vLine"> 执行场景</a>
+                        </Popconfirm>
                     </span>
                 </div>
             )

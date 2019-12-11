@@ -9,7 +9,7 @@ class TagManagerStore {
 
     @action
     async postInsertTag(value) {
-        return await post("1.0.0/hipac.api.test.tag.saveTag",{value:value})
+        return await post("1.0.0/hipac.api.test.tag.saveTag/",{value:value})
     }
 
 

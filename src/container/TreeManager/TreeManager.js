@@ -67,9 +67,9 @@ class TreeManager extends Component {
     /**
      * 编辑节点
      */
-    handleDeleteTree = (id) => {
+    handleDeleteTree = (id,appId,parentId) => {
         if (id) {
-            this.props.TreeManagerStore.deleteTree(id)
+            this.props.TreeManagerStore.deleteTree(id,appId,parentId)
         }
     };
     /**
@@ -94,7 +94,7 @@ class TreeManager extends Component {
                     </span>
                     <span className="tree-span" >
                          {level != 1 &&
-                              <Popconfirm title="确定删除此参数吗？" onConfirm={() => this.handleDeleteTree(id)}>
+                              <Popconfirm title="确定删除此参数吗？" onConfirm={() => this.handleDeleteTree(id,appId,parentId)}>
                                  <Icon type="delete" theme="outlined"/>
                               </Popconfirm>
                          }

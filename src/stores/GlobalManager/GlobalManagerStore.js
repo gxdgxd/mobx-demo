@@ -30,7 +30,7 @@ class GlobalManagerStore {
      */
     @action
     async initData(pageNo) {
-        const result = await post("1.0.0/hipac.api.test.var.userVars",{})
+        const result = await post("1.0.0/hipac.api.test.var.userVars/",{})
         console.log(result)
         this.dataSource = result.data;
     }
@@ -65,7 +65,7 @@ class GlobalManagerStore {
     @action
     async insert() {
         const params = {"saveForm":{"ownerId":"","domain":1,"name":this.tableRequestData.name,"value":this.tableRequestData.value,"varType":this.tableRequestData.varType}}
-        const result = await post("1.0.0/hipac.api.test.var.saveVar",params)
+        const result = await post("1.0.0/hipac.api.test.var.saveVar/",params)
 
         if(result.code == "200"){
             message.success('添加参数成功');
@@ -82,7 +82,7 @@ class GlobalManagerStore {
     @action
     async update() {
         const params = {"saveForm":{"id":this.detailData.id,"ownerId":"","domain":1,"name":this.detailData.name,"value":this.detailData.value,"varType":this.detailData.varType}}
-        const result = await post("1.0.0/hipac.api.test.var.saveVar",params)
+        const result = await post("1.0.0/hipac.api.test.var.saveVar/",params)
 
         if(result.code == "200"){
             message.success('修改参数成功');
@@ -99,7 +99,7 @@ class GlobalManagerStore {
     @action
     async delete(data) {
         debugger
-        const result = await post("1.0.0/hipac.api.test.var.delVar",{id:data.id})
+        const result = await post("1.0.0/hipac.api.test.var.delVar/",{id:data.id})
 
         if(result.code == "200"){
             message.success('删除参数成功');

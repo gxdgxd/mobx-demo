@@ -22,7 +22,7 @@ class SceneManagerList extends Component {
     onChangePage = page => {
         this.props.SceneManagerStore.initData(page);
     };
-    exeCase = (record) => {
+    exeCase =(record) => {
         this.props.TestCaseManagerStore.exeCase(record,'scene')
     }
     render(){
