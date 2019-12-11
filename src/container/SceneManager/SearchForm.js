@@ -53,12 +53,12 @@ class SearchForm extends Component{
                 <Row gutter={48}>
                     <Col span={7}>
                         <FormItem {...this.formItemLayout} label="场景ID">
-                            <Input placeholder="请输入场景ID" onChange={this.inputChange.bind(this,'id')}/>
+                            <Input placeholder="请输入场景ID" allowClear={true} onChange={this.inputChange.bind(this,'id')}/>
                         </FormItem>
                     </Col>
                     <Col span={7}>
                         <FormItem {...this.formItemLayout} label="场景名称">
-                            <Input placeholder="请输入场景名称" onChange={this.inputChange.bind(this,'name')}/>
+                            <Input placeholder="请输入场景名称" allowClear={true} onChange={this.inputChange.bind(this,'name')}/>
                         </FormItem>
                     </Col>
                     <Col span={7}>
@@ -69,7 +69,7 @@ class SearchForm extends Component{
                                 placeholder="请输入真名搜索(非花名)"
                                 style={this.props.style}
                                 defaultActiveFirstOption={false}
-                                showArrow={false}
+                                showArrow={false}  allowClear={true}
                                 filterOption={false}
                                 onSearch={this.handleCreatorSearch}
                                 onChange={this.handleCreatorChange}

@@ -1,9 +1,11 @@
 import React  from 'react';
 import { Icon,Popconfirm,Popover,Tag} from 'antd';
 import ReactJson from 'react-json-view'
+import common from "../../style/common.css";
+
 export const columns = (context) => [
     {
-        title: 'ID',
+        title: '场景ID',
         dataIndex: 'testSceneId',
         key: 'testSceneId',
     },
@@ -51,17 +53,17 @@ export const columns = (context) => [
             if(row == "0"){
                 name = "待执行"
                 return (
-                    <span><Tag color="orange">{name}</Tag></span>
+                    <span><Tag color="#f50">{name}</Tag></span>
                 )
             }else if(row == "1"){
                 name = "执行中"
                 return (
-                    <span><Tag color="blue">{name}</Tag></span>
+                    <span><Tag color="#2db7f5">{name}</Tag></span>
                 )
             }else if(row == "2"){
                 name = "已完成"
                 return (
-                    <span><Tag color="green">{name}</Tag></span>
+                    <span><Tag color="#87d068">{name}</Tag></span>
                 )
             }
         }
@@ -83,53 +85,108 @@ export const columns = (context) => [
 ];
 
 export const detailColumns = (context) => [
+
     {
         title: '用例名称',
-        dataIndex: 'id',
-        key: 'id',
+        dataIndex: 'name',
+        key: 'name',
+        width:'15%',
+        render:function(text, record){
+            let testCase = record.testCase
+            var name = testCase.name.length > 16 ? testCase.name.substr(0,16) + '...' : testCase.name;
+            let str = <div>
+                <span>用例ID：{testCase.id}</span><br/>
+                <span>用例名称：{testCase.name}</span><br/>
+                <span>校验规则：{testCase.validScript}</span><br/>
+                <span>入参：{testCase.paramScript}</span><br/>
+                <span>其他参数：{testCase.contextParamScript}</span><br/>
+                <span>描述：{testCase.desc}</span><br/>
+                <span>接口ID：{testCase.apiId}</span><br/>
+                <span>接口路径：{testCase.testApi.apiClassName}</span><br/>
+                <span>方法名：{testCase.testApi.apiMethodName}</span><br/>
+                <span>接口名：{testCase.testApi.name}</span><br/>
+            </div>
+            return (
+                <span>
+                    <Popover content={str} >
+                       <font color="#d2a216">{name}</font>
+                    </Popover>
+                </span>
+            )
+        }
     },
     {
-        title: '执行结果',
-        dataIndex: 'result',
-        key: 'result',
+        title: '优先级',
+        dataIndex: 'priority',
+        key: 'priority',
+        width:'7%',
+        render:function(text, record){
+            var priority = record.testCase.priority;
+            return (
+                <span>
+                   {priority}
+                </span>
+            )
+        }
     },
     {
-        title: '时间',
-        dataIndex: 'apiMethodName',
-        key: 'apiMethodName',
+        title: '创建人',
+        dataIndex: 'creatorName',
+        key: 'creatorName',
+        width:'10%',
+        render:function(text, record){
+            var creatorName = record.testCase.creatorName;
+            return (
+                <span>
+                   {creatorName}
+                </span>
+            )
+        }
     },
     {
-        title: '环境',
-        dataIndex: 'apiMethodName',
-        key: 'apiMethodName',
+        title: '接口名',
+        dataIndex: 'a',
+        key: 'a',
+        width:'16%',
+        render:function(text, record){
+            var name = record.testCase.testApi.name
+            return (
+                <span>
+                   {name}
+                </span>
+            )
+        }
     },
     {
-        title: '方法名称',
-        dataIndex: 'env',
-        key: 'env',
+        title: '信息',
+        dataIndex: 'message',
+        key: 'message',
+        width:'25%',
+        render:function(text, record){
+            var message = record.message.length > 25 ? record.message.substr(0,25) + '...' : record.message;
+            return (
+                <span>
+                     <Popover content={record.message} >
+                        {message}
+                     </Popover>
+                </span>
+            )
+        }
     },
     {
-        title: '参数',
-        dataIndex: 'env',
-        key: 'env',
-    },
-    {
-        title: '接口返回',
-        dataIndex: 'env',
-        key: 'env',
-        // render:function(text, record){
-        //     let str = {"itemId":"111067","shopId":"$p.result.id","shopEEId":"6dc677030efb48fcb0c5db98fef8ef99"}
-        //     var name = record.name.length > 12 ? record.name.substr(0,12) + '...' : record.name;
-        //
-        //     let jsonStr = <ReactJson src={str} theme="google" style={{border:'1px solid #ccc','maxHeight':'261px','overflow-y':'auto' }}/>
-        //     return (
-        //         <span>
-        //             <Popover content={jsonStr} >
-        //                 <font color="#0c8dbf">{name}</font>
-        //             </Popover>
-        //         </span>
-        //     )
-        // }
+        title: '操作',
+        width: '18%',
+        key: 'operation',
+        render:(row,record) => {
+            let apiHref = '/update_api?apiId=' + record.testCase.apiId
+            let updateHref = '/edit_testcase?apiId=' + record.testCase.apiId + "&caseId=" + record.testCase.id
+            return (
+                <span>
+                    <a href={updateHref} target="_blank">查看用例</a>&nbsp;
+                    <a href={apiHref} target="_blank" className="vLine"> 查看接口</a>&nbsp;
+                </span>
+            )
+        }
     }
 ];
 

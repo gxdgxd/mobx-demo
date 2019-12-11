@@ -4,6 +4,8 @@ import { observer, inject } from 'mobx-react';
 import { Table,Pagination,Row, Col,Button} from 'antd';
 import {columns} from './config';
 import SearchForm from './SearchForm';
+import ExeCaseModal from './ExeCaseModal';
+
 import TreeManager from '../TreeManager/TreeManager';
 import {message} from "antd/lib/index";
 
@@ -39,8 +41,11 @@ class TestCaseManagerList extends Component {
     onChangePage = page => {
         this.props.TestCaseManagerStore.initData(page);
     };
+    showExeCaseModal(caseIds){
+        this.props.TestCaseManagerStore.showExeCaseModal(caseIds);
+    }
     render(){
-        const {dataSource,pageNo,pageSize,totalCount} = this.props.TestCaseManagerStore
+        const {dataSource,pageNo,pageSize,totalCount,exeCaseModalVisible,caseIds} = this.props.TestCaseManagerStore
         const mydataSource = dataSource.toJS()
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
@@ -60,7 +65,7 @@ class TestCaseManagerList extends Component {
                     <Col span={20}>
                         <SearchForm/>
                         <Button type="primary" style={{'marginBottom':'7px'}} onClick={this.batchExeCase} >
-                            执行用例
+                            批量执行
                         </Button>
 
                         <Table
@@ -68,7 +73,7 @@ class TestCaseManagerList extends Component {
                             columns={columns(this)} pagination={false}
                             dataSource={mydataSource}  rowSelection={rowSelection}/>
                         <Pagination onChange={this.onChangePage} pageSize={pageSize} current={pageNo}  total={totalCount} style={{'marginTop':'6px','float':'right'}}/>
-
+                        <ExeCaseModal exeCaseModalVisible={exeCaseModalVisible} caseIds={caseIds}></ExeCaseModal>
                     </Col>
                 </Row>
             </div>

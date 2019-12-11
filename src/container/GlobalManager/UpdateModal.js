@@ -55,7 +55,7 @@ class InsertModal extends Component{
                 okText="保存"
                 cancelText="取消"
                 className="model">
-                <Form className="ant-advanced-search-form p-xs pb-0" onSubmit={this.handleSubmit}>
+                <Form className="ant-advanced-search-form p-xs pb-0" >
                     <FormItem {...this.formItemLayout} label="参数名">
                         {getFieldDecorator('name', {
                             initialValue: detailData.name,

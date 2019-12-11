@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import ReactJson from 'react-json-view'
 import { Tag, Button,Alert, Select, Row,Icon, Form, Input,Tooltip,message } from 'antd';
-import {getUrlParam,addUrlParam} from '../../../utils/common'
+import {getUrlParam} from '../../../utils/common'
+import SingleTag from "../../TagManager/SingleTag";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -10,8 +11,7 @@ const { TextArea } = Input;
 let caseId = getUrlParam('caseId',window.location.search);
 let apiId = getUrlParam('apiId',window.location.search);
 
-@inject('ApiManagerStore')
-@inject('TestCaseManagerStore')
+@inject('TestCaseManagerStore','ApiManagerStore')
 @observer
 class InsertIndex extends Component {
     componentDidMount() {
@@ -31,43 +31,17 @@ class InsertIndex extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            tags:[],
-            inputVisible: false,
-            inputValue: '',
-            json_str:""
+            json_str:"",
+            dubboGroup:''
         }
     }
-
-    handleClose = removedTag => {
+    /**
+     * 获取子组件SingleTag中用户输入的tag标签
+     */
+    getTags = (tags) => {
         debugger
-        const tags = this.props.ApiManagerStore.tags.filter(tag => tag.id !== removedTag);
-        console.log(tags);
-        this.setState({ tags });
+        this.props.ApiManagerStore.insertTags(tags)
     };
-
-    showInput = () => {
-        this.setState({ inputVisible: true }, () => this.input.focus());
-    };
-
-    handleInputChange = e => {
-        this.setState({ inputValue: e.target.value });
-    };
-
-    handleInputConfirm = () => {
-        const { inputValue } = this.state;
-        let { tags } = this.state
-        if (inputValue && tags.indexOf(inputValue) === -1) {
-            tags = [...tags, inputValue];
-        }
-        this.props.ApiManagerStore.insertTag(tags[0])
-        this.setState({
-            inputVisible: false,
-            inputValue: '',
-        });
-    };
-
-    saveInputRef = input => (this.input = input);
-
     /**
      * 输入框和单选按钮产生的change事件
      * @param n
@@ -89,9 +63,16 @@ class InsertIndex extends Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                this.props.TestCaseManagerStore.insert(this.props.ApiManagerStore.tags)
+                this.props.TestCaseManagerStore.insert(this.props.ApiManagerStore.tags,this.props.ApiManagerStore.detailData)
             }
         });
+    }
+    /**
+     * 只测试不保存
+     */
+    testCaseExe = () => {
+        let params =  {"id":null,"caseIds":[caseId],"scheduleType":1,"env":this.state.dubboGroup}
+        this.props.TestCaseManagerStore.exeCase(params,'case');
     }
 
     /**
@@ -112,17 +93,17 @@ class InsertIndex extends Component {
         const { getFieldDecorator} = this.props.form;
         const {detailData,tags} = this.props.ApiManagerStore
         const {insertButtonStatus,updateButtonStatus,caseDetailData} = this.props.TestCaseManagerStore
-        const { inputVisible, inputValue} = this.state;
+
         return(
             <div className="container-bg" style={{'marginLeft':'15px'}}>
                 <Form  layout="inline" className="ant-advanced-search-form p-xs pb-0" onSubmit={this.insert}>
                     <Alert message="接口信息" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px'}}/>
                     <Row>
-                        <FormItem {...this.formItemLayout} label="应用名">
-                            {detailData.appName}
+                        <FormItem {...this.formItemLayout} label="">
+                            <Tag color="geekblue">接口归属应用：{detailData.appName}</Tag>
                         </FormItem>
-                        <FormItem {...this.formItemLayout} label="模块">
-                            {detailData.moduleName}
+                        <FormItem {...this.formItemLayout} label="">
+                            <Tag color="geekblue">接口归属模块：{detailData.moduleName}</Tag>
                         </FormItem>
                     </Row>
                     <Row>
@@ -149,42 +130,22 @@ class InsertIndex extends Component {
                         </FormItem>
                     </Row>
                     <Row>
-                        <FormItem {...this.formItemLayout} label="标签">
-                            <div>
-                                {tags.map((tag, index) => {
-                                    const isLongTag = tag.length > 20;
-                                    const tagElem = (
-                                        <Tag key={tag.id} closable onClose={() => this.handleClose(tag.id)}>
-                                            {isLongTag ? `${tag.value.slice(0, 20)}...` : tag.value}
-                                        </Tag>
-                                    );
-                                    return isLongTag ? (
-                                        <Tooltip title={tag.value} key={tag.id}>
-                                            {tagElem}
-                                        </Tooltip>
-                                    ) : (
-                                        tagElem
-                                    );
-                                })}
-                                {inputVisible && (
-                                    <Input
-                                        ref={this.saveInputRef}
-                                        type="text"
-                                        size="small"
-                                        style={{ width: 78 }}
-                                        value={inputValue}
-                                        onChange={this.handleInputChange}
-                                        onBlur={this.handleInputConfirm}
-                                        onPressEnter={this.handleInputConfirm}
-                                    />
-                                )}
-                                {!inputVisible && (
-                                    <Tag onClick={this.showInput} style={{ background: '#fff', borderStyle: 'dashed' }}>
-                                        <Icon type="plus" /> New Tag
+                        <FormItem {...this.formItemLayout} label="接口标签">
+                            {tags.map((tag, index) => {
+                                const isLongTag = tag.length > 20;
+                                const tagElem = (
+                                    <Tag key={tag.id} >
+                                        {isLongTag ? `${tag.value.slice(0, 20)}...` : tag.value}
                                     </Tag>
-                                )}
-
-                            </div>
+                                );
+                                return isLongTag ? (
+                                    <Tooltip title={tag.value} key={tag.id}>
+                                        {tagElem}
+                                    </Tooltip>
+                                ) : (
+                                    tagElem
+                                );
+                            })}
                         </FormItem>
                     </Row>
                     <Alert message="用例信息" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px'}}/>
@@ -194,17 +155,23 @@ class InsertIndex extends Component {
                                 initialValue: caseDetailData.name,
                                 rules: [{ required: true, message: '请填写用例名!' }],
                             })(
-                                <Input style={{ width: 365 }} onChange={this.inputChange.bind(this,'name')}/>
+                                <Input style={{ width: 365 }} pllaceholder="请填写用例名" onChange={this.inputChange.bind(this,'name')}/>
                             )}
                         </FormItem>
                         <FormItem {...this.formItemLayout} label="优先级">
                             <span>
-                                <Select  value={caseDetailData.priority} style={{ width: 120 }} onChange={this.optionChange.bind(this,'priority')}>
-                                    <Option value="1">1</Option>
-                                    <Option value="2">2</Option>
-                                    <Option value="3">3</Option>
-                                    <Option value="4">4</Option>
-                                </Select>&nbsp;&nbsp;&nbsp;
+                                 {getFieldDecorator('priority', {
+                                     initialValue: caseDetailData.priority,
+                                     rules: [{ required: true, message: '请选择优先级!' }],
+                                 })(
+                                     <Select style={{ width: 120 }} onChange={this.optionChange.bind(this,'priority')}>
+                                         <Option value="1">1</Option>
+                                         <Option value="2">2</Option>
+                                         <Option value="3">3</Option>
+                                         <Option value="4">4</Option>
+                                     </Select>
+                                 )}
+                                &nbsp;&nbsp;&nbsp;
                                 <Tag color="magenta"> 1为最高，4为最低 </Tag>
                             </span>
                         </FormItem>
@@ -222,7 +189,7 @@ class InsertIndex extends Component {
                     <Alert message="请求入参" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px'}}/>
                     <Row>
                         <div style={{float:'left',width:'50%'}}>
-                            <ReactJson src={detailData.argsJsonFormat} onAdd={this.handleAdd} onEdit={this.handleEdit} onDelete={this.handleDelete}   theme="google" style={{border:'1px solid #ccc','maxHeight':'325px','overflow-y':'auto' }}/>
+                            <ReactJson src={eval(detailData.argsJsonFormat)} onAdd={this.handleAdd} onEdit={this.handleEdit} onDelete={this.handleDelete}   theme="google" style={{border:'1px solid #ccc','maxHeight':'325px','overflow-y':'auto' }}/>
                         </div>
                         <div style={{float:'right',width:'49%'}}>
 
@@ -263,10 +230,10 @@ class InsertIndex extends Component {
                             <Button type="primary" htmlType="submit" style={{marginBottom:'8px'}} onClick={()=>{window.open("/edit_testcase?type=copy&apiId=" + apiId + "&caseId=" + caseId)}}>复制用例</Button>
                         </FormItem>
                         <FormItem {...this.formItemLayout} label="">
-                            <Button type="primary" htmlType="submit"  style={{marginBottom:'8px'}}>只测试不保存</Button>
+                            <Button type="primary" style={{marginBottom:'8px'}} onClick={this.testCaseExe}>只测试不保存</Button>
                         </FormItem>
                         <FormItem {...this.formItemLayout} label="">
-                            <Input style={{ width: 280 }} placeholder="请输入测试用的dubbo分组"/>
+                            <Input style={{ width: 280 }} placeholder="请输入测试用的dubbo分组" allowClear={true}  onChange={e => this.setState({ dubboGroup: e.target.value })}/>
                         </FormItem>
                     </Row>
                 </Form>

@@ -91,9 +91,9 @@ export const insertColumns = (context) => [
         title: '接口路径',
         dataIndex: 'apiClassName',
         key: 'apiClassName',
-        width:'25%',
+        width:'27%',
         render:function(text, record){
-            var name = record.apiClassName.length > 27 ? record.apiClassName.substr(0,27) + '...' : record.apiClassName;
+            var name = record.apiClassName.length > 30 ? record.apiClassName.substr(0,30) + '...' : record.apiClassName;
             return (
                 <span  >
                     <Popover content={record.apiClassName} >
@@ -107,9 +107,9 @@ export const insertColumns = (context) => [
         title: '方法名',
         dataIndex: 'apiMethodName',
         key: 'apiMethodName',
-        width:'16%',
+        width:'20%',
         render:function(text, record){
-            var name = record.apiMethodName.length > 14 ? record.apiMethodName.substr(0,14) + '...' : record.apiMethodName;
+            var name = record.apiMethodName.length > 20 ? record.apiMethodName.substr(0,20) + '...' : record.apiMethodName;
             return (
                 <span  >
                     <Popover content={record.apiMethodName} >
@@ -123,7 +123,7 @@ export const insertColumns = (context) => [
         title: '接口名',
         dataIndex: 'name',
         key: 'name',
-        width:'13%',
+        width:'17%',
         editable: true,
         render:(row,record) => {
             if(record.name != null){
@@ -141,7 +141,7 @@ export const insertColumns = (context) => [
         title: '描述',
         dataIndex: 'desc',
         key: 'desc',
-        width:'16%',
+        width:'17%',
         editable: true,
         render:(row,record) => {
             if(record.desc != null){
@@ -155,52 +155,52 @@ export const insertColumns = (context) => [
             }
         }
     },
-    {
-        title: '打标签',
-        dataIndex: 'tag',
-        key: 'tag',
-        width:'20%',
-        render:(row,record) => {
-            const {tags,inputVisible, inputValue } = context.state;
-
-            return (
-                <div>
-                    {tags.map((tag, index) => {
-                        const isLongTag = tag.length > 20;
-                        const tagElem = (
-                            <Tag key={tag} closable  onClose={() => context.handleClose(tag)}>
-                                {isLongTag ? `${tag.slice(0, 20)}...` : tag}
-                            </Tag>
-                        );
-                        return isLongTag ? (
-                            <Tooltip title={tag} key={tag}>
-                                {tagElem}
-                            </Tooltip>
-                        ) : (
-                            tagElem
-                        );
-                    })}
-                    {inputVisible && (
-                        <Input
-                        ref={context.saveInputRef}
-                        type="text"
-                        size="small"
-                        style={{ width: 78 }}
-                        value={inputValue}
-                        onChange={context.handleInputChange}
-                        onBlur={context.handleInputConfirm}
-                        onPressEnter={context.handleInputConfirm}
-                        />
-                    )}
-                    {!inputVisible && (
-                        <Tag onClick={context.showInput} style={{ background: '#fff', borderStyle: 'dashed' }}>
-                            <Icon type="plus" /> New Tag
-                        </Tag>
-                    )}
-                </div>
-            )
-        }
-    },
+    // {
+    //     title: '打标签',
+    //     dataIndex: 'tag',
+    //     key: 'tag',
+    //     width:'20%',
+        // render:(row,record) => {
+        //     const {tags,inputVisible, inputValue } = context.state;
+        //
+        //     return (
+        //         <div>
+        //             {tags.map((tag, index) => {
+        //                 const isLongTag = tag.length > 20;
+        //                 const tagElem = (
+        //                     <Tag key={tag} closable  onClose={() => context.handleClose(tag)}>
+        //                         {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+        //                     </Tag>
+        //                 );
+        //                 return isLongTag ? (
+        //                     <Tooltip title={tag} key={tag}>
+        //                         {tagElem}
+        //                     </Tooltip>
+        //                 ) : (
+        //                     tagElem
+        //                 );
+        //             })}
+        //             {inputVisible && (
+        //                 <Input
+        //                 ref={context.saveInputRef}
+        //                 type="text"
+        //                 size="small"
+        //                 style={{ width: 78 }}
+        //                 value={inputValue}
+        //                 onChange={context.handleInputChange}
+        //                 onBlur={context.handleInputConfirm}
+        //                 onPressEnter={context.handleInputConfirm}
+        //                 />
+        //             )}
+        //             {!inputVisible && (
+        //                 <Tag onClick={context.showInput} style={{ background: '#fff', borderStyle: 'dashed' }}>
+        //                     <Icon type="plus" /> New Tag
+        //                 </Tag>
+        //             )}
+        //         </div>
+        //     )
+        // }
+    // },
     {
         title: '操作',
         width: '7%',

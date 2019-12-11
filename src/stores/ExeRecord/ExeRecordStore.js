@@ -20,6 +20,10 @@ class ExeRecordStore {
     changeTableRequestData(n,v){
         this.tableRequestData[n]=v;
     }
+    @action
+    hideModal(){
+        this.modalVisible = false;
+    }
     /**
      * 初始化table数据
      * @param pageNo

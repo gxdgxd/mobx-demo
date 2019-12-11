@@ -1,9 +1,10 @@
 import React  from 'react';
 import { Popover,Popconfirm} from 'antd';
+import common from "../../style/common.css";
 
 export const columns = (context) => [
     {
-        title: 'ID',
+        title: '场景ID',
         dataIndex: 'id',
         key: 'id',
     },
@@ -35,11 +36,7 @@ export const columns = (context) => [
         dataIndex: 'env',
         key: 'env',
     },
-    {
-        title: '用例组',
-        dataIndex: 'apiMethodName',
-        key: 'apiMethodName',
-    },
+
     {
         title: '创建人',
         dataIndex: 'creatorName',
@@ -52,15 +49,16 @@ export const columns = (context) => [
     },
     {
         title: '操作',
-        width: '10%',
+        width: '13%',
         key: 'operation',
         render:(row,record) => {
             let href = "/update_scene?sceneId=" + record.id
+
             return (
                 <div>
                     <span>
-                        <a href={href} target="_blank">修改</a>&nbsp;
-                        <a href="$" target="_blank" className="vLine"> 执行</a>
+                        <a href={href} target="_blank">修改场景</a>&nbsp;
+                        <a href="#" onClick={context.exeCase.bind(context,record)} className="vLine"> 执行场景</a>
                     </span>
                 </div>
             )

@@ -11,22 +11,16 @@ class TestCaseManagerStore{
     @observable pageSize = 0
     @observable pageNo = 0
     @observable treeParams = {'appId':'','moduleId':''}
-
+    @observable exeCaseModalVisible = false
+    @observable caseIds = []
     @observable caseDetailData = {
-        "appId":1,
-        "moduleId":1,
-        "priority":2
+
     };
     @observable insertButtonStatus = "";
     @observable updateButtonStatus = "none";
 
     @observable tableRequestData = {
-        "apiId":"",
-        "appId":1,
-        "moduleId":"",
-        "priority":2,
-        "name":"",
-        "tagId":""
+
     };
 
     @action
@@ -46,7 +40,7 @@ class TestCaseManagerStore{
     @action
     async initData(pageNo,appId,moduleId) {
         this.treeParams = {'appId':appId,'moduleId':moduleId}
-        const params = {"query":{"creatorId":this.tableRequestData.creatorId,"apiId":this.tableRequestData.apiId,"appId":this.treeParams.appId,"moduleId":this.treeParams.moduleId,"name":this.tableRequestData.name,"pageNo":pageNo,"pageSize":10,"tagId":this.tableRequestData.tagId}}
+        const params = {"query":{"priority":this.tableRequestData.priority,"creatorId":this.tableRequestData.creatorId,"apiId":this.tableRequestData.apiId,"appId":this.treeParams.appId,"moduleId":this.treeParams.moduleId,"name":this.tableRequestData.name,"pageNo":pageNo,"pageSize":10,"tagId":this.tableRequestData.tagId}}
         console.log(JSON.stringify(params))
         const result = await post("1.0.0/hipac.api.test.case.queryCase",params)
         this.dataSource = result.data;
@@ -73,7 +67,7 @@ class TestCaseManagerStore{
      * @returns {Promise<void>}
      */
     @action
-    async insert(tags) {
+    async insert(tags,apiDetailData) {
         let tagIds = []
         if(tags.length > 0){
             for (let i = 0; i < tags.length; i++) {
@@ -87,7 +81,8 @@ class TestCaseManagerStore{
         if(type == "copy"){
             caseId = ""
         }
-        const params = {"arg0":{"apiId":apiId,"appId":this.caseDetailData.appId,"contextParamScript":this.caseDetailData.contextParamScript,"desc":this.caseDetailData.desc,"id":caseId,"moduleId":this.caseDetailData.moduleId,"name":this.caseDetailData.name,"paramScript":this.caseDetailData.paramScript,"postScript":"","preScript":"","priority":this.caseDetailData.priority,"tagIds":tagIds,"validScript":this.caseDetailData.validScript}}
+        debugger
+        const params = {"arg0":{"apiId":apiId,"appId":apiDetailData.appId,"contextParamScript":this.caseDetailData.contextParamScript,"desc":this.caseDetailData.desc,"id":caseId,"moduleId":apiDetailData.moduleId,"name":this.caseDetailData.name,"paramScript":this.caseDetailData.paramScript,"priority":this.caseDetailData.priority,"validScript":this.caseDetailData.validScript}}
         const result = await post("1.0.0/hipac.api.test.case.saveCase",params)
         if(result.code == 200){
             message.success("保存用例成功")
@@ -98,29 +93,43 @@ class TestCaseManagerStore{
     }
 
     /**
-     * 执行用例
+     * 执行用例和执行场景
      * @returns {Promise<void>}
      */
     @action
-    async batchExeCase(data) {
-        var array = []
-        for (let i = 0; i < data.length; i++) {
-            var obj = {}
-            obj.apiClassName = data[i].apiClassName
-            obj.apiMethodName = data[i].apiMethodName
-            obj.argsTypeNames = data[i].argsTypeNames
-            obj.desc = data[i].desc
-            obj.name = data[i].name
-            obj.type = data[i].type
-            array.push(obj)
+    async exeCase(data,type){
+        if(data.env == ""){
+            message.warn("请输入dubbo分组再测试！")
+            return
         }
-        const params =  {"caseIds":array,"scheduleType":null,"env":""}
+        let caseIds = []
+        if(type == "scene"){
+            let testCaseSchedules = data.testCaseSchedules
+            let caseIds = []
+            for (let i = 0; i < testCaseSchedules.length ; i++) {
+                caseIds.push(testCaseSchedules[i].testCaseId)
+            }
+        }else if(type == "case"){
+            caseIds = data.caseIds
+        }
+        let params =  {"sceneId":data.id,"caseIds":caseIds,"scheduleType":data.scheduleType,"env":data.env}
+
         const result = await post("1.0.0/hipac.api.test.exe.apply",params)
         if(result.code == 200){
-            message.success("用例已经开始执行")
+            message.success("已经开始执行，请前往执行记录中查看用例执行情况")
         }
     }
 
+    @action
+    showExeCaseModal(caseIds){
+        this.caseIds = caseIds
+        this.exeCaseModalVisible = true;
+    }
+
+    @action
+    hideExeCaseModal(){
+        this.exeCaseModalVisible = false
+    }
 }
 
 export default new TestCaseManagerStore();

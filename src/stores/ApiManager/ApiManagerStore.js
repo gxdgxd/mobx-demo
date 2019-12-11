@@ -8,16 +8,14 @@ import {getUrlParam,removeUrlParam} from "../../utils/common";
 
 class ApiManagerStore {
     @observable dataSource = [];
-    @observable creatorList = ['张三','李四'];
     @observable tags = [];
-    @observable tagsSearch = [];
     @observable insertDataSource = [];
     @observable detailData = {};
     @observable totalCount = 0
     @observable pageSize = 0
     @observable pageNo = 0
     @observable treeParams = {'appId':'','moduleId':'','appName':'','moduleName':''}
-
+    @observable treeModalVisible = false
     //查询条件
     @observable tableRequestData = {
         apiClassName:null,
@@ -62,7 +60,13 @@ class ApiManagerStore {
     @action
     async updateApi() {
         debugger
-        const params = {"arg0":{"apiClassName":this.detailData.apiClassName,"apiMethodName":this.detailData.apiMethodName,"appId":1,"argsJsonFormat":this.detailData.argsJsonFormat,"argsTypeNames":this.detailData.argsTypeNames,"artifactId":this.detailData.artifactId,"creatorId":this.detailData.creatorId,"desc":this.detailData.desc,"groupId":this.detailData.groupId,"id":this.detailData.id,"moduleId":this.detailData.moduleId,"name":this.detailData.name,"resultJsonFormat":this.detailData.resultJsonFormat,"type":this.detailData.type}}
+        console.log(this.tags)
+        let tags = this.tags
+        let tagIds = []
+        for (let i = 0; i < tags.length; i++) {
+            tagIds.push(tags[i].id)
+        }
+        const params = {"arg0":{"tagIds":tagIds,"apiClassName":this.detailData.apiClassName,"apiMethodName":this.detailData.apiMethodName,"appId":this.detailData.appId,"argsJsonFormat":this.detailData.argsJsonFormat,"argsTypeNames":this.detailData.argsTypeNames,"artifactId":this.detailData.artifactId,"creatorId":this.detailData.creatorId,"desc":this.detailData.desc,"groupId":this.detailData.groupId,"id":this.detailData.id,"moduleId":this.detailData.moduleId,"name":this.detailData.name,"resultJsonFormat":this.detailData.resultJsonFormat,"type":this.detailData.type}}
         const result = await post("1.0.0/hipac.api.test.api.saveApi",params)
         console.log(result)
         if(result.code == 200){
@@ -163,19 +167,41 @@ class ApiManagerStore {
             tags = toJS(result.data.tags)
         }
         this.tags = tags
-        // this.tags = [{"id":1,"value":'123'}]
-    }
-
-    @action
-    async insertTag(value) {
-        const result = await post("1.0.0/hipac.api.test.tag.saveTag",{value:value})
-        let obj = {'id':result.data,'value':value}
-        this.tags.push(obj)
     }
 
     @action
     async setTreeParams(appId,moduleId,appName,moduleName) {
         this.treeParams = {'appId':appId,'moduleId':moduleId,'appName':appName,'moduleName':moduleName}
+    }
+    @action
+    async setDetailDataTreeParams() {
+        debugger
+        if(this.treeParams.appId == ""){
+            message.warn("请选择应用后再点击保存")
+            return
+        }
+        if(typeof this.treeParams.moduleId == "undefined"){
+            message.warn("只选中应用不行，还需要选择应用下的模块级别")
+            return
+        }
+        this.detailData.appId =  this.treeParams.appId
+        this.detailData.appName =  this.treeParams.appName
+        this.detailData.moduleId =  this.treeParams.moduleId
+        this.detailData.moduleName =  this.treeParams.moduleName
+        this.hideTreeModal()
+    }
+
+    @action
+    hideTreeModal(){
+        this.treeModalVisible = false;
+    }
+    @action
+    showTreeModal(){
+        this.treeModalVisible = true;
+    }
+    @action
+    async insertTags(tags){
+        this.tags.push(tags)
     }
 }
 

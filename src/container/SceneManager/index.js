@@ -5,16 +5,14 @@ import { Table,Row, Pagination} from 'antd';
 import {columns} from './config';
 import SearchForm from './SearchForm';
 
-@inject('SceneManagerStore','CommonStore')
+@inject('SceneManagerStore','CommonStore','TestCaseManagerStore')
 @observer
 class SceneManagerList extends Component {
     componentDidMount() {
         this.props.setBreadcrumb([
             {name: '场景管理'},
-            {name: '添加场景'}
         ]);
         this.props.SceneManagerStore.initData(1);
-        this.props.CommonStore.getAllCreators();
     }
     constructor(props){
         super(props);
@@ -24,14 +22,16 @@ class SceneManagerList extends Component {
     onChangePage = page => {
         this.props.SceneManagerStore.initData(page);
     };
+    exeCase = (record) => {
+        this.props.TestCaseManagerStore.exeCase(record,'scene')
+    }
     render(){
         const {dataSource,pageNo,pageSize,totalCount} = this.props.SceneManagerStore
         const mydataSource = dataSource.toJS()
-        const {allCreators} = this.props.CommonStore
         return(
             <div className="container-bg">
                 <Row>
-                    <SearchForm allCreators={allCreators}/>
+                    <SearchForm/>
                     <Table
                         bordered
                         columns={columns(this)} pagination={false}

@@ -16,7 +16,7 @@ class SceneManagerStore {
     @observable totalCount = 0
     @observable pageSize = 0
     @observable pageNo = 0
-    @observable tableRequestData = {"scheduleType":0}
+    @observable tableRequestData = {}
 
     @action
     changeTableRequestData(n,v){
@@ -29,15 +29,9 @@ class SceneManagerStore {
 
     @action
     async initData(pageNo) {
-        const params = {"arg0":{"creatorId":"","cron":"","desc":"","env":"","id":null,"name":"","pageNo":pageNo,"pageSize":10,"scheduleType":null}}
+        const params = {"arg0":{"creatorId":this.tableRequestData.creatorId,"env":this.tableRequestData.env,"id":this.tableRequestData.id,"name":this.tableRequestData.name,"pageNo":pageNo,"pageSize":10,"scheduleType":this.tableRequestData.scheduleType}}
         const result = await post("1.0.0/hipac.api.test.scene.query",params)
         this.dataSource = result.data;
-        // this.dataSource = [{
-        //     id:13,
-        //     name:'ceshi',
-        //     env:'测试环境',
-        //     scheduleType:0
-        // }]
     }
 
     @action
@@ -79,12 +73,10 @@ class SceneManagerStore {
      */
     @action
     async insertCase(data){
-        debugger
 
         console.log(JSON.stringify(data))
         this.caseDataSource = data
         let updateCaseDataSourceNew = this.updateCaseDataSource.toJS()
-
 
         if(updateCaseDataSourceNew.length > 0){
             let caseDataSourceNew = data

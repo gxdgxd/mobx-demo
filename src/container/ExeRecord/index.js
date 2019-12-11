@@ -81,12 +81,12 @@ class ExeRecordIndex extends Component {
                         </Col>
                         <Col span={7}>
                             <FormItem {...this.formItemLayout} label="场景ID">
-                                <Input placeholder="请输入场景ID"  onChange={this.inputChange.bind(this,'testSceneId')}/>
+                                <Input placeholder="请输入场景ID"  allowClear={true}  onChange={this.inputChange.bind(this,'testSceneId')}/>
                             </FormItem>
                         </Col>
                         <Col span={7}>
                             <FormItem {...this.formItemLayout} label="执行环境">
-                                <Input placeholder="请输入执行环境" onChange={this.inputChange.bind(this,'env')}/>
+                                <Input placeholder="请输入执行环境"  allowClear={true} onChange={this.inputChange.bind(this,'env')}/>
                             </FormItem>
                         </Col>
                     </Row>
@@ -100,7 +100,7 @@ class ExeRecordIndex extends Component {
                                     style={this.props.style}
                                     defaultActiveFirstOption={false}
                                     showArrow={false}
-                                    filterOption={false}
+                                    filterOption={false}  allowClear={true}
                                     onSearch={this.handleCreatorSearch}
                                     onChange={this.handleCreatorChange}
                                     notFoundContent={null}

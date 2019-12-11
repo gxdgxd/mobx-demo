@@ -5,6 +5,7 @@ import SceneManagerStore from './SceneManager/SceneManagerStore';
 import ExeRecordStore from './ExeRecord/ExeRecordStore';
 import CommonStore from './Common/CommonStore'
 import TreeManagerStore from './TreeManager/TreeManagerStore'
+import TagManagerStore from './TagManager/TagManagerStore'
 
 export {
     ApiManagerStore,
@@ -13,5 +14,6 @@ export {
     SceneManagerStore,
     ExeRecordStore,
     CommonStore,
-    TreeManagerStore
+    TreeManagerStore,
+    TagManagerStore
 }

@@ -52,7 +52,7 @@ class SearchForm extends Component{
                 <Row gutter={48}>
                     <Col span={7}>
                         <FormItem {...this.formItemLayout} label="接口ID">
-                            <Input placeholder="请输入接口ID" onChange={this.inputChange.bind(this,'id')}/>
+                            <Input placeholder="请输入接口ID" onChange={this.inputChange.bind(this,'id')} allowClear={true}/>
                         </FormItem>
                     </Col>
                     <Col span={7}>
@@ -75,7 +75,7 @@ class SearchForm extends Component{
                                 placeholder="请输入真名搜索(非花名)"
                                 style={this.props.style}
                                 defaultActiveFirstOption={false}
-                                showArrow={false}
+                                showArrow={false} allowClear={true}
                                 filterOption={false}
                                 onSearch={this.handleCreatorSearch}
                                 onChange={this.handleCreatorChange}

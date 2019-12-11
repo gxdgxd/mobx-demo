@@ -12,7 +12,6 @@ import {insertCaseColumns} from '../config';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-@inject('TestCaseManagerStore')
 @inject('SceneManagerStore')
 @observer
 class InsertIndex extends Component {
@@ -84,16 +83,16 @@ class InsertIndex extends Component {
                                 {getFieldDecorator('name', {
                                     rules: [{ required: true, message: '请输入场景名!' }],
                                 })(
-                                    <Input placeholder="请输入场景名"  style={{ width: 200 }} onChange={this.inputChange.bind(this,'name')}/>
+                                    <Input placeholder="请输入场景名"  allowClear={true} style={{ width: 200 }} onChange={this.inputChange.bind(this,'name')}/>
                                 )}
                             </FormItem>
                         </Col>
                         <Col span={7}>
-                            <FormItem {...this.formItemLayout} label="环境">
+                            <FormItem {...this.formItemLayout} label="执行环境">
                                 {getFieldDecorator('env', {
-                                    rules: [{ required: true, message: '请输入环境!' }],
+                                    rules: [{ required: true, message: '请输入执行环境!' }],
                                 })(
-                                    <Input placeholder="请输入场景环境"  style={{ width: 200 }}  onChange={this.inputChange.bind(this,'env')}/>
+                                    <Input placeholder="请输入执行环境"  allowClear={true} style={{ width: 200 }}  onChange={this.inputChange.bind(this,'env')}/>
                                 )}
 
                             </FormItem>

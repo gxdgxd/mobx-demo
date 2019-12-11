@@ -29,6 +29,8 @@ class TreeManager extends Component {
             this.props.ApiManagerStore.initData(1,appId,moduleId)
         }else if(pageType == "insertApi"){
             this.props.ApiManagerStore.setTreeParams(appId,moduleId,appName,moduleName)
+        }else if(pageType == "updateApi"){
+            this.props.ApiManagerStore.setTreeParams(appId,moduleId,appName,moduleName)
         }
     };
     /**

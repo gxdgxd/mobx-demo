@@ -1,7 +1,6 @@
 import { observable, action, extendObservable } from 'mobx';
 import axios from 'axios';
 import {post} from '../../utils/http'
-import {toJS} from "mobx/lib/mobx";
 import {message} from "antd/lib/index";
 
 
