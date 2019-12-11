@@ -1,7 +1,7 @@
 import { observable, action, extendObservable } from 'mobx';
 import axios from 'axios';
 import { message } from 'antd';
-import {getUrlParam,addUrlParam,removeUrlParam} from '../../utils/common'
+import {getUrlParam,replaceUrlParamVal,removeUrlParam} from '../../utils/common'
 import {post} from '../../utils/http'
 
 
@@ -29,7 +29,7 @@ class TestCaseManagerStore{
     }
     @action
     changeTableRequestData(n,v){
-        this.tableRequestData[n]=v;
+        this.tableRequestData[n] = v == "" ? undefined : v ;
     }
 
     /**
@@ -40,6 +40,10 @@ class TestCaseManagerStore{
     @action
     async initData(pageNo,appId,moduleId) {
         this.treeParams = {'appId':appId,'moduleId':moduleId}
+        let apiId = getUrlParam('apiId',window.location.search);
+        if(apiId != ""){
+            this.tableRequestData.apiId = apiId
+        }
         const params = {"query":{"priority":this.tableRequestData.priority,"creatorId":this.tableRequestData.creatorId,"apiId":this.tableRequestData.apiId,"appId":this.treeParams.appId,"moduleId":this.treeParams.moduleId,"name":this.tableRequestData.name,"pageNo":pageNo,"pageSize":10,"tagId":this.tableRequestData.tagId}}
         console.log(JSON.stringify(params))
         const result = await post("1.0.0/hipac.api.test.case.queryCase",params)
@@ -47,6 +51,7 @@ class TestCaseManagerStore{
         this.pageNo = result.pageNo;
         this.pageSize = result.pageSize;
         this.totalCount = result.totalCount;
+        removeUrlParam("apiId")
     }
 
     /**
@@ -67,7 +72,7 @@ class TestCaseManagerStore{
      * @returns {Promise<void>}
      */
     @action
-    async insert(tags,apiDetailData) {
+    async insert(tags,apiDetailData,value) {
         let tagIds = []
         if(tags.length > 0){
             for (let i = 0; i < tags.length; i++) {
@@ -85,10 +90,12 @@ class TestCaseManagerStore{
         const params = {"arg0":{"apiId":apiId,"appId":apiDetailData.appId,"contextParamScript":this.caseDetailData.contextParamScript,"desc":this.caseDetailData.desc,"id":caseId,"moduleId":apiDetailData.moduleId,"name":this.caseDetailData.name,"paramScript":this.caseDetailData.paramScript,"priority":this.caseDetailData.priority,"validScript":this.caseDetailData.validScript}}
         const result = await post("1.0.0/hipac.api.test.case.saveCase",params)
         if(result.code == 200){
-            message.success("保存用例成功")
+            if(value == true){
+                message.success("保存用例成功")
+            }
             this.insertButtonStatus = "none"
             this.updateButtonStatus = ""
-            addUrlParam('caseId',result.data)
+            replaceUrlParamVal('caseId',result.data)
         }
     }
 

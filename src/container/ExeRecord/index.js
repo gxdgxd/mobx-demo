@@ -128,12 +128,10 @@ class ExeRecordIndex extends Component {
                 <Row style={{'marginTop':'8px'}}>
                     <Table
                         bordered
-                        columns={columns(this)}
+                        columns={columns(this)} pagination={false}
                         dataSource={mydataSource} />
                     <Pagination onChange={this.onChangePage} pageSize={pageSize} current={pageNo}  total={totalCount} style={{'marginTop':'6px','float':'right'}}/>
-
                     <DetailModal modalVisible={modalVisible} detailData={detailData}/>
-
                 </Row>
             </div>
         )

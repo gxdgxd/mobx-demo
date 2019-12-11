@@ -18,7 +18,7 @@ export const columns = (context) => [
         key: 'varType',
         render: (row) => {
             return (
-                <span>{row == 0 ? "常量":"必包"}</span>
+                <span>{row == 0 ? "常量":"闭包"}</span>
             )
         }
     },

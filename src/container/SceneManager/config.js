@@ -44,8 +44,8 @@ export const columns = (context) => [
     },
     {
         title: '更新时间',
-        dataIndex: 'editTime',
-        key: 'editTime',
+        dataIndex: 'editTimeStr',
+        key: 'editTimeStr',
     },
     {
         title: '操作',
@@ -131,10 +131,10 @@ export const insertCaseColumns = (context) => [
         }
     },
     {
-        title: '更新时间',
-        dataIndex: 'editTimeStr',
-        key: 'editTimeStr',
-        width:'17%'
+        title: '创建人',
+        dataIndex: 'creatorName',
+        key: 'creatorName',
+        width:'15%'
     },
     {
         title: '操作',

@@ -1,5 +1,5 @@
 import React  from 'react';
-import {Input,Icon,Popover,Tag} from 'antd';
+import {Input,Icon,Popover,Tag,Tooltip} from 'antd';
 import common from "../../style/common.css";
 
 const TextArea  = Input;
@@ -40,6 +40,11 @@ export const columns = (context) => [
         title: '失败数',
         dataIndex: 'failedCount',
         key: 'failedCount',
+        render: (row) => {
+            return (
+                <font color={row > 0 ? "red" : "#696969"}>{row}</font>
+            )
+        }
     },
     {
         title: '操作人',
@@ -92,7 +97,7 @@ export const detailColumns = (context) => [
         title: '用例名称',
         dataIndex: 'name',
         key: 'name',
-        width:'15%',
+        width:'20%',
         render:function(text, record){
             let testCase = record.testCase
             var name = testCase.name.length > 16 ? testCase.name.substr(0,16) + '...' : testCase.name;
@@ -135,7 +140,7 @@ export const detailColumns = (context) => [
         title: '创建人',
         dataIndex: 'creatorName',
         key: 'creatorName',
-        width:'10%',
+        width:'12%',
         render:function(text, record){
             var creatorName = record.testCase.creatorName;
             return (
@@ -149,7 +154,7 @@ export const detailColumns = (context) => [
         title: '接口名',
         dataIndex: 'a',
         key: 'a',
-        width:'16%',
+        width:'20%',
         render:function(text, record){
             var name = record.testCase.testApi.name
             return (
@@ -160,24 +165,43 @@ export const detailColumns = (context) => [
         }
     },
     {
+        title: '状态',
+        dataIndex: 'succeed',
+        key: 'succeed',
+        width:'12%',
+        render:function(row){
+            let name = ""
+            if(row == true){
+                name = "执行成功"
+                return (
+                    <span><Tag color="#87d068">{name}</Tag></span>
+                )
+            }else if(row == false){
+                name = "执行失败"
+                return (
+                    <span><Tag color="#f50">{name}</Tag></span>
+                )
+            }
+        }
+    },
+    {
         title: '信息',
         dataIndex: 'message',
         key: 'message',
         width:'6%',
         render:function(text, record){
-            let message = <div>{record.message}</div>
             return (
                 <span>
-                     <Popover content={message} >
+                     <Tooltip title={record.message} >
                        <Icon type="message" />
-                     </Popover>
+                     </Tooltip>
                 </span>
             )
         }
     },
     {
         title: '操作',
-        width: '18%',
+        width: '15%',
         key: 'operation',
         render:(row,record) => {
             let apiHref = '/update_api?apiId=' + record.testCase.apiId

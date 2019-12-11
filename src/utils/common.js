@@ -51,3 +51,30 @@ function removeUrlParamFrom(url, paramName) {
 }
 
 
+export function replaceUrlParamVal(paramName,replaceWith) {
+    var nUrl = changeURLArg(window.location.href,paramName,replaceWith)
+    window.history.replaceState({},"", nUrl);
+}
+
+function changeURLArg(url,arg,arg_val){
+    if(url.indexOf("#")!=-1){
+        url = url.replace("#","");
+    }
+    if(url.indexOf("&"+arg+'=')!=-1){
+        arg = "&"+arg;
+    }
+    var pattern = arg+'=([^&]*)';
+    var replaceText = arg+'='+arg_val;
+    if(url.match(pattern)){
+        var tmp='/('+ arg+'=)([^&]*)/gi';
+        tmp=url.replace(eval(tmp),replaceText);
+        return tmp;
+    }else{
+        if(url.match('[\?]')){
+            return url+'&'+replaceText;
+        }else{
+            return url+'?'+replaceText;
+        }
+    }
+    return url+'\n'+arg+'\n'+arg_val;
+}

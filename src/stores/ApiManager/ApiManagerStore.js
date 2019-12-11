@@ -27,7 +27,7 @@ class ApiManagerStore {
     };
     @action
     changeTableRequestData(n,v){
-        this.tableRequestData[n]=v;
+        this.tableRequestData[n] = v == "" ? undefined : v ;
     }
     @action
     changeDetailData(n,v){

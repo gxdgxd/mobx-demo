@@ -18,7 +18,7 @@ class ExeRecordStore {
     };
     @action
     changeTableRequestData(n,v){
-        this.tableRequestData[n]=v;
+        this.tableRequestData[n] = v == "" ? undefined : v ;
     }
     @action
     hideModal(){

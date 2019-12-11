@@ -18,7 +18,7 @@ class ExeCaseModal extends Component{
     okModal(){
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                let params =  {"id":null,"caseIds":this.props.caseIds,"scheduleType":this.state.scheduleType,"env":this.state.env}
+                let params =  {"id":null,"caseIds":this.props.caseIds,"scheduleType":1,"env":this.state.env}
                 this.props.TestCaseManagerStore.exeCase(params,"case");
             }
         });
@@ -56,14 +56,7 @@ class ExeCaseModal extends Component{
                         )}
                     </FormItem>
                     <FormItem {...this.formItemLayout} label="执行方式">
-                        {getFieldDecorator('scheduleType', {
-                            rules: [{ required: true, message: '请选择执行方式!' }],
-                        })(
-                            <Select placeholder="请选择执行方式"  style={{ width: 220 }} onChange={value => this.setState({ scheduleType:value.toString() })}>
-                                <Option value="1">并行执行</Option>
-                                <Option value="0">顺序执行</Option>
-                            </Select>
-                        )}
+                        <span>并行执行</span>
                     </FormItem>
                 </Form>
             </Modal>

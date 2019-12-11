@@ -20,11 +20,11 @@ class SceneManagerStore {
 
     @action
     changeTableRequestData(n,v){
-        this.tableRequestData[n]=v;
+        this.tableRequestData[n] = v == "" ? undefined : v ;
     }
     @action
     changeDetailData(n,v){
-        this.detailData[n]=v;
+        this.detailData[n] = v;
     }
 
     @action

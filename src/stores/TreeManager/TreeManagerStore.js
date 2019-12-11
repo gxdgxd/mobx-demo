@@ -11,8 +11,7 @@ class TreeManagerStore {
     @observable treeModalVisible = false;
     @observable detailData = {}
     @observable modalName = ""
-    @observable appId = "3"
-    @observable moduleId = ""
+
 
     @action
     hideTreeModal (){

@@ -54,6 +54,12 @@ export const columns = (context) => [
         width:'8%'
     },
     {
+        title: '接口ID',
+        dataIndex: 'apiId',
+        key: 'apiId',
+        width:'8%',
+    },
+    {
         title: '更新时间',
         dataIndex: 'editTimeStr',
         key: 'editTimeStr',

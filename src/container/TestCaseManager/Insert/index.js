@@ -8,8 +8,6 @@ import SingleTag from "../../TagManager/SingleTag";
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { TextArea } = Input;
-let caseId = getUrlParam('caseId',window.location.search);
-let apiId = getUrlParam('apiId',window.location.search);
 
 @inject('TestCaseManagerStore','ApiManagerStore')
 @observer
@@ -20,7 +18,7 @@ class InsertIndex extends Component {
             {name: '编辑用例'},
         ]);
         this.props.ApiManagerStore.getApiDetailData()
-        if(caseId != ""){
+        if(getUrlParam('caseId',window.location.search) != ""){
             this.props.TestCaseManagerStore.getDetailData()
         }
         // this.setState({
@@ -57,13 +55,14 @@ class InsertIndex extends Component {
     }
 
     /**
-     * 批量添加
+     * 保存用例
      */
     insert = (e) => {
+
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                this.props.TestCaseManagerStore.insert(this.props.ApiManagerStore.tags,this.props.ApiManagerStore.detailData)
+                this.props.TestCaseManagerStore.insert(this.props.ApiManagerStore.tags,this.props.ApiManagerStore.detailData,true)
             }
         });
     }
@@ -71,6 +70,18 @@ class InsertIndex extends Component {
      * 只测试不保存
      */
     testCaseExe = () => {
+        debugger
+        let caseId = getUrlParam('caseId',window.location.search);
+
+        if(caseId == ""){
+            message.warn("请先保存用例再执行！")
+            return
+        }
+        this.props.form.validateFieldsAndScroll((err, values) => {
+            if (!err) {
+                this.props.TestCaseManagerStore.insert(this.props.ApiManagerStore.tags,this.props.ApiManagerStore.detailData,false)
+            }
+        });
         let params =  {"id":null,"caseIds":[caseId],"scheduleType":1,"env":this.state.dubboGroup}
         this.props.TestCaseManagerStore.exeCase(params,'case');
     }
@@ -208,14 +219,14 @@ class InsertIndex extends Component {
                             )}
                         </FormItem>
                     </Row>
-                    <Alert message="结果校验规则" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px'}}/>
+                    <Alert message="结果校验规则（如：assert self.result.data != null:'结果data不能为空'）" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px'}}/>
                     <Row>
                         <FormItem {...this.formItemLayout} label="">
                             {getFieldDecorator('validScript', {
                                 initialValue: caseDetailData.validScript,
                                 rules: [{ required: true, message: '请填写用例校验规则!' }],
                             })(
-                                <TextArea rows={4} style={{ width: 1210 }} placeholder="如：result != null  && result.data != null && result.data.size() > 0 && result.data.id == $p.result.id" onChange={this.inputChange.bind(this,'validScript')}/>
+                                <TextArea rows={4} style={{ width: 1210 }} placeholder="如：assert self.result.data != null:'结果data不能为空'" onChange={this.inputChange.bind(this,'validScript')}/>
                             )}
                         </FormItem>
                     </Row>
@@ -227,12 +238,12 @@ class InsertIndex extends Component {
                             <Button type="primary" htmlType="submit" style={{marginBottom:'8px'}}>修改用例</Button>
                         </FormItem>
                         <FormItem {...this.formItemLayout} label="" style={{display:updateButtonStatus}}>
-                            <Button type="primary" htmlType="submit" style={{marginBottom:'8px'}} onClick={()=>{window.open("/edit_testcase?type=copy&apiId=" + apiId + "&caseId=" + caseId)}}>复制用例</Button>
+                            <Button type="primary" htmlType="submit" style={{marginBottom:'8px'}} onClick={()=>{window.open("/edit_testcase?type=copy&apiId=" + getUrlParam('apiId',window.location.search) + "&caseId=" + getUrlParam('caseId',window.location.search))}}>复制用例</Button>
                         </FormItem>
-                        <FormItem {...this.formItemLayout} label="">
-                            <Button type="primary" style={{marginBottom:'8px'}} onClick={this.testCaseExe}>只测试不保存</Button>
+                        <FormItem {...this.formItemLayout} label="" style={{display:updateButtonStatus}}>
+                            <Button type="primary" style={{marginBottom:'8px'}} onClick={this.testCaseExe}>保存并执行</Button>
                         </FormItem>
-                        <FormItem {...this.formItemLayout} label="">
+                        <FormItem {...this.formItemLayout} label="" style={{display:updateButtonStatus}}>
                             <Input style={{ width: 280 }} placeholder="请输入测试用的dubbo分组" allowClear={true}  onChange={e => this.setState({ dubboGroup: e.target.value })}/>
                         </FormItem>
                     </Row>

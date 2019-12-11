@@ -4,10 +4,10 @@ import common from "../../style/common.css";
 
 export const columns = (context) => [
     {
-        title: 'ID',
+        title: '接口ID',
         dataIndex: 'id',
         key: 'id',
-        width:'7%'
+        width:'8%'
     },
     {
         title: '方法名',
@@ -37,7 +37,7 @@ export const columns = (context) => [
         title: '接口名',
         dataIndex: 'name',
         key: 'name',
-        width:'19%',
+        width:'18%',
         render:function(text, record){
             var name = record.name.length > 20 ? record.name.substr(0,20) + '...' : record.name;
             return (
