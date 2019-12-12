@@ -20,6 +20,7 @@ class ExeCaseModal extends Component{
             if (!err) {
                 let params =  {"id":null,"caseIds":this.props.caseIds,"scheduleType":1,"env":this.state.env}
                 this.props.TestCaseManagerStore.exeCase(params,"case");
+                this.hideExeCaseModal()
             }
         });
     }

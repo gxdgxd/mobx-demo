@@ -70,12 +70,11 @@ export const columns = (context) => [
 
 export const insertCaseColumns = (context) => [
     {
-        title: '应用',
-        dataIndex: 'appName',
-        key: 'appName',
-        width:'10%'
+        title: '用例ID',
+        dataIndex: 'id',
+        key: 'id',
+        width:'7%',
     },
-
     {
         title: '用例名称',
         dataIndex: 'name',
@@ -113,6 +112,13 @@ export const insertCaseColumns = (context) => [
         width:'7%'
     },
     {
+        title: '应用',
+        dataIndex: 'appName',
+        key: 'appName',
+        width:'10%'
+    },
+
+    {
         title: '接口ID',
         dataIndex: 'apiId',
         key: 'apiId',
@@ -140,7 +146,7 @@ export const insertCaseColumns = (context) => [
     },
     {
         title: '操作',
-        width: '18%',
+        width: '25%',
         key: 'operation',
         render:(row,record) => {
             let updateHref = '/edit_testcase?apiId=' + record.apiId + "&caseId=" + record.id
@@ -161,12 +167,11 @@ export const insertCaseColumns = (context) => [
 
 export const caseColumns = (context) => [
     {
-        title: '应用',
-        dataIndex: 'appName',
-        key: 'appName',
-        width:'10%'
+        title: '用例ID',
+        dataIndex: 'id',
+        key: 'id',
+        width:'7%',
     },
-
     {
         title: '用例名称',
         dataIndex: 'name',
@@ -205,6 +210,12 @@ export const caseColumns = (context) => [
         width:'7%'
     },
     {
+        title: '应用',
+        dataIndex: 'appName',
+        key: 'appName',
+        width:'10%'
+    },
+    {
         title: '接口ID',
         dataIndex: 'apiId',
         key: 'apiId',
@@ -235,7 +246,7 @@ export const caseColumns = (context) => [
         title: '更新时间',
         dataIndex: 'editTimeStr',
         key: 'editTimeStr',
-        width:'15%'
+        width:'20%'
     }
 ];
 

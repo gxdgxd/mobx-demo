@@ -29,7 +29,6 @@ class Index extends Component{
             {name: '接口管理'},
             {name: '添加接口'},
         ]);
-        this.props.ApiManagerStore.fetchApiByGAV(1);
     }
 
     /**

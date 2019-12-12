@@ -23,7 +23,7 @@ class ApiManagerStore {
         id:null,
         creatorId:null,
         tagIds:null,
-        "artifactId":"pay-api","groupId":"com.yangt.pay","version":"1.0.20"
+        // "artifactId":"pay-api","groupId":"com.yangt.pay","version":"1.0.20"
     };
     @action
     changeTableRequestData(n,v){

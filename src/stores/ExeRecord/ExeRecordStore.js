@@ -9,9 +9,11 @@ class ExeRecordStore {
     @observable dataSource = [];
     @observable detailData = [];
     @observable modalVisible = false;
+    @observable resultMessageModalVisible = false;
     @observable totalCount = 0
     @observable pageSize = 0
     @observable pageNo = 0
+    @observable message = ""
     //查询条件
     @observable tableRequestData = {
 
@@ -23,6 +25,16 @@ class ExeRecordStore {
     @action
     hideModal(){
         this.modalVisible = false;
+    }
+    @action
+    hideResultMessageModal(){
+        this.resultMessageModalVisible = false;
+    }
+    @action
+    showResultMessageModal(message){
+        this.resultMessageModalVisible = true;
+        console.log('message:',message)
+        this.message = message
     }
     /**
      * 初始化table数据

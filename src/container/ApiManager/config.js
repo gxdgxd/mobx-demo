@@ -7,13 +7,30 @@ export const columns = (context) => [
         title: '接口ID',
         dataIndex: 'id',
         key: 'id',
-        width:'8%'
+        width:80,
+        fixed: 'left',
+    },
+    {
+        title: '接口名',
+        dataIndex: 'name',
+        key: 'name',
+        width:180,
+        render:function(text, record){
+            var name = record.name.length > 20 ? record.name.substr(0,20) + '...' : record.name;
+            return (
+                <span  >
+                    <Popover content={record.name} >
+                        {name}
+                    </Popover>
+                </span>
+            )
+        }
     },
     {
         title: '方法名',
         dataIndex: 'apiMethodName',
         key: 'apiMethodName',
-        width:'15%',
+        width:150,
         render:function(text, record){
             var name = record.apiMethodName.length > 12 ? record.apiMethodName.substr(0,12) + '...' : record.apiMethodName;
             let str = <div>
@@ -33,44 +50,76 @@ export const columns = (context) => [
             )
         }
     },
+
     {
-        title: '接口名',
-        dataIndex: 'name',
-        key: 'name',
-        width:'18%',
-        render:function(text, record){
-            var name = record.name.length > 20 ? record.name.substr(0,20) + '...' : record.name;
-            return (
-                <span  >
-                    <Popover content={record.name} >
-                        {name}
-                    </Popover>
-                </span>
-            )
-        }
-    },
-    {
-        title: '应用名',
+        title: '应用',
         dataIndex: 'appName',
         key: 'appName',
-        width:'10%',
+        width:100,
+    },
+    {
+        title: '模块',
+        dataIndex: 'moduleName',
+        key: 'moduleName',
+        width:150,
     },
     {
         title: 'groupId',
         dataIndex: 'groupId',
         key: 'groupId',
-        width:'13%',
+        width:150,
     },
     {
         title: 'artifactId',
         dataIndex: 'artifactId',
         key: 'artifactId',
-        width:'13%',
+        width:120,
+    },
+    {
+        title: '更新时间',
+        dataIndex: 'editTimeStr',
+        key: 'editTimeStr',
+        width:180,
+    },
+    {
+        title: '创建人',
+        dataIndex: 'creatorName',
+        key: 'creatorName',
+        width:150,
+    },
+    {
+        title: '标签',
+        dataIndex: 'tags',
+        key: 'tags',
+        width:150,
+        render:(row,record) => {
+
+            return (
+                <span>
+                    {record.tags.map((tag, index) => {
+                        const isLongTag = tag.length > 20;
+                        const tagElem = (
+                            <Tag key={tag.id} color="purple">
+                                {isLongTag ? `${tag.value.slice(0, 20)}...` : tag.value}
+                            </Tag>
+                        );
+                        return isLongTag ? (
+                            <Tooltip title={tag.value} key={tag.id}>
+                                {tagElem}
+                            </Tooltip>
+                        ) : (
+                            tagElem
+                        );
+                    })}
+                </span>
+            )
+        }
     },
     {
         title: '操作',
-        width: '22%',
+        width:230,
         key: 'operation',
+        fixed: 'right',
         render:(row,record) => {
             let updateHref = "/update_api?apiId=" + record.id
             let searchCaseHref = "/testcase_manager?apiId=" + record.id

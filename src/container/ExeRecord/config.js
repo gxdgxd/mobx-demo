@@ -151,6 +151,20 @@ export const detailColumns = (context) => [
         }
     },
     {
+        title: '接口ID',
+        dataIndex: 'apiId',
+        key: 'apiId',
+        width:'7%',
+        render:function(text, record){
+            var apiId = record.testCase.apiId
+            return (
+                <span>
+                   {apiId}
+                </span>
+            )
+        }
+    },
+    {
         title: '接口名',
         dataIndex: 'a',
         key: 'a',
@@ -168,7 +182,7 @@ export const detailColumns = (context) => [
         title: '状态',
         dataIndex: 'succeed',
         key: 'succeed',
-        width:'12%',
+        width:'10%',
         render:function(row){
             let name = ""
             if(row == true){
@@ -190,12 +204,9 @@ export const detailColumns = (context) => [
         key: 'message',
         width:'6%',
         render:function(text, record){
-            // let message=
             return (
                 <span>
-                     <Tooltip title={record.message} >
-                       <Icon type="message" />
-                     </Tooltip>
+                    <a onClick={context.showResultMessageModal.bind(context,record.message)}><Icon type="message" /></a> &nbsp;
                 </span>
             )
         }

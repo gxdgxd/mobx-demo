@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import { observable, action, computed ,toJS} from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Table,Alert,Tree,Form,Row, Col,Tag,Modal,DatePicker} from 'antd';
+import { Table,Alert,Row, Col,Tag,Modal} from 'antd';
 import {detailColumns} from "./config";
+import ResultMessageModal from "./ResultMessageModal";
 
 
 @inject('ExeRecordStore')
@@ -18,7 +19,11 @@ class DetailModal extends Component {
     hideModal(){
         this.props.ExeRecordStore.hideModal();
     }
+    showResultMessageModal(message){
+        this.props.ExeRecordStore.showResultMessageModal(message);
+    }
     render(){
+        const {resultMessageModalVisible,message} = this.props.ExeRecordStore
         const {modalVisible,detailData} = this.props
         let caseData = toJS(detailData.caseExeRecords)
         let statusStr = ""
@@ -38,6 +43,7 @@ class DetailModal extends Component {
                     destroyOnClose
                     title="执行详情"
                     width="800px"
+                    okText="关闭"
                     visible={modalVisible}
                     onOk={this.hideModal.bind(this)}
                     onCancel={this.hideModal.bind(this)}
@@ -75,6 +81,7 @@ class DetailModal extends Component {
                         bordered
                         columns={detailColumns(this)}
                         dataSource={caseData} />
+                    <ResultMessageModal resultMessageModalVisible={resultMessageModalVisible} message={message}/>
                 </Modal>
             </div>
         )

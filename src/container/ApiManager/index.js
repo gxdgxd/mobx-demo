@@ -52,7 +52,7 @@ class ApiManagerList extends Component {
                         <SearchForm allTags={allTags} allCreators={allCreators} />
                         <Table
                             bordered
-                            columns={columns(this)}
+                            columns={columns(this)} scroll={{ x: 1680, y: 600 }}
                             dataSource={mydataSource} pagination={false}
                         />
                         <Pagination onChange={this.onChangePage} pageSize={pageSize} current={pageNo}  total={totalCount} style={{'marginTop':'6px','float':'right'}}/>

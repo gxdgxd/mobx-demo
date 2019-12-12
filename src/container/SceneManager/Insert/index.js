@@ -111,7 +111,12 @@ class InsertIndex extends Component {
                     </Row>
 
                     <Row gutter={48}>
-                        <Tag color="purple" style={{'marginBottom':'8px'}}>  <Icon type="smile" /> 上下拖拽可以移动表格中用例顺序哦～  </Tag>
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit" >
+                                保存此场景数据
+                            </Button> &nbsp; &nbsp; &nbsp;
+                            <Tag color="purple" style={{'marginBottom':'8px'}}>  <Icon type="smile" /> 上下拖拽可以移动表格中用例顺序哦～  </Tag>
+                        </Form.Item>
                         <DndProvider backend={HTML5Backend}>
                             <Table
                                 bordered
@@ -123,18 +128,7 @@ class InsertIndex extends Component {
                                 })} />
                         </DndProvider>
                     </Row>
-                    <Row style={{'marginTop':'6px'}}>
-                        <Col span={7}>
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit" >
-                                    保存此场景数据
-                                </Button> &nbsp; &nbsp; &nbsp;
-                                <Button type="primary" >
-                                    执行场景
-                                </Button>  &nbsp; &nbsp; &nbsp;
-                            </Form.Item>
-                        </Col>
-                    </Row>
+
                 </Form>
             </div>
         )

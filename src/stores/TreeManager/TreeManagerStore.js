@@ -66,7 +66,6 @@ class TreeManagerStore {
     @action
     async getTreeModuleDataSouce(item){
         console.log('item', item);
-        debugger
         const moduleResult = await post("1.0.0/hipac.api.test.module.findByAppIdAndParentId/",{"appId":item.appId,"parentId":item.parentId})
         let data = moduleResult.data
         let array = []
@@ -82,7 +81,6 @@ class TreeManagerStore {
             obj.appName = item.appName
             array.push(obj)
         }
-        debugger
 
         console.log(array)
         // return array
@@ -98,6 +96,7 @@ class TreeManagerStore {
         if(result.code == 200){
             message.success("保存模块成功")
             this.getTreeAppDataSouce()
+            console.log("appID:",this.tableRequestData.appId)
             this.getTreeModuleDataSouce({'appId':this.tableRequestData.appId,"parentId":this.tableRequestData.parentId})
             this.hideTreeModal()
         }
