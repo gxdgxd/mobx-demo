@@ -203,8 +203,13 @@ class InsertIndex extends Component {
                             <ReactJson src={eval(detailData.argsJsonFormat)} onAdd={this.handleAdd} onEdit={this.handleEdit} onDelete={this.handleDelete}   theme="google" style={{border:'1px solid #ccc','maxHeight':'325px','overflow-y':'auto' }}/>
                         </div>
                         <div style={{float:'right',width:'49%'}}>
+                            {getFieldDecorator('paramScript', {
+                                initialValue: caseDetailData.paramScript,
+                                rules: [{ required: false, message: '请填写其他参数!' }],
+                            })(
+                                <TextArea rows={15} style={{'width':'1300px'}} onChange={this.inputChange.bind(this,'paramScript')}/>
 
-                            <TextArea value={caseDetailData.paramScript}  rows={15} style={{'width':'1300px'}} onChange={this.inputChange.bind(this,'paramScript')}/>
+                            )}
 
                         </div>
                     </Row>
