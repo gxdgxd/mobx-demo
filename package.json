@@ -25,10 +25,10 @@
     "react-router-dom": "^5.1.2",
     "regenerator-runtime": "^0.13.3"
   },
-    "repository": {
-        "url": "git@git.hipac.cn:automation/api_automation_static.git",
-        "type": "git"
-    },
+  "repository": {
+    "url": "git@git.hipac.cn:automation/api_automation_static.git",
+    "type": "git"
+  },
   "scripts": {
     "dep-install": "npm i --registry=http://registry.npm.yangtuojia.com",
     "start": "yt-react-scripts start",
