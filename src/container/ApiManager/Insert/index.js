@@ -4,6 +4,7 @@ import { Table, Button,Tag, Alert, message, Row, Col, Form, Input,Icon, } from '
 import SearchForm from './SearchForm';
 import {insertColumns} from "../config";
 import TreeManager from '../../TreeManager/TreeManager';
+import Highlighter from 'react-highlight-words';
 
 const FormItem = Form.Item;
 
@@ -20,7 +21,9 @@ class Index extends Component{
             inputVisible: false,
             inputValue: '',
             selectedRowKeysApis:[],
-            selectedRowsApis:[]
+            selectedRowsApis:[],
+            searchText: '',
+            searchedColumn: '',
         }
     }
 
@@ -106,6 +109,79 @@ class Index extends Component{
             this.props.ApiManagerStore.insertApi(this.state.selectedRowsApis)
         }
     }
+    /**
+     * 表头搜索触发
+     * @param dataIndex
+     * @returns {{filterDropdown: (function({setSelectedKeys: *, selectedKeys?: *, confirm?: *, clearFilters?: *}): *), filterIcon: (function(*): *), onFilter: (function(*, *): boolean), onFilterDropdownVisibleChange: onFilterDropdownVisibleChange, render: (function(*): *)}}
+     */
+    getColumnSearchProps = dataIndex => ({
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+            <div style={{ padding: 8 }}>
+                <Input
+                    ref={node => {
+                        this.searchInput = node;
+                    }}
+                    placeholder={`Search ${dataIndex}`}
+                    value={selectedKeys[0]}
+                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                    onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                    style={{ width: 188, marginBottom: 8, display: 'block' }}
+                />
+                <Button
+                    type="primary"
+                    onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                    icon="search"
+                    size="small"
+                    style={{ width: 90, marginRight: 8 }}
+                >
+                    Search
+                </Button>
+                <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+                    Reset
+                </Button>
+            </div>
+        ),
+        filterIcon: filtered => (
+            <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
+        ),
+        onFilter: (value, record) =>
+            record[dataIndex]
+                .toString()
+                .toLowerCase()
+                .includes(value.toLowerCase()),
+        onFilterDropdownVisibleChange: visible => {
+            if (visible) {
+                setTimeout(() => this.searchInput.select());
+            }
+        },
+        render: text =>
+            this.state.searchedColumn === dataIndex ? (
+                <Highlighter
+                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+                    searchWords={[this.state.searchText]}
+                    autoEscape
+                    textToHighlight={text.toString()}
+                />
+            ) : (
+                text
+            ),
+    });
+    handleSearch = (selectedKeys, confirm, dataIndex) => {
+        confirm();
+        this.setState({
+            searchText: selectedKeys[0],
+            searchedColumn: dataIndex,
+        });
+    };
+
+    handleReset = clearFilters => {
+        clearFilters();
+        this.setState({ searchText: '' });
+    };
+
+    /**
+     * 表头搜索触发 end
+     */
 
     render(){
         //可编辑单元格

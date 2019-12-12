@@ -141,6 +141,7 @@ export const insertColumns = (context) => [
         dataIndex: 'apiClassName',
         key: 'apiClassName',
         width:'27%',
+        ...context.getColumnSearchProps('apiClassName'),
         render:function(text, record){
             var name = record.apiClassName.length > 30 ? record.apiClassName.substr(0,30) + '...' : record.apiClassName;
             return (
@@ -157,6 +158,7 @@ export const insertColumns = (context) => [
         dataIndex: 'apiMethodName',
         key: 'apiMethodName',
         width:'20%',
+        ...context.getColumnSearchProps('apiMethodName'),
         render:function(text, record){
             var name = record.apiMethodName.length > 20 ? record.apiMethodName.substr(0,20) + '...' : record.apiMethodName;
             return (
@@ -168,6 +170,7 @@ export const insertColumns = (context) => [
             )
         }
     },
+
     {
         title: '接口名',
         dataIndex: 'name',

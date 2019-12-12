@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import { observable, action, computed ,toJS} from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Input,Alert,Modal} from 'antd';
-
-const { TextArea } = Input;
+import { Modal} from 'antd';
 
 @inject('ExeRecordStore')
 @observer
