@@ -32,7 +32,7 @@ class InsertIndex extends Component {
         this.state = {
             isCompressDisplay:'',
             isJsonFormatDisplay:'none',
-            dubboGroup:'2',
+            dubboGroup:'',
             leg: {"userId":"*******","ipAddr":"10.10.10.10","appKey":"*******","openId":"******","unionId":"********","deviceId":"*******","appv":"","os":""}
         }
     }
@@ -92,7 +92,7 @@ class InsertIndex extends Component {
         this.timerDate = setInterval(()=> this.tick(data.status),1000);
     }
     handleClearTimeout(){
-        this.timerDate && clearTimeout(this.timerDate);
+        this.timerDate && clearInterval(this.timerDate);
     }
     componentWillUnmount(){
         this.handleClearTimeout()

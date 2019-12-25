@@ -23,7 +23,7 @@ class ExeCaseModal extends Component{
                 let result = await this.props.TestCaseManagerStore.exeCase(params,'case');
                 if(result.code == 200){
                     this.hideExeCaseModal()
-                    await this.props.ExeRecordStore.getDetailData(result.data)
+                    this.timerExe(result)
                     await this.props.TestCaseManagerStore.showCaseDrawer()
                 }else{
                     message.warn("执行出现错误")
@@ -31,6 +31,21 @@ class ExeCaseModal extends Component{
 
             }
         });
+    }
+    timerExe = async(result) => {
+        let data = await this.props.ExeRecordStore.getDetailData(result.data)
+        this.timerDate = setInterval(()=> this.tick(data.status),1000);
+    }
+    handleClearTimeout(){
+        this.timerDate && clearInterval(this.timerDate);
+    }
+    componentWillUnmount(){
+        this.handleClearTimeout()
+    }
+    tick(status){
+        if(status == 2){
+            this.handleClearTimeout()
+        }
     }
 
     hideExeCaseModal(){
