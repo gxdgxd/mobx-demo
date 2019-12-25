@@ -45,7 +45,6 @@ class SceneManagerStore {
      */
     @action
     async insertScene(){
-        debugger
         let caseArray  = []
         for (let i = 0; i < this.caseDataSource.length; i++) {
             let obj = {}
@@ -88,7 +87,6 @@ class SceneManagerStore {
             }
             this.caseDataSource = caseDataSourceNew
         }
-        debugger
         console.log(JSON.stringify(this.caseDataSource))
         this.hideInsertCaseModal()
     }

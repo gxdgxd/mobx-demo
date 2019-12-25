@@ -53,7 +53,7 @@ class DetailModal extends Component {
 
                     <Row gutter={48} style={style}>
                         <Col span={4}>
-                           &nbsp;执行结果：{statusStr}
+                           &nbsp;任务状态：{statusStr}
                         </Col>
                         <Col span={6}>
                             执行时间：{detailData.exeTimeStr}

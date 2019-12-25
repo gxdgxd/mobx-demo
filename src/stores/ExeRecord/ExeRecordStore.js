@@ -7,7 +7,7 @@ import {getUrlParam} from "../../utils/common";
 
 class ExeRecordStore {
     @observable dataSource = [];
-    @observable detailData = [];
+    @observable exeDetailData = [];
     @observable modalVisible = false;
     @observable resultMessageModalVisible = false;
     @observable totalCount = 0
@@ -56,8 +56,9 @@ class ExeRecordStore {
     @action
     async getDetailData(id){
         const result = await post("1.0.0/hipac.api.test.exe.record.info/",{id:id})
-        this.detailData = result.data;
+        this.exeDetailData = result.data;
         this.modalVisible = true;
+        return result.data
     }
 
 }

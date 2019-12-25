@@ -3,13 +3,17 @@ import { observer, inject } from 'mobx-react';
 import ReactJson from 'react-json-view'
 import { Tag, Button,Alert, Select, Row,Icon, Form, Input,Tooltip,message } from 'antd';
 import {getUrlParam} from '../../../utils/common'
-import SingleTag from "../../TagManager/SingleTag";
+import ExeCaseDrawer from '../ExeCaseDrawer'
+
+message.config({
+    top: 200
+});
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { TextArea } = Input;
 
-@inject('TestCaseManagerStore','ApiManagerStore')
+@inject('TestCaseManagerStore','ApiManagerStore','ExeRecordStore')
 @observer
 class InsertIndex extends Component {
     componentDidMount() {
@@ -21,16 +25,15 @@ class InsertIndex extends Component {
         if(getUrlParam('caseId',window.location.search) != ""){
             this.props.TestCaseManagerStore.getDetailData()
         }
-        // this.setState({
-        //     json_str:this.props.TestCaseManagerStore.caseDetailData.paramScript
-        // })
 
     }
     constructor(props) {
         super(props);
         this.state = {
-            json_str:"",
-            dubboGroup:''
+            isCompressDisplay:'',
+            isJsonFormatDisplay:'none',
+            dubboGroup:'2',
+            leg: {"userId":"*******","ipAddr":"10.10.10.10","appKey":"*******","openId":"******","unionId":"********","deviceId":"*******","appv":"","os":""}
         }
     }
     /**
@@ -67,9 +70,43 @@ class InsertIndex extends Component {
         });
     }
     /**
+     * 压缩参数
+     */
+    compressParams = () => {
+        this.setState({
+            'isCompressDisplay':'',
+            'isJsonFormatDisplay':'none',
+        })
+    }
+    /**
+     * json格式化
+     */
+    jsonFormat = () => {
+        this.setState({
+            'isCompressDisplay':'none',
+            'isJsonFormatDisplay':'',
+        })
+    }
+    timerExe = async(result) => {
+        let data = await this.props.ExeRecordStore.getDetailData(result.data)
+        this.timerDate = setInterval(()=> this.tick(data.status),1000);
+    }
+    handleClearTimeout(){
+        this.timerDate && clearTimeout(this.timerDate);
+    }
+    componentWillUnmount(){
+        this.handleClearTimeout()
+    }
+    tick(status){
+        if(status == 2){
+            this.handleClearTimeout()
+        }
+    }
+
+    /**
      * 只测试不保存
      */
-    testCaseExe = () => {
+    testCaseExe = async () => {
         debugger
         let caseId = getUrlParam('caseId',window.location.search);
 
@@ -83,28 +120,23 @@ class InsertIndex extends Component {
             }
         });
         let params =  {"id":null,"caseIds":[caseId],"scheduleType":1,"env":this.state.dubboGroup}
-        this.props.TestCaseManagerStore.exeCase(params,'case');
-    }
+        let result = await this.props.TestCaseManagerStore.exeCase(params,'case');
+        if(result.code == 200){
+            this.timerExe(result)
 
-    /**
-     * json tree 添加、修改、删除
-     * @param add
-     */
-    handleAdd = (add) => {
-        this.props.TestCaseManagerStore.changeDetailData("paramScript",JSON.stringify(add.updated_src));
+            this.props.TestCaseManagerStore.showCaseDrawer()
+        }else{
+            message.warn("执行出现错误")
+        }
     }
-    handleEdit = (add) => {
-        debugger
-        this.props.TestCaseManagerStore.changeDetailData("paramScript",JSON.stringify(add.updated_src));
-    }
-    handleDelete = (add) => {
-        this.props.TestCaseManagerStore.changeDetailData("paramScript",JSON.stringify(add.updated_src));
+    handleCopy(copy){
+        message.success("复制成功")
     }
     render(){
         const { getFieldDecorator} = this.props.form;
         const {detailData,tags} = this.props.ApiManagerStore
-        const {insertButtonStatus,updateButtonStatus,caseDetailData} = this.props.TestCaseManagerStore
-
+        const {exeDetailData} = this.props.ExeRecordStore
+        const {insertButtonStatus,updateButtonStatus,caseDetailData,drawerVisible} = this.props.TestCaseManagerStore
         return(
             <div className="container-bg" style={{'marginLeft':'15px'}}>
                 <Form  layout="inline" className="ant-advanced-search-form p-xs pb-0" onSubmit={this.insert}>
@@ -197,43 +229,65 @@ class InsertIndex extends Component {
                             )}
                         </FormItem>
                     </Row>
-                    <Alert message="请求入参" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px'}}/>
+                    <Alert message="接口参数信息" type="info" style={{backgroundColor:'#c7e7ff',border:'0px'}}/>
                     <Row>
-                        <div style={{float:'left',width:'50%'}}>
-                            <ReactJson src={eval(detailData.argsJsonFormat)} onAdd={this.handleAdd} onEdit={this.handleEdit} onDelete={this.handleDelete}   theme="google" style={{border:'1px solid #ccc','maxHeight':'325px','overflow-y':'auto' }}/>
+                        <div style={{float:'left',width:'48%'}}>
+                            <b>接口入参：</b>
+                            <ReactJson src={eval(detailData.argsJsonFormat)}  enableClipboard={this.handleCopy} name={null}  theme="google" style={{border:'1px solid #ccc','height':'180px','maxHeight':'180px','overflow-y':'auto' }}/>
+                            <b>接口出参：</b>
+                            <ReactJson src={eval(detailData.resultJsonFormat)}  enableClipboard={this.handleCopy} name={null} theme="google" style={{border:'1px solid #ccc','height':'180px','maxHeight':'180px','overflow-y':'auto' }}/>
                         </div>
-                        <div style={{float:'right',width:'49%'}}>
+                        <div style={{float:'right',width:'51%','marginTop':'19px'}}>
                             {getFieldDecorator('paramScript', {
                                 initialValue: caseDetailData.paramScript,
-                                rules: [{ required: false, message: '请填写其他参数!' }],
+                                rules: [{ required: false, message: '请填写接口参数信息!' }],
                             })(
-                                <TextArea rows={15} style={{'width':'1300px'}} onChange={this.inputChange.bind(this,'paramScript')}/>
-
+                                <TextArea rows={16} style={{'width':'1300px',display:this.state.isCompressDisplay }} onChange={this.inputChange.bind(this,'paramScript')}/>
                             )}
 
+                            <ReactJson src={eval(caseDetailData.paramScript)}  enableClipboard={false}  name={null} style={{border:'1px solid #ccc','height':'343px','marginBottom':'5px','maxHeight':'343px','overflow-y':'auto',display:this.state.isJsonFormatDisplay  }}/>
+
+                            <Button type="primary" style={{marginBottom:'8px'}} onClick={this.compressParams}>压缩</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <Button type="primary" style={{marginBottom:'8px'}} onClick={this.jsonFormat}>格式化</Button>
                         </div>
                     </Row>
-                    <Alert message="其他参数（dubbo rpc parameter）" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px'}}/>
+                    <Alert message="dubbo contextParams" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px','marginTop':'6px'}}/>
                     <Row>
-                        <FormItem {...this.formItemLayout} label="">
-                            {getFieldDecorator('contextParamScript', {
-                                initialValue: caseDetailData.contextParamScript,
-                                rules: [{ required: false, message: '请填写其他参数!' }],
-                            })(
-                                <TextArea rows={3} style={{ width: 1210 }} onChange={this.inputChange.bind(this,'contextParamScript')}/>
-                            )}
-                        </FormItem>
+                        <div style={{float:'left',width:'48%'}}>
+                            <FormItem {...this.formItemLayout} label="">
+                                {getFieldDecorator('contextParamScript', {
+                                    initialValue: caseDetailData.contextParamScript,
+                                    rules: [{ required: false, message: '请填写其他参数!' }],
+                                })(
+                                    <TextArea rows={6} style={{ width: 600 }} placeholder='如果此dubbo接口是供hop网关使用，则可能需要填写dubbo context,如：{"userId":"5c0e5e0c881f449b9fe50923ea8f6183"}，也可以参考右侧格式' onChange={this.inputChange.bind(this,'contextParamScript')}/>
+                                )}
+                            </FormItem>
+                        </div>
+                        <div style={{float:'right',width:'50%'}}>
+                            如果此dubbo接口是供hop网关使用，则可能需要填写dubbo context，如：
+                            <ReactJson src={this.state.leg} name={null}  enableClipboard={this.handleCopy} style={{border:'1px solid #ccc','height':'113px','marginBottom':'5px','maxHeight':'113px','overflow-y':'auto'  }}/>
+                        </div>
                     </Row>
                     <Alert message="结果校验规则（如：assert self.result.data != null:'结果data不能为空'）" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px'}}/>
                     <Row>
-                        <FormItem {...this.formItemLayout} label="">
-                            {getFieldDecorator('validScript', {
-                                initialValue: caseDetailData.validScript,
-                                rules: [{ required: true, message: '请填写用例校验规则!' }],
-                            })(
-                                <TextArea rows={4} style={{ width: 1210 }} placeholder="如：assert self.result.data != null:'结果data不能为空'" onChange={this.inputChange.bind(this,'validScript')}/>
-                            )}
-                        </FormItem>
+                        <div style={{float:'left',width:'48%'}}>
+                            <FormItem {...this.formItemLayout} label="">
+                                {getFieldDecorator('validScript', {
+                                    initialValue: caseDetailData.validScript,
+                                    rules: [{ required: true, message: '请填写用例校验规则!' }],
+                                })(
+                                    <TextArea rows={6} style={{ width: 600 }} placeholder="多个assert的规则需要换行写" onChange={this.inputChange.bind(this,'validScript')}/>
+                                )}
+                            </FormItem>
+                        </div>
+                        <div style={{float:'right',width:'50%'}}>
+                            示例一：校验后返回布尔值作为校验结果（不推荐）return self.result.data != null<br/>
+                            示例二：使用强断言校验结果（推荐）assert self.result.data != null <br/>
+                            示例三：使用断言校验结果（推荐）assert self.result.data != null:'结果data不能为空'<br/>
+                            示例四：多个判断<br/>
+                            assert self.result.data != null:'结果data不能为空' <br/>
+                            assert self.result.data.itemId !=null:'结果中的itemId不能为空'  &nbsp;&nbsp;<a href="http://k.yangtuojia.com/pages/viewpage.action?pageId=18827049" target="_blank" ><Icon type="question-circle" /> 更多写法帮助</a><br/>
+                        </div>
                     </Row>
                     <Row>
                         <FormItem {...this.formItemLayout} label="" style={{display:insertButtonStatus}}>
@@ -253,6 +307,7 @@ class InsertIndex extends Component {
                         </FormItem>
                     </Row>
                 </Form>
+                <ExeCaseDrawer exeDetailData={exeDetailData} drawerVisible={drawerVisible}></ExeCaseDrawer>
             </div>
         )
     }

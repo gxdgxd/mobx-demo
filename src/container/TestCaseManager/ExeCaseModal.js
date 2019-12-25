@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Select,Form, Input, Modal } from 'antd';
-const FormItem = Form.Item;
-const Option = Select.Option;
+import {message} from "antd/lib/index";
 
-@inject('TestCaseManagerStore')
+const FormItem = Form.Item;
+
+@inject('TestCaseManagerStore','ExeRecordStore')
 @observer
 class ExeCaseModal extends Component{
     constructor(props){
@@ -16,11 +17,18 @@ class ExeCaseModal extends Component{
     }
 
     okModal(){
-        this.props.form.validateFieldsAndScroll((err, values) => {
+        this.props.form.validateFieldsAndScroll( async (err, values) => {
             if (!err) {
                 let params =  {"id":null,"caseIds":this.props.caseIds,"scheduleType":1,"env":this.state.env}
-                this.props.TestCaseManagerStore.exeCase(params,"case");
-                this.hideExeCaseModal()
+                let result = await this.props.TestCaseManagerStore.exeCase(params,'case');
+                if(result.code == 200){
+                    this.hideExeCaseModal()
+                    await this.props.ExeRecordStore.getDetailData(result.data)
+                    await this.props.TestCaseManagerStore.showCaseDrawer()
+                }else{
+                    message.warn("执行出现错误")
+                }
+
             }
         });
     }
@@ -60,6 +68,7 @@ class ExeCaseModal extends Component{
                         <span>并行执行</span>
                     </FormItem>
                 </Form>
+
             </Modal>
         )
     }

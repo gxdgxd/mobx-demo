@@ -5,11 +5,13 @@ import { Table,Pagination,Row, Col,Button} from 'antd';
 import {columns} from './config';
 import SearchForm from './SearchForm';
 import ExeCaseModal from './ExeCaseModal';
-
+import ExeCaseDrawer from './ExeCaseDrawer'
 import TreeManager from '../TreeManager/TreeManager';
 import {message} from "antd/lib/index";
-
-@inject('TestCaseManagerStore','CommonStore','SceneManagerStore')
+message.config({
+    top: 200
+});
+@inject('TestCaseManagerStore','CommonStore','SceneManagerStore','ExeRecordStore')
 @observer
 class TestCaseManagerList extends Component {
     componentDidMount() {
@@ -45,6 +47,9 @@ class TestCaseManagerList extends Component {
         // this.props.SceneManagerStore.insertCase(this.state.selectedRows);
         // this.props.history.push("/insert_scene")
 
+        // <Button type="primary" style={{'marginBottom':'7px'}} onClick={this.batchExeCase.bind(this)} >
+        // 批量执行
+        // </Button>
     }
     onChangePage = page => {
         this.props.TestCaseManagerStore.initData(page);
@@ -53,7 +58,7 @@ class TestCaseManagerList extends Component {
         this.props.TestCaseManagerStore.showExeCaseModal(caseIds);
     }
     render(){
-        const {dataSource,pageNo,pageSize,totalCount,exeCaseModalVisible,caseIds} = this.props.TestCaseManagerStore
+        const {dataSource,pageNo,pageSize,totalCount,exeCaseModalVisible,caseIds,drawerVisible} = this.props.TestCaseManagerStore
         const mydataSource = dataSource.toJS()
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
@@ -64,6 +69,7 @@ class TestCaseManagerList extends Component {
                 });
             }
         };
+        const {exeDetailData} = this.props.ExeRecordStore
         return(
             <div className="container-bg">
                 <Row>
@@ -72,16 +78,15 @@ class TestCaseManagerList extends Component {
                     </Col>
                     <Col span={20}>
                         <SearchForm/>
-                        <Button type="primary" style={{'marginBottom':'7px'}} onClick={this.batchExeCase.bind(this)} >
-                            批量执行
-                        </Button>
 
                         <Table
                             bordered
                             columns={columns(this)} pagination={false} scroll={{ x: 1380, y: 600 }}
-                            dataSource={mydataSource}  rowSelection={rowSelection}/>
+                            dataSource={mydataSource}  />
                         <Pagination onChange={this.onChangePage} pageSize={pageSize} current={pageNo}  total={totalCount} style={{'marginTop':'6px','float':'right'}}/>
                         <ExeCaseModal exeCaseModalVisible={exeCaseModalVisible} caseIds={caseIds}></ExeCaseModal>
+                        <ExeCaseDrawer exeDetailData={exeDetailData} drawerVisible={drawerVisible}></ExeCaseDrawer>
+
                     </Col>
                 </Row>
             </div>

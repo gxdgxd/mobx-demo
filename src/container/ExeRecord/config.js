@@ -179,7 +179,7 @@ export const detailColumns = (context) => [
         }
     },
     {
-        title: '状态',
+        title: '执行结果',
         dataIndex: 'succeed',
         key: 'succeed',
         width:'10%',

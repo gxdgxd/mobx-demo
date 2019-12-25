@@ -12,6 +12,7 @@ class TestCaseManagerStore{
     @observable pageNo = 0
     @observable treeParams = {'appId':'','moduleId':''}
     @observable exeCaseModalVisible = false
+    @observable drawerVisible = false
     @observable caseIds = []
     @observable caseDetailData = {
 
@@ -86,7 +87,6 @@ class TestCaseManagerStore{
         if(type == "copy"){
             caseId = ""
         }
-        debugger
         const params = {"arg0":{"apiId":apiId,"appId":apiDetailData.appId,"contextParamScript":this.caseDetailData.contextParamScript,"desc":this.caseDetailData.desc,"id":caseId,"moduleId":apiDetailData.moduleId,"name":this.caseDetailData.name,"paramScript":this.caseDetailData.paramScript,"priority":this.caseDetailData.priority,"validScript":this.caseDetailData.validScript}}
         const result = await post("1.0.0/hipac.api.test.case.saveCase/",params)
         if(result.code == 200){
@@ -122,9 +122,10 @@ class TestCaseManagerStore{
         let params =  {"sceneId":data.id,"caseIds":caseIds,"scheduleType":data.scheduleType,"env":data.env}
 
         const result = await post("1.0.0/hipac.api.test.exe.apply/",params)
-        if(result.code == 200){
-            message.success("已经开始执行，请前往执行记录中查看用例执行情况")
-        }
+        // if(result.code == 200){
+        //     message.success("已经开始执行，请前往执行记录中查看用例执行情况")
+        // }
+        return result
     }
 
     @action
@@ -136,6 +137,17 @@ class TestCaseManagerStore{
     @action
     hideExeCaseModal(){
         this.exeCaseModalVisible = false
+    }
+
+    @action
+    showCaseDrawer(){
+        this.drawerVisible = true;
+    }
+
+    @action
+    hideCaseDrawer(){
+        debugger
+        this.drawerVisible = false
     }
 }
 
