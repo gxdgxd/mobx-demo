@@ -139,6 +139,16 @@ class InsertIndex extends Component {
         const {detailData,tags} = this.props.ApiManagerStore
         const {exeDetailData} = this.props.ExeRecordStore
         const {insertButtonStatus,updateButtonStatus,caseDetailData,drawerVisible} = this.props.TestCaseManagerStore
+        var mockJson = ""
+        if(typeof caseDetailData.paramScript != "undefined"){
+            try {
+                if (typeof JSON.parse(caseDetailData.paramScript) == "object" ) {
+                    mockJson = JSON.parse(caseDetailData.paramScript)
+                }
+            }catch(e) {
+                console.log('error：'+e);
+            }
+        }
         return(
             <div className="container-bg" style={{'marginLeft':'15px'}}>
                 <Form  layout="inline" className="ant-advanced-search-form p-xs pb-0" onSubmit={this.insert}>
@@ -240,14 +250,15 @@ class InsertIndex extends Component {
                             <ReactJson src={eval(detailData.resultJsonFormat)}  enableClipboard={this.handleCopy} name={null} theme="google" style={{border:'1px solid #ccc','height':'180px','maxHeight':'180px','overflow-y':'auto' }}/>
                         </div>
                         <div style={{float:'right',width:'51%','marginTop':'19px'}}>
-                            {getFieldDecorator('paramScript', {
-                                initialValue: caseDetailData.paramScript,
-                                rules: [{ required: false, message: '请填写接口参数信息!' }],
-                            })(
-                                <TextArea rows={16} style={{'width':'1300px',display:this.state.isCompressDisplay }} onChange={this.inputChange.bind(this,'paramScript')}/>
-                            )}
-
-                            <ReactJson src={eval(caseDetailData.paramScript)}  enableClipboard={false}  name={null} style={{border:'1px solid #ccc','height':'343px','marginBottom':'5px','maxHeight':'343px','overflow-y':'auto',display:this.state.isJsonFormatDisplay  }}/>
+                            <FormItem {...this.formItemLayout} label="">
+                                {getFieldDecorator('paramScript', {
+                                    initialValue: caseDetailData.paramScript,
+                                    rules: [{ required: false, message: '请填写接口参数信息!' }],
+                                })(
+                                    <TextArea rows={16} style={{'width':'1300px',display:this.state.isCompressDisplay }} onChange={this.inputChange.bind(this,'paramScript')}/>
+                                )}
+                            </FormItem>
+                            <ReactJson src={mockJson}  enableClipboard={false}  name={null} style={{"border":'1px solid #ccc','height':'343px','marginBottom':'5px','maxHeight':'343px','overflow-y':'auto',"display":this.state.isJsonFormatDisplay  }}/>
 
                             <Button type="primary" style={{marginBottom:'8px'}} onClick={this.compressParams}>压缩</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <Button type="primary" style={{marginBottom:'8px'}} onClick={this.jsonFormat}>格式化</Button>
