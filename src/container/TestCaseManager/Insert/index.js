@@ -132,7 +132,9 @@ class InsertIndex extends Component {
     handleCopy(copy){
         message.success("复制成功")
     }
+
     render(){
+
         const { getFieldDecorator} = this.props.form;
         const {detailData,tags} = this.props.ApiManagerStore
         const {exeDetailData} = this.props.ExeRecordStore
@@ -254,14 +256,10 @@ class InsertIndex extends Component {
                     <Alert message="dubbo contextParams" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px','marginTop':'6px'}}/>
                     <Row>
                         <div style={{float:'left',width:'48%'}}>
-                            <FormItem {...this.formItemLayout} label="">
-                                {getFieldDecorator('contextParamScript', {
-                                    initialValue: caseDetailData.contextParamScript,
-                                    rules: [{ required: false, message: '请填写其他参数!' }],
-                                })(
-                                    <TextArea rows={6} style={{ width: 600 }} placeholder='如果此dubbo接口是供hop网关使用，则可能需要填写dubbo context,如：{"userId":"5c0e5e0c881f449b9fe50923ea8f6183"}，也可以参考右侧格式' onChange={this.inputChange.bind(this,'contextParamScript')}/>
-                                )}
-                            </FormItem>
+                            {
+                                getUrlParam('caseId',window.location.search) != "" ?
+                                    <TextArea rows={6} style={{ width: 600}} value={caseDetailData.contextParamScript} placeholder='如果此dubbo接口是供hop网关使用，则可能需要填写dubbo context,如：{"userId":"5c0e5e0c881f449b9fe50923ea8f6183"}，也可以参考右侧格式' onChange={this.inputChange.bind(this,'contextParamScript')}/> : <TextArea rows={6} style={{ width: 600}}  placeholder='如果此dubbo接口是供hop网关使用，则可能需要填写dubbo context,如：{"userId":"5c0e5e0c881f449b9fe50923ea8f6183"}，也可以参考右侧格式' onChange={this.inputChange.bind(this,'contextParamScript')}/>
+                            }
                         </div>
                         <div style={{float:'right',width:'50%'}}>
                             如果此dubbo接口是供hop网关使用，则可能需要填写dubbo context，如：
@@ -271,22 +269,20 @@ class InsertIndex extends Component {
                     <Alert message="结果校验规则（如：assert self.result.data != null:'结果data不能为空'）" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px'}}/>
                     <Row>
                         <div style={{float:'left',width:'48%'}}>
-                            <FormItem {...this.formItemLayout} label="">
-                                {getFieldDecorator('validScript', {
-                                    initialValue: caseDetailData.validScript,
-                                    rules: [{ required: true, message: '请填写用例校验规则!' }],
-                                })(
+                            {
+                                getUrlParam('caseId',window.location.search) != "" ?
+                                    <TextArea rows={6} style={{ width: 600 }} value={caseDetailData.validScript} placeholder="多个assert的规则需要换行写" onChange={this.inputChange.bind(this,'validScript')}/>
+                                    :
                                     <TextArea rows={6} style={{ width: 600 }} placeholder="多个assert的规则需要换行写" onChange={this.inputChange.bind(this,'validScript')}/>
-                                )}
-                            </FormItem>
+                            }
                         </div>
                         <div style={{float:'right',width:'50%'}}>
-                            示例一：校验后返回布尔值作为校验结果（不推荐）return self.result.data != null<br/>
-                            示例二：使用强断言校验结果（推荐）assert self.result.data != null <br/>
-                            示例三：使用断言校验结果（推荐）assert self.result.data != null:'结果data不能为空'<br/>
+                            示例一：校验后返回布尔值作为校验结果(不推荐)return self.result.data != null<br/>
+                            示例二：使用强断言校验结果(推荐)assert self.result.data != null <br/>
+                            示例三：使用断言校验结果(推荐)assert self.result.data != null:'data不能为空'<br/>
                             示例四：多个判断<br/>
                             assert self.result.data != null:'结果data不能为空' <br/>
-                            assert self.result.data.itemId !=null:'结果中的itemId不能为空'  &nbsp;&nbsp;<a href="http://k.yangtuojia.com/pages/viewpage.action?pageId=18827049" target="_blank" ><Icon type="question-circle" /> 更多写法帮助</a><br/>
+                            assert self.result.data.itemId !=null:'结果itemId不能为空'  &nbsp;&nbsp;<a href="http://k.yangtuojia.com/pages/viewpage.action?pageId=18827049" target="_blank" ><Icon type="question-circle" /> 更多写法帮助</a><br/>
                         </div>
                     </Row>
                     <Row>

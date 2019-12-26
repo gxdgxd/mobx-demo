@@ -3,7 +3,9 @@ import axios from 'axios';
 import { message } from 'antd';
 import {getUrlParam,replaceUrlParamVal,removeUrlParam} from '../../utils/common'
 import {post} from '../../utils/http'
-
+message.config({
+    top: 200
+});
 
 class TestCaseManagerStore{
     @observable dataSource = [];
@@ -74,6 +76,11 @@ class TestCaseManagerStore{
      */
     @action
     async insert(tags,apiDetailData,value) {
+        debugger
+        if(this.caseDetailData.validScript == "" || typeof this.caseDetailData.validScript == "undefined" ){
+            message.warn("请填写用例校验规则")
+            return
+        }
         let tagIds = []
         if(tags.length > 0){
             for (let i = 0; i < tags.length; i++) {
