@@ -245,9 +245,9 @@ class InsertIndex extends Component {
                     <Row>
                         <div style={{float:'left',width:'48%'}}>
                             <b>接口入参：</b>
-                            <ReactJson src={eval(detailData.argsJsonFormat)}  enableClipboard={this.handleCopy} name={null}  theme="google" style={{border:'1px solid #ccc','height':'180px','maxHeight':'180px','overflow-y':'auto' }}/>
+                            <ReactJson src={eval("("+detailData.argsJsonFormat+")")}  enableClipboard={this.handleCopy} name={null}  theme="google" style={{border:'1px solid #ccc','height':'180px','maxHeight':'180px','overflow-y':'auto' }}/>
                             <b>接口出参：</b>
-                            <ReactJson src={eval(detailData.resultJsonFormat)}  enableClipboard={this.handleCopy} name={null} theme="google" style={{border:'1px solid #ccc','height':'180px','maxHeight':'180px','overflow-y':'auto' }}/>
+                            <ReactJson src={eval("("+detailData.resultJsonFormat+")")}  enableClipboard={this.handleCopy} name={null} theme="google" style={{border:'1px solid #ccc','height':'180px','maxHeight':'180px','overflow-y':'auto' }}/>
                         </div>
                         <div style={{float:'right',width:'51%','marginTop':'19px'}}>
                             <FormItem {...this.formItemLayout} label="">
