@@ -36,13 +36,14 @@ class TreeManager extends Component {
     /**
      * 新增节点
      */
-    handleAddTree = (e,id,parentId,appId) => {
+    handleAddTree = (e,id,parentId,appId,appName) => {
         e.stopPropagation();
         if (id) {
             console.log(e.target.value)
             this.props.TreeManagerStore.showTreeModal({
                 moduleName:"添加模块",
                 parentId:parentId,
+                appName:appName,
                 appId:appId,
                 type:"insert"
             })
@@ -75,14 +76,14 @@ class TreeManager extends Component {
     /**
      * 获取节点的title内容
      */
-    getNodeTitle = (title, id, level,parentId,parentIdF,appId) => {
+    getNodeTitle = (title, id, level,parentId,parentIdF,appId,appName) => {
         return (
             <div className="tree-title">
                 <span>
                     {title}
                 </span>
                 <div className="tree-parent-div ">
-                    <span className="tree-span" onClick={e => this.handleAddTree(e,id,parentId,appId)}>
+                    <span className="tree-span" onClick={e => this.handleAddTree(e,id,parentId,appId,appName)}>
                        {level !== 4 &&
                             <Icon type="plus-circle" theme="outlined"/>
                        }
@@ -107,13 +108,13 @@ class TreeManager extends Component {
         if (treeNode.props.children) {
             return;
         }
-        this.props.TreeManagerStore.getTreeModuleDataSouce(treeNode.props.dataRef)
+        await this.props.TreeManagerStore.getTreeModuleDataSouce(treeNode.props.dataRef)
     }
 
     renderTreeNodes = (data, level) => {
         return (
             data.map(item => {
-                const title = this.getNodeTitle(item.title, item.id, level,item.parentId,item.parentIdF,item.appId);
+                const title = this.getNodeTitle(item.title, item.id, level,item.parentId,item.parentIdF,item.appId,item.appName);
                 if (item.children) {
                     return (
                         <TreeNode title={title} key={item.id} dataRef={item}>

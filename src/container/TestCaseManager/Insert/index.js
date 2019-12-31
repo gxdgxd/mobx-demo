@@ -247,21 +247,21 @@ class InsertIndex extends Component {
                             <b>接口入参：</b>
                             <ReactJson src={eval("("+detailData.argsJsonFormat+")")}  enableClipboard={this.handleCopy} name={null}  theme="google" style={{border:'1px solid #ccc','height':'180px','maxHeight':'180px','overflow-y':'auto' }}/>
                             <b>接口出参：</b>
-                            <ReactJson src={eval("("+detailData.resultJsonFormat+")")}  enableClipboard={this.handleCopy} name={null} theme="google" style={{border:'1px solid #ccc','height':'180px','maxHeight':'180px','overflow-y':'auto' }}/>
+                            <ReactJson src={eval("("+detailData.resultJsonFormat+")")}  enableClipboard={this.handleCopy} name={null} theme="google" style={{border:'1px solid #ccc','height':'189px','maxHeight':'189px','overflow-y':'auto' }}/>
                         </div>
-                        <div style={{float:'right',width:'51%','marginTop':'19px'}}>
-                            <FormItem {...this.formItemLayout} label="">
+                        <div style={{float:'right',width:'51%'}}>
+                            <FormItem {...this.formItemLayout} label="" >
                                 {getFieldDecorator('paramScript', {
                                     initialValue: caseDetailData.paramScript,
                                     rules: [{ required: false, message: '请填写接口参数信息!' }],
                                 })(
-                                    <TextArea rows={16} style={{'width':'1300px',display:this.state.isCompressDisplay }} onChange={this.inputChange.bind(this,'paramScript')}/>
+                                    <TextArea rows={16} style={{'width':'1300px','marginTop':'19px',display:this.state.isCompressDisplay }} onChange={this.inputChange.bind(this,'paramScript')}/>
                                 )}
                             </FormItem>
                             <ReactJson src={mockJson}  enableClipboard={false}  name={null} style={{"border":'1px solid #ccc','height':'343px','marginBottom':'5px','maxHeight':'343px','overflow-y':'auto',"display":this.state.isJsonFormatDisplay  }}/>
 
-                            <Button type="primary" style={{marginBottom:'8px'}} onClick={this.compressParams}>压缩</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <Button type="primary" style={{marginBottom:'8px'}} onClick={this.jsonFormat}>格式化</Button>
+                            <Button type="primary" style={{marginBottom:'5px'}} onClick={this.compressParams}>压缩</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <Button type="primary" style={{marginBottom:'5px'}} onClick={this.jsonFormat}>格式化</Button>
                         </div>
                     </Row>
                     <Alert message="dubbo contextParams" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px','marginTop':'6px'}}/>
