@@ -36,66 +36,61 @@ class TreeManager extends Component {
     /**
      * 新增节点
      */
-    handleAddTree = (e,id,parentId,appId,appName) => {
+    handleAddTree = (e,item) => {
         e.stopPropagation();
-        if (id) {
+        if (item.id) {
             console.log(e.target.value)
             this.props.TreeManagerStore.showTreeModal({
                 moduleName:"添加模块",
-                parentId:parentId,
-                appName:appName,
-                appId:appId,
-                type:"insert"
+                type:"insert",
+                item:item
             })
         }
     };
     /**
      * 编辑节点
      */
-    handleEditTree = (e, name,id,parentIdF,appId) => {
+    handleEditTree = (e,item) => {
         e.stopPropagation();
-        if (id) {
+        if (item.id) {
             this.props.TreeManagerStore.showTreeModal({
-                id:id,
                 moduleName:"修改模块",
-                parentIdF:parentIdF,
-                appId:appId,
-                name:name,
-                type:"update"
+                type:"update",
+                item:item,
             });
         }
     };
     /**
      * 编辑节点
      */
-    handleDeleteTree = (id,appId,parentId) => {
-        if (id) {
-            this.props.TreeManagerStore.deleteTree(id,appId,parentId)
+    handleDeleteTree = (item) => {
+        if (item.id) {
+            this.props.TreeManagerStore.deleteTree(item)
         }
     };
     /**
      * 获取节点的title内容
      */
-    getNodeTitle = (title, id, level,parentId,parentIdF,appId,appName) => {
+    getNodeTitle = (title, id, level,item) => {
         return (
             <div className="tree-title">
                 <span>
                     {title}
                 </span>
                 <div className="tree-parent-div ">
-                    <span className="tree-span" onClick={e => this.handleAddTree(e,id,parentId,appId,appName)}>
+                    <span className="tree-span" onClick={e => this.handleAddTree(e,item)}>
                        {level !== 4 &&
                             <Icon type="plus-circle" theme="outlined"/>
                        }
                     </span>
-                    <span className="tree-span"  onClick={e => this.handleEditTree(e, title,id,parentIdF,appId)}>
+                    <span className="tree-span"  onClick={e => this.handleEditTree(e,item)}>
                        {level != 1 &&
                             <Icon type="form" theme="outlined" />
                        }
                     </span>
                     <span className="tree-span" >
                          {level != 1 &&
-                              <Popconfirm title="确定删除此参数吗？" onConfirm={() => this.handleDeleteTree(id,appId,parentId)}>
+                              <Popconfirm title="确定删除此参数吗？" onConfirm={() => this.handleDeleteTree(item)}>
                                  <Icon type="delete" theme="outlined"/>
                               </Popconfirm>
                          }
@@ -108,13 +103,13 @@ class TreeManager extends Component {
         if (treeNode.props.children) {
             return;
         }
-        await this.props.TreeManagerStore.getTreeModuleDataSouce(treeNode.props.dataRef)
+        await this.props.TreeManagerStore.getTreeModuleDataSouce(treeNode.props.dataRef,treeNode.props.dataRef.parentId)
     }
 
     renderTreeNodes = (data, level) => {
         return (
             data.map(item => {
-                const title = this.getNodeTitle(item.title, item.id, level,item.parentId,item.parentIdF,item.appId,item.appName);
+                const title = this.getNodeTitle(item.title, item.id, level,item);
                 if (item.children) {
                     return (
                         <TreeNode title={title} key={item.id} dataRef={item}>
