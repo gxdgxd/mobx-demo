@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Row,Col,Form, Drawer, Tag ,Alert,Input} from 'antd';
+import ReactJson from 'react-json-view'
 import {toJS} from "mobx/lib/mobx";
+import {message} from "antd/lib/index";
 const { TextArea } = Input;
 
 @inject('TestCaseManagerStore')
@@ -17,7 +19,9 @@ class ExeCaseDrawer extends Component{
     onClose = () => {
         this.props.TestCaseManagerStore.hideCaseDrawer()
     };
-
+    handleCopy(copy){
+        message.success("复制成功")
+    }
     render(){
         const {exeDetailData,drawerVisible} = this.props
         let caseData = toJS(exeDetailData.caseExeRecords)
@@ -31,9 +35,9 @@ class ExeCaseDrawer extends Component{
         }
         let resultStatus = ""
         if(typeof caseData != "undefined"){
-            if(caseData[0].testCase.succeed == true){
+            if(caseData[0].succeed == true){
                 resultStatus = <Tag color="#87d068">执行成功</Tag>
-            }else{
+            }else if(caseData[0].succeed == false){
                 resultStatus = <Tag color="#f50">执行失败</Tag>
             }
         }
@@ -82,10 +86,11 @@ class ExeCaseDrawer extends Component{
                 <pre>
                     {typeof caseData == 'undefined' ? "" : caseData[0].message == null ? "暂无结果":caseData[0].message}
                 </pre>
-                <Alert message="返回结果" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px'}}/>
-                <TextArea rows={5} style={{'width':'670px','marginBottom':'6px'}} value={typeof caseData == 'undefined' ? "" : caseData[0].testCase.testApi.resultJsonFormat}/>
+                <Alert message="接口实际返回结果" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px'}}/>
+                <ReactJson src={typeof caseData == 'undefined' ? "" : eval("("+caseData[0].sampleResult+")")} name={null}  enableClipboard={this.handleCopy} style={{border:'1px solid #ccc','height':'153px','marginBottom':'5px','maxHeight':'153px','overflow-y':'auto'  }}/>
+
                 <Alert message="请求入参" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px'}}/>
-                <TextArea rows={5} style={{'width':'670px','marginBottom':'6px'}} value={typeof caseData == 'undefined' ? "" : caseData[0].testCase.paramScript}/>
+                <TextArea rows={5} style={{'width':'670px','marginBottom':'6px'}} value={typeof caseData == 'undefined' ? "" : caseData[0].param}/>
                 <Alert message="dubbo contextParams" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px'}}/>
                 <TextArea rows={3} style={{'width':'670px','marginBottom':'6px'}} value={typeof caseData == 'undefined' ? "" : caseData[0].testCase.contextParamScript}/>
             </Drawer>

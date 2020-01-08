@@ -40,7 +40,6 @@ class InsertIndex extends Component {
      * 获取子组件SingleTag中用户输入的tag标签
      */
     getTags = (tags) => {
-        debugger
         this.props.ApiManagerStore.insertTags(tags)
     };
     /**
@@ -88,8 +87,8 @@ class InsertIndex extends Component {
         })
     }
     timerExe = async(result) => {
-        let data = await this.props.ExeRecordStore.getDetailData(result.data)
-        this.timerDate = setInterval(()=> this.tick(data.status),1000);
+        // let data = await this.props.ExeRecordStore.getDetailData(result.data)
+        this.timerDate = setInterval(()=> this.tick(result.data));
     }
     handleClearTimeout(){
         this.timerDate && clearInterval(this.timerDate);
@@ -97,8 +96,9 @@ class InsertIndex extends Component {
     componentWillUnmount(){
         this.handleClearTimeout()
     }
-    tick(status){
-        if(status == 2){
+    tick = async(data) => {
+        let detailData = await this.props.ExeRecordStore.getDetailData(data)
+        if(detailData.status == 2){
             this.handleClearTimeout()
         }
     }
@@ -107,7 +107,6 @@ class InsertIndex extends Component {
      * 只测试不保存
      */
     testCaseExe = async () => {
-        debugger
         let caseId = getUrlParam('caseId',window.location.search);
 
         if(caseId == ""){

@@ -76,7 +76,6 @@ class TestCaseManagerStore{
      */
     @action
     async insert(tags,apiDetailData,value) {
-        debugger
         if(this.caseDetailData.validScript == "" || typeof this.caseDetailData.validScript == "undefined" ){
             message.warn("请填写用例校验规则")
             return
@@ -153,7 +152,6 @@ class TestCaseManagerStore{
 
     @action
     hideCaseDrawer(){
-        debugger
         this.drawerVisible = false
     }
 }

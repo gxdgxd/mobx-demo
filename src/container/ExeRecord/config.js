@@ -1,6 +1,7 @@
 import React  from 'react';
 import {Input,Icon,Popover,Tag,Tooltip} from 'antd';
 import common from "../../style/common.css";
+import ReactJson from 'react-json-view'
 
 const TextArea  = Input;
 
@@ -105,7 +106,7 @@ export const detailColumns = (context) => [
                 <span>用例ID：{testCase.id}</span><br/>
                 <span>用例名称：{testCase.name}</span><br/>
                 <span>校验规则：{testCase.validScript}</span><br/>
-                <span>入参：{testCase.paramScript}</span><br/>
+                <span>入参：{record.param}</span><br/>
                 <span>其他参数：{testCase.contextParamScript}</span><br/>
                 <span>描述：{testCase.desc}</span><br/>
                 <span>接口ID：{testCase.apiId}</span><br/>
@@ -165,16 +166,17 @@ export const detailColumns = (context) => [
         }
     },
     {
-        title: '接口名',
-        dataIndex: 'a',
-        key: 'a',
+        title: '接口返回结果',
+        dataIndex: 'sampleResult',
+        key: 'sampleResult',
         width:'20%',
         render:function(text, record){
-            var name = record.testCase.testApi.name
+            let a = <ReactJson src={typeof record == 'undefined' ? "" : eval("("+record.sampleResult+")")} name={null} style={{border:'1px solid #ccc','height':'173px','marginBottom':'5px','maxHeight':'173px','overflow-y':'auto'  }}/>
+
             return (
-                <span>
-                   {name}
-                </span>
+                <Popover content={a} >
+                    <font color="#d2a216">接口返回结果</font>
+                </Popover>
             )
         }
     },

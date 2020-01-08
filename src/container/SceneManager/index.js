@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Table,Row, Pagination} from 'antd';
+import { Table,Row, Pagination,notification,Icon} from 'antd';
 import {columns} from './config';
 import SearchForm from './SearchForm';
 
@@ -23,6 +23,12 @@ class SceneManagerList extends Component {
         this.props.SceneManagerStore.initData(page);
     };
     exeCase =(record) => {
+        notification.open({
+            message: '执行提醒',
+            description:
+                '场景已经开始执行，请前往执行记录中查看用例执行情况；',
+            icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
+        });
         this.props.TestCaseManagerStore.exeCase(record,'scene')
     }
     render(){

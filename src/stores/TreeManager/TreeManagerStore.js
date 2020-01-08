@@ -92,13 +92,19 @@ class TreeManagerStore {
 
     @action
     async insertTreeModule(){
-        debugger
-        const result = await post("1.0.0/hipac.api.test.module.save/",{"arg0":{"appId":this.item.appId,"id":this.tableRequestData.id,"name":this.tableRequestData.name,"parentId":this.item.parentIdF}})
-        if(result.code == 200){
-            message.success("保存模块成功")
-            await this.getTreeModuleDataSouce(this.item,this.item.parentIdF)
-            this.hideTreeModal()
+        if(this.modalName == "修改模块"){
+            const result = await post("1.0.0/hipac.api.test.module.save/",{"arg0":{"appId":this.item.appId,"id":this.tableRequestData.id,"name":this.tableRequestData.name,"parentId":this.item.parentIdF}})
+            if(result.code == 200){
+                message.success("保存模块成功")
+            }
+        }else{
+            const result = await post("1.0.0/hipac.api.test.module.save/",{"arg0":{"appId":this.item.appId,"id":this.tableRequestData.id,"name":this.tableRequestData.name,"parentId":this.item.parentId}})
+            if(result.code == 200){
+                message.success("保存模块成功")
+            }
         }
+        await this.getTreeModuleDataSouce(this.item,this.item.parentId)
+        this.hideTreeModal()
     }
 
     /**
@@ -114,7 +120,7 @@ class TreeManagerStore {
 
         if(result.code == "200"){
             message.success('删除模块成功');
-            await this.getTreeModuleDataSouce(this.item,this.item.parentIdF)
+            await this.getTreeModuleDataSouce(this.item,this.item.parentId)
         }
     }
 
