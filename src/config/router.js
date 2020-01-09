@@ -17,6 +17,7 @@ const getRouters = (routers) => {
 
 // 页面路由配置
 const routers = [
+    { path: '/', component: lazy(() => import('../container/Test')), exact: true, title: '接口管理' },
     { path: '/api_manager', component: lazy(() => import('../container/ApiManager')), exact: true, title: '接口管理' },
     { path: '/insert_api', component: lazy(() => import('../container/ApiManager/Insert')), exact: true, title: '添加接口' },
     { path: '/update_api', component: lazy(() => import('../container/ApiManager/Update')), exact: true, title: '修改接口' },
