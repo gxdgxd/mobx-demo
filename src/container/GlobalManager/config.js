@@ -6,16 +6,19 @@ export const columns = (context) => [
         title: '参数名',
         dataIndex: 'name',
         key: 'name',
+        width:'15%',
     },
     {
         title: '参数值',
         dataIndex: 'value',
         key: 'value',
+        width:'40%',
     },
     {
         title: '参数类型',
         dataIndex: 'varType',
         key: 'varType',
+        width:'8%',
         render: (row) => {
             return (
                 <span>{row == 0 ? "常量":"闭包"}</span>
@@ -26,10 +29,12 @@ export const columns = (context) => [
         title: '更新时间',
         dataIndex: 'editTimeStr',
         key: 'editTimeStr',
+        width:'18%',
     },
     {
         title: '操作',
         key: 'operation',
+        width:'12%',
         render:(row,record) => {
             return (
                 <div>

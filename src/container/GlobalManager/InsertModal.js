@@ -49,7 +49,7 @@ class InsertModal extends Component{
             <Modal
                 destroyOnClose
                 title="添加参数"
-                width="800px"
+                width="900px"
                 visible={modalVisible}
                 onOk={this.okModal.bind(this)}
                 onCancel={this.hideModal.bind(this)}
@@ -61,14 +61,14 @@ class InsertModal extends Component{
                         {getFieldDecorator('name', {
                             rules: [{ required: true, message: '请填写参数名!' }],
                         })(
-                            <Input type="text"  style={{ width: 400 }}  placeholder="请填写参数名" onChange={this.inputChange.bind(this,'name')}/>
+                            <Input type="text"  style={{ width: 550 }}  placeholder="请填写参数名" onChange={this.inputChange.bind(this,'name')}/>
                         )}
                     </FormItem>
                     <FormItem {...this.formItemLayout} label="参数值">
                         {getFieldDecorator('value', {
                             rules: [{ required: true, message: '请填写参数值!' }],
                         })(
-                            <TextArea rows={3} style={{ width: 400 }} placeholder="请填写参数值" onChange={this.inputChange.bind(this,'value')}/>
+                            <TextArea rows={8} style={{ width: 550 }} placeholder="请填写参数值" onChange={this.inputChange.bind(this,'value')}/>
                         )}
                     </FormItem>
                     <FormItem {...this.formItemLayout} label="参数类型">
