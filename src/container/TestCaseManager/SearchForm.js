@@ -51,11 +51,7 @@ class SearchForm extends Component{
         return (
             <Form className="ant-advanced-search-form p-xs pb-0" >
                 <Row gutter={48}>
-                    <Col span={7}>
-                        <FormItem {...this.formItemLayout} label="接口ID">
-                            <Input placeholder="请输入接口ID" allowClear={true} onChange={this.inputChange.bind(this,'apiId')}/>
-                        </FormItem>
-                    </Col>
+
                     <Col span={7}>
                         <FormItem {...this.formItemLayout} label="用例名">
                             <Input placeholder="请输入用例名"  allowClear={true} onChange={this.inputChange.bind(this,'name')}/>
@@ -69,8 +65,6 @@ class SearchForm extends Component{
                             </Select>
                         </FormItem>
                     </Col>
-                </Row>
-                <Row gutter={48}>
                     <Col span={7}>
                         <FormItem {...this.formItemLayout} label="创建人">
                             <Select
@@ -89,6 +83,14 @@ class SearchForm extends Component{
                             </Select>
                         </FormItem>
                     </Col>
+                </Row>
+                <Row gutter={48}>
+                    <Col span={7}>
+                        <FormItem {...this.formItemLayout} label="接口ID">
+                            <Input placeholder="请输入接口ID" allowClear={true} onChange={this.inputChange.bind(this,'apiId')}/>
+                        </FormItem>
+                    </Col>
+
                     <Col span={7}>
                         <FormItem {...this.formItemLayout} label="优先级">
                             <Select  placeholder="请选择优先级搜索"  allowClear={true} onChange={this.optionChange.bind(this,'priority')}>

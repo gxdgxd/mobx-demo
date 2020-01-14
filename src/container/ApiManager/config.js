@@ -10,6 +10,7 @@ export const columns = (context) => [
         width:80,
         fixed: 'left',
     },
+
     {
         title: '接口名',
         dataIndex: 'name',
@@ -27,53 +28,40 @@ export const columns = (context) => [
         }
     },
     {
-        title: '方法名',
-        dataIndex: 'apiMethodName',
-        key: 'apiMethodName',
-        width:150,
-        render:function(text, record){
-            var name = record.apiMethodName.length > 12 ? record.apiMethodName.substr(0,12) + '...' : record.apiMethodName;
-            let str = <div>
-                        <span>方法名：{record.apiMethodName}</span><br/>
-                        <span>创建人：{record.creatorName}</span><br/>
-                        <span>接口路径：{record.apiClassName}</span><br/>
-                        <span>更新时间：{record.editTimeStr}</span><br/>
-                        <span>应用：{record.appName}</span><br/>
-                        <span>模块：{record.moduleName}</span>
-                      </div>
-            return (
-                <span>
-                    <Popover content={str} >
-                        <font color="#d2a216">{name}</font>
-                    </Popover>
-                </span>
-            )
-        }
-    },
-
-    {
         title: '应用',
         dataIndex: 'appName',
         key: 'appName',
         width:100,
     },
     {
-        title: '模块',
-        dataIndex: 'moduleName',
-        key: 'moduleName',
-        width:150,
+        title: '接口路径',
+        dataIndex: 'apiClassName',
+        key: 'apiClassName',
+        width:350,
     },
     {
-        title: 'groupId',
-        dataIndex: 'groupId',
-        key: 'groupId',
-        width:150,
-    },
-    {
-        title: 'artifactId',
-        dataIndex: 'artifactId',
-        key: 'artifactId',
-        width:120,
+        title: '方法名',
+        dataIndex: 'apiMethodName',
+        key: 'apiMethodName',
+        width:180,
+        render:function(text, record){
+            var name = record.apiMethodName.length > 18 ? record.apiMethodName.substr(0,18) + '...' : record.apiMethodName;
+            let str = <div>
+                        <span>方法名：{record.apiMethodName}</span><br/>
+                        <span>接口路径：{record.apiClassName}</span><br/>
+                        <span>应用：{record.appName}</span><br/>
+                        <span>groupId：{record.groupId}</span><br/>
+                        <span>artifactId：{record.artifactId}</span><br/>
+                        <span>模块：{record.moduleName}</span>
+                      </div>
+            return (
+                <span>
+                    <Popover content={str} >
+                       {name}
+                    </Popover>
+                </span>
+            )
+        }
     },
     {
         title: '更新时间',
@@ -91,7 +79,7 @@ export const columns = (context) => [
         title: '标签',
         dataIndex: 'tags',
         key: 'tags',
-        width:150,
+        width:160,
         render:(row,record) => {
 
             return (
@@ -140,10 +128,10 @@ export const insertColumns = (context) => [
         title: '接口路径',
         dataIndex: 'apiClassName',
         key: 'apiClassName',
-        width:'27%',
+        width:'30%',
         ...context.getColumnSearchProps('apiClassName'),
         render:function(text, record){
-            var name = record.apiClassName.length > 30 ? record.apiClassName.substr(0,30) + '...' : record.apiClassName;
+            var name = record.apiClassName.length > 35 ? record.apiClassName.substr(0,35) + '...' : record.apiClassName;
             return (
                 <span  >
                     <Popover content={record.apiClassName} >

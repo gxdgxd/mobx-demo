@@ -51,11 +51,6 @@ class SearchForm extends Component{
             <Form  className="ant-advanced-search-form p-xs pb-0"  onSubmit={this.handleSubmit}>
                 <Row gutter={48}>
                     <Col span={7}>
-                        <FormItem {...this.formItemLayout} label="接口ID">
-                            <Input placeholder="请输入接口ID" onChange={this.inputChange.bind(this,'id')} allowClear={true}/>
-                        </FormItem>
-                    </Col>
-                    <Col span={7}>
                         <FormItem {...this.formItemLayout} label="接口名">
                             <Input placeholder="请输入接口名" onChange={this.inputChange.bind(this,'name')}/>
                         </FormItem>
@@ -63,6 +58,11 @@ class SearchForm extends Component{
                     <Col span={7}>
                         <FormItem {...this.formItemLayout} label="方法名">
                             <Input placeholder="请输入方法名" onChange={this.inputChange.bind(this,'apiMethodName')}/>
+                        </FormItem>
+                    </Col>
+                    <Col span={7}>
+                        <FormItem {...this.formItemLayout} label="接口ID">
+                            <Input placeholder="请输入接口ID" onChange={this.inputChange.bind(this,'id')} allowClear={true}/>
                         </FormItem>
                     </Col>
                 </Row>
