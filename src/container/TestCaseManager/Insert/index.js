@@ -25,7 +25,6 @@ class InsertIndex extends Component {
         if(getUrlParam('caseId',window.location.search) != ""){
             this.props.TestCaseManagerStore.getDetailData()
         }
-
     }
     constructor(props) {
         super(props);
@@ -219,14 +218,14 @@ class InsertIndex extends Component {
                                      rules: [{ required: true, message: '请选择优先级!' }],
                                  })(
                                      <Select style={{ width: 120 }} onChange={this.optionChange.bind(this,'priority')}>
-                                         <Option value="1">1</Option>
-                                         <Option value="2">2</Option>
-                                         <Option value="3">3</Option>
-                                         <Option value="4">4</Option>
+                                         <Option value="P0">P0</Option>
+                                         <Option value="P1">P1</Option>
+                                         <Option value="P2">P2</Option>
+                                         <Option value="P3">P3</Option>
                                      </Select>
                                  )}
                                 &nbsp;&nbsp;&nbsp;
-                                <Tag color="magenta"> 1为最高，4为最低 </Tag>
+                                <Tag color="magenta"> P0为最高，P3为最低 </Tag>
                             </span>
                         </FormItem>
                     </Row>

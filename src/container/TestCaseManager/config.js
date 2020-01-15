@@ -1,6 +1,7 @@
 import React  from 'react';
 import { Popover} from 'antd';
 import common from "../../style/common.css";
+import {getUrlParam} from "../../utils/common";
 
 export const columns = (context) => [
 
@@ -15,9 +16,8 @@ export const columns = (context) => [
         title: '用例名称',
         dataIndex: 'name',
         key: 'name',
-        width:270,
+        width:350,
         render:function(text, record){
-            var name = record.name.length > 20 ? record.name.substr(0,20) + '...' : record.name;
             let str = <div>
                         <span>用例名称：{record.name}</span><br/>
                         <span>接口名：{record.testApi.name}</span><br/>
@@ -25,18 +25,13 @@ export const columns = (context) => [
             return (
                 <span  >
                     <Popover content={str} >
-                       {name}
+                       {record.name}
                     </Popover>
                 </span>
             )
         }
     },
-    {
-        title: '优先级',
-        dataIndex: 'priority',
-        key: 'priority',
-        width:80
-    },
+
     {
         title: '应用',
         dataIndex: 'appName',
@@ -70,6 +65,12 @@ export const columns = (context) => [
         }
     },
     {
+        title: '优先级',
+        dataIndex: 'priority',
+        key: 'priority',
+        width:80
+    },
+    {
         title: '创建人',
         dataIndex: 'creatorName',
         key: 'creatorName',
@@ -85,7 +86,7 @@ export const columns = (context) => [
         title: '操作',
         width: '27%',
         key: 'operation',
-        width:267,
+        width:220,
         fixed: 'right',
         render:(row,record) => {
             let insertHref = '/edit_testcase?apiId=' + record.apiId
@@ -93,9 +94,10 @@ export const columns = (context) => [
             let updateHref = '/edit_testcase?apiId=' + record.apiId + "&caseId=" + record.id
             return (
                 <span>
-                    <a href={updateHref} target="_blank">修改用例</a>&nbsp;
-                    <a href={insertHref} target="_blank" className="vLine"> 追加用例</a>&nbsp;
-                    <a href={apiHref} target="_blank" className="vLine"> 查看接口</a>&nbsp;
+                    <a href={updateHref} target="_blank">修改</a>&nbsp;
+                    <a onClick={()=>{window.open("/edit_testcase?type=copy&apiId=" + record.apiId + "&caseId=" + record.id)}} className="vLine"> 复制</a>&nbsp;
+                    <a href={insertHref} target="_blank" className="vLine"> 追加</a>&nbsp;
+                    <a href={apiHref} target="_blank" className="vLine"> 接口</a>&nbsp;
                     <a onClick={context.showExeCaseModal.bind(context,[record.id])} className="vLine"> 执行</a>
                 </span>
             )

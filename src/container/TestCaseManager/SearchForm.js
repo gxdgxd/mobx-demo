@@ -94,10 +94,10 @@ class SearchForm extends Component{
                     <Col span={7}>
                         <FormItem {...this.formItemLayout} label="优先级">
                             <Select  placeholder="请选择优先级搜索"  allowClear={true} onChange={this.optionChange.bind(this,'priority')}>
-                                <Option value="1">1</Option>
-                                <Option value="2">2</Option>
-                                <Option value="3">3</Option>
-                                <Option value="4">4</Option>
+                                <Option value="P0">P0</Option>
+                                <Option value="P1">P1</Option>
+                                <Option value="P2">P2</Option>
+                                <Option value="P3">P3</Option>
                             </Select>
                         </FormItem>
                     </Col>

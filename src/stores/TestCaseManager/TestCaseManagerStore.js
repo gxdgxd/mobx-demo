@@ -102,6 +102,7 @@ class TestCaseManagerStore{
             this.insertButtonStatus = "none"
             this.updateButtonStatus = ""
             replaceUrlParamVal('caseId',result.data)
+            removeUrlParam('type')
         }
     }
 

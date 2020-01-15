@@ -15,7 +15,7 @@ export const columns = (context) => [
         title: '接口名',
         dataIndex: 'name',
         key: 'name',
-        width:180,
+        width:230,
         render:function(text, record){
             var name = record.name.length > 20 ? record.name.substr(0,20) + '...' : record.name;
             return (
@@ -37,15 +37,14 @@ export const columns = (context) => [
         title: '接口路径',
         dataIndex: 'apiClassName',
         key: 'apiClassName',
-        width:350,
+        width:360,
     },
     {
         title: '方法名',
         dataIndex: 'apiMethodName',
         key: 'apiMethodName',
-        width:180,
+        width:210,
         render:function(text, record){
-            var name = record.apiMethodName.length > 18 ? record.apiMethodName.substr(0,18) + '...' : record.apiMethodName;
             let str = <div>
                         <span>方法名：{record.apiMethodName}</span><br/>
                         <span>接口路径：{record.apiClassName}</span><br/>
@@ -57,17 +56,23 @@ export const columns = (context) => [
             return (
                 <span>
                     <Popover content={str} >
-                       {name}
+                       {record.apiMethodName}
                     </Popover>
                 </span>
             )
         }
     },
     {
+        title: '方法参数',
+        dataIndex: 'argsTypeNames',
+        key: 'argsTypeNames',
+        width:360,
+    },
+    {
         title: '更新时间',
         dataIndex: 'editTimeStr',
         key: 'editTimeStr',
-        width:180,
+        width:220,
     },
     {
         title: '创建人',
@@ -79,7 +84,7 @@ export const columns = (context) => [
         title: '标签',
         dataIndex: 'tags',
         key: 'tags',
-        width:160,
+        width:230,
         render:(row,record) => {
 
             return (
