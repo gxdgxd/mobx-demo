@@ -137,10 +137,16 @@ export const insertColumns = (context) => [
         ...context.getColumnSearchProps('apiClassName'),
         render:function(text, record){
             var name = record.apiClassName.length > 35 ? record.apiClassName.substr(0,35) + '...' : record.apiClassName;
+
+            let str = <div>
+                <span>接口路径：{record.apiClassName}</span><br/>
+                <span>方法名：{record.apiMethodName}</span><br/>
+                <span>参数类型：{record.argsTypeNames}</span><br/>
+            </div>
             return (
-                <span  >
-                    <Popover content={record.apiClassName} >
-                        {name}
+                <span>
+                    <Popover content={str} >
+                       {name}
                     </Popover>
                 </span>
             )
@@ -153,11 +159,10 @@ export const insertColumns = (context) => [
         width:'20%',
         ...context.getColumnSearchProps('apiMethodName'),
         render:function(text, record){
-            var name = record.apiMethodName.length > 20 ? record.apiMethodName.substr(0,20) + '...' : record.apiMethodName;
             return (
                 <span  >
                     <Popover content={record.apiMethodName} >
-                        {name}
+                        {record.apiMethodName}
                     </Popover>
                 </span>
             )

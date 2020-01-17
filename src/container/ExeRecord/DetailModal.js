@@ -80,7 +80,7 @@ class DetailModal extends Component {
                     <Table
                         bordered
                         columns={detailColumns(this)}
-                        dataSource={caseData} />
+                        dataSource={caseData}  scroll={{ x: 1730, y: 600 }} />
                     <ResultMessageModal resultMessageModalVisible={resultMessageModalVisible} message={message}/>
                 </Modal>
             </div>

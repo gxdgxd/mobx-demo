@@ -103,7 +103,7 @@ class InsertIndex extends Component {
     }
 
     /**
-     * 只测试不保存
+     * 保存并执行
      */
     testCaseExe = async () => {
         let caseId = getUrlParam('caseId',window.location.search);
@@ -112,11 +112,14 @@ class InsertIndex extends Component {
             message.warn("请先保存用例再执行！")
             return
         }
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
-                this.props.TestCaseManagerStore.insert(this.props.ApiManagerStore.tags,this.props.ApiManagerStore.detailData,false)
-            }
-        });
+        if(this.state.dubboGroup == ""){
+            message.warn("请输入测试用的dubbo分组！")
+            return
+        }
+        let abc = await this.props.TestCaseManagerStore.insert(this.props.ApiManagerStore.tags,this.props.ApiManagerStore.detailData,false)
+        if(abc != 200){
+            return
+        }
         let params =  {"id":null,"caseIds":[caseId],"scheduleType":1,"env":this.state.dubboGroup}
         let result = await this.props.TestCaseManagerStore.exeCase(params,'case');
         if(result.code == 200){
@@ -147,6 +150,7 @@ class InsertIndex extends Component {
                 console.log('error：'+e);
             }
         }
+
         return(
             <div className="container-bg" style={{'marginLeft':'15px'}}>
                 <Form  layout="inline" className="ant-advanced-search-form p-xs pb-0" onSubmit={this.insert}>
@@ -218,10 +222,10 @@ class InsertIndex extends Component {
                                      rules: [{ required: true, message: '请选择优先级!' }],
                                  })(
                                      <Select style={{ width: 120 }} onChange={this.optionChange.bind(this,'priority')}>
-                                         <Option value="P0">P0</Option>
-                                         <Option value="P1">P1</Option>
-                                         <Option value="P2">P2</Option>
-                                         <Option value="P3">P3</Option>
+                                         <Option value="0">0</Option>
+                                         <Option value="1">1</Option>
+                                         <Option value="2">2</Option>
+                                         <Option value="3">3</Option>
                                      </Select>
                                  )}
                                 &nbsp;&nbsp;&nbsp;

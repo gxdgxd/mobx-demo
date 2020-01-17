@@ -123,7 +123,7 @@ class UpdateIndex extends Component {
                         <DndProvider backend={HTML5Backend}>
                             <Table
                                 bordered
-                                columns={insertCaseColumns(this)}
+                                columns={insertCaseColumns(this)} scroll={{ x: 1500, y: 600 }}
                                 dataSource={caseDataSource.toJS()} components={this.components}
                                 onRow={(record, index) => ({
                                     index,

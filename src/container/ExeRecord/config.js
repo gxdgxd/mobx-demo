@@ -93,32 +93,67 @@ export const columns = (context) => [
 ];
 
 export const detailColumns = (context) => [
-
+    {
+        title: '用例ID',
+        dataIndex: 'caseId',
+        key: 'caseId',
+        width:80,
+        fixed: 'left',
+        render:function(text, record){
+            let testCase = record.testCase
+            return (
+                <span>
+                   {testCase.id}
+                </span>
+            )
+        }
+    },
     {
         title: '用例名称',
         dataIndex: 'name',
         key: 'name',
-        width:'20%',
+        width:350,
         render:function(text, record){
             let testCase = record.testCase
-            var name = testCase.name.length > 16 ? testCase.name.substr(0,16) + '...' : testCase.name;
+            return (
+                <span>
+                       {testCase.name}
+                </span>
+            )
+        }
+    },
+    {
+        title: '接口路径',
+        dataIndex: 'apiClassName',
+        key: 'apiClassName',
+        width:330,
+        render:function(text, record){
+            let testCase = record.testCase
             let str = <div>
-                <span>用例ID：{testCase.id}</span><br/>
-                <span>用例名称：{testCase.name}</span><br/>
-                <span>校验规则：{testCase.validScript}</span><br/>
-                <span>入参：{record.param}</span><br/>
-                <span>其他参数：{testCase.contextParamScript}</span><br/>
-                <span>描述：{testCase.desc}</span><br/>
-                <span>接口ID：{testCase.apiId}</span><br/>
+                <span>接口名：{testCase.testApi.name}</span><br/>
                 <span>接口路径：{testCase.testApi.apiClassName}</span><br/>
                 <span>方法名：{testCase.testApi.apiMethodName}</span><br/>
-                <span>接口名：{testCase.testApi.name}</span><br/>
+                <span>参数类型：{testCase.testApi.argsTypeNames}</span><br/>
             </div>
             return (
                 <span>
                     <Popover content={str} >
-                       <font color="#d2a216">{name}</font>
+                       {testCase.testApi.apiClassName}
                     </Popover>
+                </span>
+            )
+        }
+    },
+    {
+        title: '方法名',
+        dataIndex: 'apiMethodName',
+        key: 'apiMethodName',
+        width:170,
+        render:function(text, record){
+            let testCase = record.testCase
+            return (
+                <span>
+                    {testCase.testApi.apiMethodName}
                 </span>
             )
         }
@@ -127,7 +162,7 @@ export const detailColumns = (context) => [
         title: '优先级',
         dataIndex: 'priority',
         key: 'priority',
-        width:'7%',
+        width:80,
         render:function(text, record){
             var priority = record.testCase.priority;
             return (
@@ -141,7 +176,7 @@ export const detailColumns = (context) => [
         title: '创建人',
         dataIndex: 'creatorName',
         key: 'creatorName',
-        width:'12%',
+        width:150,
         render:function(text, record){
             var creatorName = record.testCase.creatorName;
             return (
@@ -152,30 +187,16 @@ export const detailColumns = (context) => [
         }
     },
     {
-        title: '接口ID',
-        dataIndex: 'apiId',
-        key: 'apiId',
-        width:'7%',
-        render:function(text, record){
-            var apiId = record.testCase.apiId
-            return (
-                <span>
-                   {apiId}
-                </span>
-            )
-        }
-    },
-    {
         title: '接口返回结果',
         dataIndex: 'sampleResult',
         key: 'sampleResult',
-        width:'20%',
+        width:140,
         render:function(text, record){
             let a = <ReactJson src={typeof record == 'undefined' ? "" : eval("("+record.sampleResult+")")} name={null} style={{border:'1px solid #ccc','height':'173px','marginBottom':'5px','maxHeight':'173px','overflow-y':'auto'  }}/>
 
             return (
                 <Popover content={a} >
-                    <font color="#d2a216">接口返回结果</font>
+                    <font color="#d2a216">(鼠标移入显示)</font>
                 </Popover>
             )
         }
@@ -184,7 +205,7 @@ export const detailColumns = (context) => [
         title: '执行结果',
         dataIndex: 'succeed',
         key: 'succeed',
-        width:'10%',
+        width:120,
         render:function(row){
             let name = ""
             if(row == true){
@@ -204,7 +225,7 @@ export const detailColumns = (context) => [
         title: '信息',
         dataIndex: 'message',
         key: 'message',
-        width:'6%',
+        width:80,
         render:function(text, record){
             return (
                 <span>
@@ -215,8 +236,9 @@ export const detailColumns = (context) => [
     },
     {
         title: '操作',
-        width: '15%',
+        width:180,
         key: 'operation',
+        fixed: 'right',
         render:(row,record) => {
             let apiHref = '/update_api?apiId=' + record.testCase.apiId
             let updateHref = '/edit_testcase?apiId=' + record.testCase.apiId + "&caseId=" + record.testCase.id

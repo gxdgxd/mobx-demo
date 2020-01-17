@@ -1,5 +1,5 @@
 import React  from 'react';
-import { Popover} from 'antd';
+import { Popover,Popconfirm} from 'antd';
 import common from "../../style/common.css";
 import {getUrlParam} from "../../utils/common";
 
@@ -17,21 +17,7 @@ export const columns = (context) => [
         dataIndex: 'name',
         key: 'name',
         width:350,
-        render:function(text, record){
-            let str = <div>
-                        <span>用例名称：{record.name}</span><br/>
-                        <span>接口名：{record.testApi.name}</span><br/>
-                      </div>
-            return (
-                <span  >
-                    <Popover content={str} >
-                       {record.name}
-                    </Popover>
-                </span>
-            )
-        }
     },
-
     {
         title: '应用',
         dataIndex: 'appName',
@@ -44,9 +30,17 @@ export const columns = (context) => [
         key: 'apiClassName',
         width:300,
         render:function(text, record){
+            let str = <div>
+                <span>接口名：{record.testApi.name}</span><br/>
+                <span>接口路径：{record.testApi.apiClassName}</span><br/>
+                <span>方法名：{record.testApi.apiMethodName}</span><br/>
+                <span>参数类型：{record.testApi.argsTypeNames}</span><br/>
+            </div>
             return (
                 <span>
-                    {record.testApi.apiClassName}
+                    <Popover content={str} >
+                       {record.testApi.apiClassName}
+                    </Popover>
                 </span>
             )
         }
@@ -86,7 +80,7 @@ export const columns = (context) => [
         title: '操作',
         width: '27%',
         key: 'operation',
-        width:220,
+        width:250,
         fixed: 'right',
         render:(row,record) => {
             let insertHref = '/edit_testcase?apiId=' + record.apiId
@@ -98,7 +92,10 @@ export const columns = (context) => [
                     <a onClick={()=>{window.open("/edit_testcase?type=copy&apiId=" + record.apiId + "&caseId=" + record.id)}} className="vLine"> 复制</a>&nbsp;
                     <a href={insertHref} target="_blank" className="vLine"> 追加</a>&nbsp;
                     <a href={apiHref} target="_blank" className="vLine"> 接口</a>&nbsp;
-                    <a onClick={context.showExeCaseModal.bind(context,[record.id])} className="vLine"> 执行</a>
+                    <a onClick={context.showExeCaseModal.bind(context,[record.id])} className="vLine"> 执行</a>&nbsp;
+                    <Popconfirm title="确定删除此用例吗？" onConfirm={() => context.deleteCase([record.id])} >
+                        <a href="#"  className="vLine"> 删除</a>
+                    </Popconfirm>
                 </span>
             )
         }

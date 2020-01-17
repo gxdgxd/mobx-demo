@@ -96,13 +96,15 @@ class TestCaseManagerStore{
         const params = {"arg0":{"apiId":apiId,"appId":apiDetailData.appId,"contextParamScript":this.caseDetailData.contextParamScript,"desc":this.caseDetailData.desc,"id":caseId,"moduleId":apiDetailData.moduleId,"name":this.caseDetailData.name,"paramScript":this.caseDetailData.paramScript,"priority":this.caseDetailData.priority,"validScript":this.caseDetailData.validScript}}
         const result = await post("1.0.0/hipac.api.test.case.saveCase/",params)
         if(result.code == 200){
-            if(value == true){
-                message.success("保存用例成功")
-            }
             this.insertButtonStatus = "none"
             this.updateButtonStatus = ""
             replaceUrlParamVal('caseId',result.data)
             removeUrlParam('type')
+            if(value == true){
+                message.success("保存用例成功")
+            }else{
+                return result.code
+            }
         }
     }
 
@@ -154,6 +156,19 @@ class TestCaseManagerStore{
     @action
     hideCaseDrawer(){
         this.drawerVisible = false
+    }
+
+    /**
+     * 删除用例
+     * @param caseIds
+     */
+    @action
+    async deleteCase(caseIds){
+        const result = await post("1.0.0/hipac.api.test.case.del/",{"ids":caseIds})
+        if(result.code == 200){
+            message.success("删除用例成功！")
+            this.initData(this.pageNo)
+        }
     }
 }
 

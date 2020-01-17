@@ -57,6 +57,9 @@ class TestCaseManagerList extends Component {
     showExeCaseModal(caseIds){
         this.props.TestCaseManagerStore.showExeCaseModal(caseIds);
     }
+    deleteCase(caseIds){
+        this.props.TestCaseManagerStore.deleteCase(caseIds);
+    }
     render(){
         const {dataSource,pageNo,pageSize,totalCount,exeCaseModalVisible,caseIds,drawerVisible} = this.props.TestCaseManagerStore
         const mydataSource = dataSource.toJS()
