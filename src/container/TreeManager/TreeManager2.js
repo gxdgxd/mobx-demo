@@ -11,40 +11,21 @@ const { TreeNode } = Tree;
 @observer
 class TreeManager extends Component {
     componentDidMount() {
-        this.props.TreeManagerStore.getTreeData();
+        this.props.TreeManagerStore.getTreeAppDataSouce();
     }
     constructor(props){
         super(props);
-        this.state={
-            expandedKeys: []
-        }
     }
-    onNodeSelect = (selectedKeys, info) => {
-        console.log(selectedKeys,info.node.props)
-        let level = info.node.props.level
-        let appId = "";
-        let moduleId = ""
-        let appName = ""
-        let moduleName = ""
-        if(level == 1){
-            appId = selectedKeys[0]
-            appName = info.node.props.title
-        }else{
-            appId = info.node.props.appId
-            moduleId = info.node.props.moduleId
-            appName = info.node.props.appName
-            moduleName = info.node.props.moduleName
-        }
-        console.log("appid",appId,"moduleId",moduleId,"appName",appName,"moduleName",moduleName)
-        // let appId = info.node.props.dataRef.appId
-        // let moduleId = info.node.props.dataRef.moduleId
-        // let appName = info.node.props.dataRef.appName
-        // let moduleName = info.node.props.dataRef.moduleName
+    onSelect = (selectedKeys, info) => {
+        console.log(info)
+        let appId = info.node.props.dataRef.appId
+        let moduleId = info.node.props.dataRef.moduleId
+        let appName = info.node.props.dataRef.appName
+        let moduleName = info.node.props.dataRef.moduleName
         let pageType = this.props.pageType
         if(pageType == 'case'){
             this.props.TestCaseManagerStore.initData(1,appId,moduleId)
-        }
-        else if(pageType == "api"){
+        }else if(pageType == "api"){
             this.props.ApiManagerStore.initData(1,appId,moduleId)
         }else if(pageType == "insertApi"){
             this.props.ApiManagerStore.setTreeParams(appId,moduleId,appName,moduleName)
@@ -52,15 +33,6 @@ class TreeManager extends Component {
             this.props.ApiManagerStore.setTreeParams(appId,moduleId,appName,moduleName)
         }
     };
-    /**
-     * 点击某个节点展开
-     */
-    onExpand = expandedKeys => {
-        this.setState({
-            expandedKeys
-        });
-    };
-
     /**
      * 新增节点
      */
@@ -107,7 +79,7 @@ class TreeManager extends Component {
                 </span>
                 <div className="tree-parent-div ">
                     <span className="tree-span" onClick={e => this.handleAddTree(e,item)}>
-                       {level !== 5 &&
+                       {level !== 4 &&
                             <Icon type="plus-circle" theme="outlined"/>
                        }
                     </span>
@@ -127,22 +99,25 @@ class TreeManager extends Component {
             </div>
         );
     };
-    /**
-     * 递归生成树节点
-     */
-    renderTree = (data, level, parentId) => {
+    onLoadData = async (treeNode) => {
+        if (treeNode.props.children) {
+            return;
+        }
+        await this.props.TreeManagerStore.getTreeModuleDataSouce(treeNode.props.dataRef,treeNode.props.dataRef.parentId)
+    }
+
+    renderTreeNodes = (data, level) => {
         return (
-            data &&
             data.map(item => {
-                const title = this.getNodeTitle(item.name, item.id, level, parentId);
-                if (item.modules && item.modules.length > 0) {
+                const title = this.getNodeTitle(item.title, item.id, level,item);
+                if (item.children) {
                     return (
-                        <TreeNode title={title} key={item.id} level={level} appId={item.appId} moduleId={item.id} appName={item.appName} moduleName={item.name} >
-                            {this.renderTree(item.modules, level + 1, item.id)}
+                        <TreeNode title={title} key={item.id} dataRef={item}>
+                            {this.renderTreeNodes(item.children,level + 1)}
                         </TreeNode>
                     );
                 }
-                return <TreeNode title={title} key={item.id} level={level} appId={item.appId} appName={item.appName} moduleId={item.id} moduleName={item.name} />;
+                return <TreeNode {...item} title={title} key={item.id} dataRef={item} />;
             })
         );
     };
@@ -151,7 +126,7 @@ class TreeManager extends Component {
         const {treeAppDataSource,treeModalVisible,tableRequestData,modalName} = this.props.TreeManagerStore
         return(
             <div style={{'maxHeight':this.props.maxHeight,'overflow-y':'auto' }}>
-                <Tree expandedKeys={this.state.expandedKeys} onSelect={this.onNodeSelect} onExpand={this.onExpand}>{this.renderTree(treeAppDataSource,1)}</Tree>
+                <Tree onSelect={this.onSelect} loadData={this.onLoadData}>{this.renderTreeNodes(treeAppDataSource,1)}</Tree>
                 <InsertTreeModal modalName={modalName} treeModalVisible={treeModalVisible} tableRequestData={tableRequestData}></InsertTreeModal>
             </div>
         )

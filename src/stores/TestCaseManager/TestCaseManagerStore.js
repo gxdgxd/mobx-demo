@@ -170,6 +170,7 @@ class TestCaseManagerStore{
             this.initData(this.pageNo)
         }
     }
+
 }
 
 export default new TestCaseManagerStore();

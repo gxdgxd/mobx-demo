@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Select,Form, Input, Modal } from 'antd';
+import { Select,Form, Input, Modal,Tag } from 'antd';
 import {message} from "antd/lib/index";
 
 const FormItem = Form.Item;
@@ -58,7 +58,7 @@ class ExeCaseModal extends Component{
     }
     render(){
         const { getFieldDecorator } = this.props.form;
-        const { exeCaseModalVisible} = this.props
+        const { exeCaseModalVisible,varValue} = this.props
 
         return (
             <Modal
@@ -74,11 +74,13 @@ class ExeCaseModal extends Component{
                 <Form className="ant-advanced-search-form p-xs pb-0" >
                     <FormItem {...this.formItemLayout} label="执行环境">
                         {getFieldDecorator('env', {
+                            initialValue: varValue,
                             rules: [{ required: true, message: '请输入执行环境!' }],
                         })(
-                            <Input placeholder="请输入执行环境"  style={{ width: 220 }}  onChange={e => this.setState({ env: e.target.value })}/>
+                            <Input placeholder="请输入执行环境"  allowClear={true} style={{ width: 220 }}  onChange={e => this.setState({ env: e.target.value })}/>
                         )}
                     </FormItem>
+                    <span style={{'paddingLeft':'160px'}}><Tag color="orange">可以在参数管理中配置默认的环境变量，参数名称必须为:default_env <a href="/global_manager" target="_blank">前往配置</a></Tag></span>
                     <FormItem {...this.formItemLayout} label="执行方式">
                         <span>并行执行</span>
                     </FormItem>

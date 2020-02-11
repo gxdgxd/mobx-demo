@@ -9,6 +9,7 @@ class GlobalManagerStore {
     @observable modalVisible = false;
     @observable updateModalVisible = false;
     @observable detailData = {};
+    @observable varValue = ""
     @observable tableRequestData = {
         name:'',
         value:'',
@@ -98,7 +99,6 @@ class GlobalManagerStore {
      */
     @action
     async delete(data) {
-        debugger
         const result = await post("1.0.0/hipac.api.test.var.delVar/",{id:data.id})
 
         if(result.code == "200"){
@@ -106,6 +106,20 @@ class GlobalManagerStore {
         }
         this.initData(1)
         this.updateModalVisible = false;
+    }
+
+    /**
+     * 根据参数名称获取参数值
+     * @param name
+     * @returns {Promise<void>}
+     */
+    @action
+    async getVarDetail(name){
+        const result = await post("1.0.0/hipac.api.test.var.userVarByName/",{"name":name})
+
+        if(result.data != null){
+            this.varValue = result.data.value
+        }
     }
 }
 

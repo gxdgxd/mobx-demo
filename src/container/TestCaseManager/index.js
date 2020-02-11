@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Table,Pagination,Row, Col,Button} from 'antd';
+import { Table,Pagination,Row, Col,Button,Input,Icon} from 'antd';
+import Highlighter from 'react-highlight-words';
+
 import {columns} from './config';
 import SearchForm from './SearchForm';
 import ExeCaseModal from './ExeCaseModal';
@@ -11,7 +13,7 @@ import {message} from "antd/lib/index";
 message.config({
     top: 200
 });
-@inject('TestCaseManagerStore','CommonStore','SceneManagerStore','ExeRecordStore')
+@inject('TestCaseManagerStore','CommonStore','SceneManagerStore','ExeRecordStore','GlobalManagerStore')
 @observer
 class TestCaseManagerList extends Component {
     componentDidMount() {
@@ -19,7 +21,7 @@ class TestCaseManagerList extends Component {
             {name: '用例管理'},
         ]);
         this.props.TestCaseManagerStore.initData(1);
-
+        this.props.GlobalManagerStore.getVarDetail("default_env");
     }
     constructor(props){
         super(props);
@@ -60,6 +62,79 @@ class TestCaseManagerList extends Component {
     deleteCase(caseIds){
         this.props.TestCaseManagerStore.deleteCase(caseIds);
     }
+    /**
+     * 表头搜索触发
+     * @param dataIndex
+     * @returns {{filterDropdown: (function({setSelectedKeys: *, selectedKeys?: *, confirm?: *, clearFilters?: *}): *), filterIcon: (function(*): *), onFilter: (function(*, *): boolean), onFilterDropdownVisibleChange: onFilterDropdownVisibleChange, render: (function(*): *)}}
+     */
+    getColumnSearchProps = dataIndex => ({
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+            <div style={{ padding: 8 }}>
+                <Input
+                    ref={node => {
+                        this.searchInput = node;
+                    }}
+                    placeholder={`Search ${dataIndex}`}
+                    value={selectedKeys[0]}
+                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                    onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                    style={{ width: 188, marginBottom: 8, display: 'block' }}
+                />
+                <Button
+                    type="primary"
+                    onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                    icon="search"
+                    size="small"
+                    style={{ width: 90, marginRight: 8 }}
+                >
+                    Search
+                </Button>
+                <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+                    Reset
+                </Button>
+            </div>
+        ),
+        filterIcon: filtered => (
+            <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
+        ),
+        onFilter: (value, record) =>
+            record[dataIndex]
+                .toString()
+                .toLowerCase()
+                .includes(value.toLowerCase()),
+        onFilterDropdownVisibleChange: visible => {
+            if (visible) {
+                setTimeout(() => this.searchInput.select());
+            }
+        },
+        render: text =>
+            this.state.searchedColumn === dataIndex ? (
+                <Highlighter
+                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+                    searchWords={[this.state.searchText]}
+                    autoEscape
+                    textToHighlight={text.toString()}
+                />
+            ) : (
+                text
+            ),
+    });
+    handleSearch = (selectedKeys, confirm, dataIndex) => {
+        confirm();
+        this.setState({
+            searchText: selectedKeys[0],
+            searchedColumn: dataIndex,
+        });
+    };
+
+    handleReset = clearFilters => {
+        clearFilters();
+        this.setState({ searchText: '' });
+    };
+
+    /**
+     * 表头搜索触发 end
+     */
     render(){
         const {dataSource,pageNo,pageSize,totalCount,exeCaseModalVisible,caseIds,drawerVisible} = this.props.TestCaseManagerStore
         const mydataSource = dataSource.toJS()
@@ -73,6 +148,7 @@ class TestCaseManagerList extends Component {
             }
         };
         const {exeDetailData} = this.props.ExeRecordStore
+        const {varValue} = this.props.GlobalManagerStore
         return(
             <div className="container-bg">
                 <Row>
@@ -81,13 +157,12 @@ class TestCaseManagerList extends Component {
                     </Col>
                     <Col span={20}>
                         <SearchForm/>
-
                         <Table
                             bordered
                             columns={columns(this)} pagination={false} scroll={{ x: 1630, y: 600 }}
                             dataSource={mydataSource}  />
                         <Pagination onChange={this.onChangePage} pageSize={pageSize} current={pageNo}  total={totalCount} style={{'marginTop':'6px','float':'right'}}/>
-                        <ExeCaseModal exeCaseModalVisible={exeCaseModalVisible} caseIds={caseIds}></ExeCaseModal>
+                        <ExeCaseModal exeCaseModalVisible={exeCaseModalVisible} caseIds={caseIds} varValue={varValue} ></ExeCaseModal>
                         <ExeCaseDrawer exeDetailData={exeDetailData} drawerVisible={drawerVisible}></ExeCaseDrawer>
 
                     </Col>

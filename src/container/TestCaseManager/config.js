@@ -23,6 +23,7 @@ export const columns = (context) => [
         dataIndex: 'appName',
         key: 'appName',
         width:100,
+        ...context.getColumnSearchProps('appName'),
     },
     {
         title: '接口路径',

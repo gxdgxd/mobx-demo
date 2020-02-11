@@ -124,6 +124,21 @@ class TreeManagerStore {
         }
     }
 
+    @action
+    async getTreeData() {
+        const result = await post("1.0.0/hipac.api.test.module.all/",{})
+        let data = result.data
+        let array = []
+        // for (let i = 0; i < data.length; i++) {
+        //     let obj = {}
+        //     obj.title = data[i].name
+        //     obj.id = data[i].id
+        //
+        // }
+        this.treeAppDataSource = data;
+
+    }
+
 }
 
 export default new TreeManagerStore();
