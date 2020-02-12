@@ -106,7 +106,7 @@ class TreeManager extends Component {
         return (
             <div className="tree-title">
                 <span>
-                    {title} - {parentId}
+                    {title}
                 </span>
                 <div className="tree-parent-div ">
                     <span className="tree-span" onClick={e => this.handleAddTree(e,parentId,item)}>
