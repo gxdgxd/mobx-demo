@@ -75,18 +75,22 @@ class SceneManagerStore {
     async insertCase(data){
 
         console.log(JSON.stringify(data))
-        this.caseDataSource = data
-        let updateCaseDataSourceNew = this.updateCaseDataSource.toJS()
+        // this.caseDataSource = data
+        // let updateCaseDataSourceNew = this.updateCaseDataSource.toJS()
+        //
+        // if(updateCaseDataSourceNew.length > 0){
+        //     let caseDataSourceNew = data
+        //     for (let i = 0; i < updateCaseDataSourceNew.length; i++) {
+        //         let ret2 = caseDataSourceNew.findIndex((v) =>  v.id == updateCaseDataSourceNew[i].id);
+        //         if(ret2 < 0){
+        //             caseDataSourceNew.push(updateCaseDataSourceNew[i])
+        //         }
+        //     }
+        //     this.caseDataSource = caseDataSourceNew
+        // }
 
-        if(updateCaseDataSourceNew.length > 0){
-            let caseDataSourceNew = data
-            for (let i = 0; i < updateCaseDataSourceNew.length; i++) {
-                let ret2 = caseDataSourceNew.findIndex((v) =>  v.id == updateCaseDataSourceNew[i].id);
-                if(ret2 < 0){
-                    caseDataSourceNew.push(updateCaseDataSourceNew[i])
-                }
-            }
-            this.caseDataSource = caseDataSourceNew
+        for (let i = 0; i < data.length; i++) {
+            this.caseDataSource.push(data[i])
         }
         console.log(JSON.stringify(this.caseDataSource))
         this.hideInsertCaseModal()

@@ -68,7 +68,6 @@ class TreeManagerStore {
     @action
     async getTreeModuleDataSouce(item,parentId){
         console.log('item', item);
-        debugger
         const moduleResult = await post("1.0.0/hipac.api.test.module.findByAppIdAndParentId/",{"appId":item.appId,"parentId":parentId})
         let data = moduleResult.data
         let array = []
@@ -94,14 +93,13 @@ class TreeManagerStore {
 
     @action
     async insertTreeModule(){
-        debugger
         if(this.modalName == "修改模块"){
             const result = await post("1.0.0/hipac.api.test.module.save/",{"arg0":{"appId":this.item.appId,"id":this.tableRequestData.id,"name":this.tableRequestData.name}})
             if(result.code == 200){
                 message.success("保存模块成功")
             }
         }else{
-            const result = await post("1.0.0/hipac.api.test.module.save/",{"arg0":{"appId":this.item.id,"id":this.tableRequestData.id,"name":this.tableRequestData.name,"parentId":this.parentId}})
+            const result = await post("1.0.0/hipac.api.test.module.save/",{"arg0":{"appId":this.item.appId,"name":this.tableRequestData.name,"parentId":this.item.id}})
             if(result.code == 200){
                 message.success("保存模块成功")
             }
@@ -117,7 +115,6 @@ class TreeManagerStore {
      */
     @action
     async deleteTree(item) {
-        debugger
         this.item = item
         const result = await post("1.0.0/hipac.api.test.module.del/",{id:this.item.id})
 

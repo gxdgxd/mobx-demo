@@ -39,11 +39,6 @@ class InsertCaseModal extends Component{
     }
     onChangePage = page => {
         this.props.TestCaseManagerStore.initData(page);
-        console.log(this.state.selectedRowKeys,this.state.selectedRows)
-        // this.setState({
-        //     selectedRowKeys: this.state.selectedRowKeys,
-        //     selectedRows: this.state.selectedRows
-        // });
     };
 
     render(){
@@ -74,7 +69,7 @@ class InsertCaseModal extends Component{
                 <Table rowSelection={rowSelection}
                     bordered
                     columns={caseColumns(this)} pagination={false}
-                    dataSource={mydataSource}  size="middle"/>
+                    dataSource={mydataSource}  size="middle" rowKey="id"/>
                 <Pagination onChange={this.onChangePage} pageSize={pageSize} current={pageNo}  total={totalCount} style={{'marginTop':'6px','float':'right'}}/>
             </Modal>
         )

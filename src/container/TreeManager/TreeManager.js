@@ -66,7 +66,6 @@ class TreeManager extends Component {
      */
     handleAddTree = (e,parentId,item) => {
         e.stopPropagation();
-        debugger
         if (item.id) {
             console.log(e.target.value)
             this.props.TreeManagerStore.showTreeModal({
