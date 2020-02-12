@@ -12,6 +12,7 @@ class TreeManagerStore {
     @observable detailData = {}
     @observable modalName = ""
     @observable item = {}
+    @observable parentId = ""
 
     @action
     hideTreeModal (){
@@ -30,9 +31,10 @@ class TreeManagerStore {
         this.treeModalVisible = true;
         this.item = params.item
         this.modalName = "添加模块"
+        this.parentId = params.parentId
         if(params.type == "update"){
             this.tableRequestData = {
-                "name":params.item.title,
+                "name":params.item.name,
                 "id":params.item.id
             }
             this.modalName = "修改模块"
@@ -92,18 +94,19 @@ class TreeManagerStore {
 
     @action
     async insertTreeModule(){
+        debugger
         if(this.modalName == "修改模块"){
-            const result = await post("1.0.0/hipac.api.test.module.save/",{"arg0":{"appId":this.item.appId,"id":this.tableRequestData.id,"name":this.tableRequestData.name,"parentId":this.item.parentIdF}})
+            const result = await post("1.0.0/hipac.api.test.module.save/",{"arg0":{"appId":this.item.appId,"id":this.tableRequestData.id,"name":this.tableRequestData.name}})
             if(result.code == 200){
                 message.success("保存模块成功")
             }
         }else{
-            const result = await post("1.0.0/hipac.api.test.module.save/",{"arg0":{"appId":this.item.appId,"id":this.tableRequestData.id,"name":this.tableRequestData.name,"parentId":this.item.parentId}})
+            const result = await post("1.0.0/hipac.api.test.module.save/",{"arg0":{"appId":this.item.id,"id":this.tableRequestData.id,"name":this.tableRequestData.name,"parentId":this.parentId}})
             if(result.code == 200){
                 message.success("保存模块成功")
             }
         }
-        await this.getTreeModuleDataSouce(this.item,this.item.parentId)
+        this.getTreeData()
         this.hideTreeModal()
     }
 
@@ -120,7 +123,7 @@ class TreeManagerStore {
 
         if(result.code == "200"){
             message.success('删除模块成功');
-            await this.getTreeModuleDataSouce(this.item,this.item.parentId)
+            this.getTreeData()
         }
     }
 
@@ -128,13 +131,6 @@ class TreeManagerStore {
     async getTreeData() {
         const result = await post("1.0.0/hipac.api.test.module.all/",{})
         let data = result.data
-        let array = []
-        // for (let i = 0; i < data.length; i++) {
-        //     let obj = {}
-        //     obj.title = data[i].name
-        //     obj.id = data[i].id
-        //
-        // }
         this.treeAppDataSource = data;
 
     }

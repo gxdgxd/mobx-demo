@@ -114,6 +114,7 @@ class TestCaseManagerStore{
      */
     @action
     async exeCase(data,type){
+        console.log(data)
         if(data.env == ""){
             message.warn("请输入dubbo分组再测试！")
             return

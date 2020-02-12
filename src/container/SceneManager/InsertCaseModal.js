@@ -38,15 +38,19 @@ class InsertCaseModal extends Component{
         this.props.SceneManagerStore.hideInsertCaseModal('insert');
     }
     onChangePage = page => {
-        console.log(page);
         this.props.TestCaseManagerStore.initData(page);
+        console.log(this.state.selectedRowKeys,this.state.selectedRows)
+        // this.setState({
+        //     selectedRowKeys: this.state.selectedRowKeys,
+        //     selectedRows: this.state.selectedRows
+        // });
     };
 
     render(){
         const {dataSource,pageNo,pageSize,totalCount} = this.props.TestCaseManagerStore
         const { insertCaseModalVisible} = this.props
         const mydataSource = dataSource.toJS()
-        const rowSelection = {
+        var rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
                 console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
                 this.setState({

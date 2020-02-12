@@ -148,7 +148,7 @@ class TestCaseManagerList extends Component {
             }
         };
         const {exeDetailData} = this.props.ExeRecordStore
-        const {varValue} = this.props.GlobalManagerStore
+
         return(
             <div className="container-bg">
                 <Row>
@@ -162,7 +162,7 @@ class TestCaseManagerList extends Component {
                             columns={columns(this)} pagination={false} scroll={{ x: 1630, y: 600 }}
                             dataSource={mydataSource}  />
                         <Pagination onChange={this.onChangePage} pageSize={pageSize} current={pageNo}  total={totalCount} style={{'marginTop':'6px','float':'right'}}/>
-                        <ExeCaseModal exeCaseModalVisible={exeCaseModalVisible} caseIds={caseIds} varValue={varValue} ></ExeCaseModal>
+                        <ExeCaseModal exeCaseModalVisible={exeCaseModalVisible} caseIds={caseIds}   ></ExeCaseModal>
                         <ExeCaseDrawer exeDetailData={exeDetailData} drawerVisible={drawerVisible}></ExeCaseDrawer>
 
                     </Col>

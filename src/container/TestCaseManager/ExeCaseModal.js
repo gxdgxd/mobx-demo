@@ -5,21 +5,21 @@ import {message} from "antd/lib/index";
 
 const FormItem = Form.Item;
 
-@inject('TestCaseManagerStore','ExeRecordStore')
+@inject('TestCaseManagerStore','ExeRecordStore','GlobalManagerStore')
 @observer
 class ExeCaseModal extends Component{
     constructor(props){
         super(props);
         this.state={
             scheduleType:'',
-            env:''
+            // env:this.props.varValue
         }
     }
 
-    okModal(){
+    okModal = () =>{
         this.props.form.validateFieldsAndScroll( async (err, values) => {
             if (!err) {
-                let params =  {"id":null,"caseIds":this.props.caseIds,"scheduleType":1,"env":this.state.env}
+                let params =  {"id":null,"caseIds":this.props.caseIds,"scheduleType":1,"env":this.props.GlobalManagerStore.varValue}
                 let result = await this.props.TestCaseManagerStore.exeCase(params,'case');
                 if(result.code == 200){
                     this.hideExeCaseModal()
@@ -47,7 +47,9 @@ class ExeCaseModal extends Component{
             this.handleClearTimeout()
         }
     }
-
+    changeInput(e){
+        this.props.GlobalManagerStore.varValue = e.target.value
+    }
     hideExeCaseModal(){
         this.props.TestCaseManagerStore.hideExeCaseModal();
     }
@@ -58,8 +60,9 @@ class ExeCaseModal extends Component{
     }
     render(){
         const { getFieldDecorator } = this.props.form;
-        const { exeCaseModalVisible,varValue} = this.props
-
+        const { exeCaseModalVisible} = this.props
+        const {varValue} = this.props.GlobalManagerStore
+        // this.state.env = varValue
         return (
             <Modal
                 destroyOnClose
@@ -77,7 +80,7 @@ class ExeCaseModal extends Component{
                             initialValue: varValue,
                             rules: [{ required: true, message: '请输入执行环境!' }],
                         })(
-                            <Input placeholder="请输入执行环境"  allowClear={true} style={{ width: 220 }}  onChange={e => this.setState({ env: e.target.value })}/>
+                            <Input placeholder="请输入执行环境"   allowClear={true} style={{ width: 220 }}  onChange={this.changeInput.bind(this) }/>
                         )}
                     </FormItem>
                     <span style={{'paddingLeft':'160px'}}><Tag color="orange">可以在参数管理中配置默认的环境变量，参数名称必须为:default_env <a href="/global_manager" target="_blank">前往配置</a></Tag></span>

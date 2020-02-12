@@ -64,27 +64,30 @@ class TreeManager extends Component {
     /**
      * 新增节点
      */
-    handleAddTree = (e,item) => {
+    handleAddTree = (e,parentId,item) => {
         e.stopPropagation();
+        debugger
         if (item.id) {
             console.log(e.target.value)
             this.props.TreeManagerStore.showTreeModal({
                 moduleName:"添加模块",
                 type:"insert",
-                item:item
+                item:item,
+                parentId:parentId
             })
         }
     };
     /**
      * 编辑节点
      */
-    handleEditTree = (e,item) => {
+    handleEditTree = (e,parentId,item) => {
         e.stopPropagation();
         if (item.id) {
             this.props.TreeManagerStore.showTreeModal({
                 moduleName:"修改模块",
                 type:"update",
                 item:item,
+                parentId:parentId
             });
         }
     };
@@ -99,19 +102,19 @@ class TreeManager extends Component {
     /**
      * 获取节点的title内容
      */
-    getNodeTitle = (title, id, level,item) => {
+    getNodeTitle = (title, id, level,parentId,item) => {
         return (
             <div className="tree-title">
                 <span>
-                    {title}
+                    {title} - {parentId}
                 </span>
                 <div className="tree-parent-div ">
-                    <span className="tree-span" onClick={e => this.handleAddTree(e,item)}>
+                    <span className="tree-span" onClick={e => this.handleAddTree(e,parentId,item)}>
                        {level !== 5 &&
                             <Icon type="plus-circle" theme="outlined"/>
                        }
                     </span>
-                    <span className="tree-span"  onClick={e => this.handleEditTree(e,item)}>
+                    <span className="tree-span"  onClick={e => this.handleEditTree(e,parentId,item)}>
                        {level != 1 &&
                             <Icon type="form" theme="outlined" />
                        }
@@ -134,11 +137,11 @@ class TreeManager extends Component {
         return (
             data &&
             data.map(item => {
-                const title = this.getNodeTitle(item.name, item.id, level, parentId);
+                const title = this.getNodeTitle(item.name, item.id, level,parentId, item);
                 if (item.modules && item.modules.length > 0) {
                     return (
                         <TreeNode title={title} key={item.id} level={level} appId={item.appId} moduleId={item.id} appName={item.appName} moduleName={item.name} >
-                            {this.renderTree(item.modules, level + 1, item.id)}
+                            {this.renderTree(item.modules, level + 1, item.id, item.id)}
                         </TreeNode>
                     );
                 }
@@ -151,7 +154,7 @@ class TreeManager extends Component {
         const {treeAppDataSource,treeModalVisible,tableRequestData,modalName} = this.props.TreeManagerStore
         return(
             <div style={{'maxHeight':this.props.maxHeight,'overflow-y':'auto' }}>
-                <Tree expandedKeys={this.state.expandedKeys} onSelect={this.onNodeSelect} onExpand={this.onExpand}>{this.renderTree(treeAppDataSource,1)}</Tree>
+                <Tree expandedKeys={this.state.expandedKeys} onSelect={this.onNodeSelect} onExpand={this.onExpand}>{this.renderTree(treeAppDataSource,1,0)}</Tree>
                 <InsertTreeModal modalName={modalName} treeModalVisible={treeModalVisible} tableRequestData={tableRequestData}></InsertTreeModal>
             </div>
         )

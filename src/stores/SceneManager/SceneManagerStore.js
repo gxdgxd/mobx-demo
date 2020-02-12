@@ -62,6 +62,7 @@ class SceneManagerStore {
         const result = await post("1.0.0/hipac.api.test.scene.save/",params)
         if(result.code == "200"){
             message.success('添加场景成功');
+            window.location.reload();
         }
     }
 
