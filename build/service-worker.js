@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "https://staticfed.hipac.cn/asset/automation/api_automation_static/1.0.0/precache-manifest.4b18b949ec433c2515a54ffb12ec1e28.js"
+  "https://staticfed.hipac.cn/asset/automation/api_automation_static/1.0.0/precache-manifest.5f6b2adc0f44a18f160e91c901a331dd.js"
 );
 
 self.addEventListener('message', (event) => {
