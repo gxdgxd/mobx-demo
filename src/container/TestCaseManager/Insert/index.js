@@ -107,7 +107,7 @@ class InsertIndex extends Component {
      */
     testCaseExe = async () => {
         let caseId = getUrlParam('caseId',window.location.search);
-
+        console.log("caseId:" , caseId)
         if(caseId == ""){
             message.warn("请先保存用例再执行！")
             return
@@ -269,10 +269,16 @@ class InsertIndex extends Component {
                     <Alert message="dubbo contextParams" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px','marginTop':'6px'}}/>
                     <Row>
                         <div style={{float:'left',width:'48%'}}>
-                            {
-                                getUrlParam('caseId',window.location.search) != "" ?
-                                    <TextArea rows={6} style={{ width: 600}} value={caseDetailData.contextParamScript} placeholder='如果此dubbo接口是供hop网关使用，则可能需要填写dubbo context,如：{"userId":"5c0e5e0c881f449b9fe50923ea8f6183"}，也可以参考右侧格式' onChange={this.inputChange.bind(this,'contextParamScript')}/> : <TextArea rows={6} style={{ width: 600}}  placeholder='如果此dubbo接口是供hop网关使用，则可能需要填写dubbo context,如：{"userId":"5c0e5e0c881f449b9fe50923ea8f6183"}，也可以参考右侧格式' onChange={this.inputChange.bind(this,'contextParamScript')}/>
-                            }
+                            {/*{*/}
+                                {/*getUrlParam('caseId',window.location.search) != "" ?*/}
+                                    {/*<TextArea rows={6} style={{ width: 600}} value={caseDetailData.contextParamScript} placeholder='如果此dubbo接口是供hop网关使用，则可能需要填写dubbo context,如：{"userId":"5c0e5e0c881f449b9fe50923ea8f6183"}，也可以参考右侧格式' onChange={this.inputChange.bind(this,'contextParamScript')}/> : <TextArea rows={6} style={{ width: 600}}  placeholder='如果此dubbo接口是供hop网关使用，则可能需要填写dubbo context,如：{"userId":"5c0e5e0c881f449b9fe50923ea8f6183"}，也可以参考右侧格式' onChange={this.inputChange.bind(this,'contextParamScript')}/>*/}
+                            {/*}*/}
+                            {getFieldDecorator('contextParamScript', {
+                                initialValue: caseDetailData.contextParamScript,
+                                rules: [{ required: false, message: '多个assert的规则需要换行写!' }],
+                            })(
+                                <TextArea rows={6}  style={{ width: 600 }}  onChange={this.inputChange.bind(this,'contextParamScript')}/>
+                            )}
                         </div>
                         <div style={{float:'right',width:'50%'}}>
                             如果此dubbo接口是供hop网关使用，则可能需要填写dubbo context，如：
@@ -282,12 +288,18 @@ class InsertIndex extends Component {
                     <Alert message="结果校验规则（如：assert self.result.data != null:'结果data不能为空'）" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px'}}/>
                     <Row>
                         <div style={{float:'left',width:'48%'}}>
-                            {
-                                getUrlParam('caseId',window.location.search) != "" ?
-                                    <TextArea rows={6} style={{ width: 600 }} value={caseDetailData.validScript} placeholder="多个assert的规则需要换行写" onChange={this.inputChange.bind(this,'validScript')}/>
-                                    :
-                                    <TextArea rows={6} style={{ width: 600 }} placeholder="多个assert的规则需要换行写" onChange={this.inputChange.bind(this,'validScript')}/>
-                            }
+                            {/*{*/}
+                                {/*getUrlParam('caseId',window.location.search) != "" ?*/}
+                                    {/*<TextArea rows={6} style={{ width: 600 }} value={caseDetailData.validScript} placeholder="多个assert的规则需要换行写" onChange={this.inputChange.bind(this,'validScript')}/>*/}
+                                    {/*:*/}
+                                    {/*<TextArea rows={6} style={{ width: 600 }} placeholder="多个assert的规则需要换行写" onChange={this.inputChange.bind(this,'validScript')}/>*/}
+                            {/*}*/}
+                            {getFieldDecorator('validScript', {
+                                initialValue: caseDetailData.validScript,
+                                rules: [{ required: false, message: '多个assert的规则需要换行写!' }],
+                            })(
+                                <TextArea rows={6}  style={{ width: 600 }}  onChange={this.inputChange.bind(this,'validScript')}/>
+                            )}
                         </div>
                         <div style={{float:'right',width:'50%'}}>
                             示例一：校验后返回布尔值作为校验结果(不推荐)return self.result.data != null<br/>
