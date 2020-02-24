@@ -120,9 +120,9 @@ class ApiManagerStore {
      */
     @action
     async insertApi(data){
-
-        if(this.treeParams.appId == ""){
-            message.warn("请在左侧树状菜单中选择该接口归属的应用")
+        debugger
+        if(this.treeParams.appId == "" || this.treeParams.moduleId == ""){
+            message.warn("请在左侧树状菜单中选择该接口归属的应用和模块")
             return
         }
         if(typeof this.treeParams.moduleId == "undefined"){

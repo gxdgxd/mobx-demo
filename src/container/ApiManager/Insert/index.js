@@ -235,9 +235,8 @@ class Index extends Component{
                         <Button type="primary" style={{marginBottom:'10px'}}   onClick={() => this.batchInsertApi()}><Icon type="plus" /> 批量添加</Button>
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <Tag color="geekblue" style={{display: treeParams.appName != "" && typeof treeParams.appName != 'undefined'  ? "" : "none"}}>
-                            <span style={{display: treeParams.appName != "" && typeof treeParams.appName != 'undefined'  ? "" : "none"}}>接口归属应用：{treeParams.appName}</span>
-                            <span style={{display: treeParams.moduleName != ""  && typeof treeParams.moduleName != 'undefined' ? "" : "none"}}>，接口归属模块：{treeParams.moduleName}</span>
-                            <span>（点击左侧切换筛选）</span>
+                            <span style={{display: treeParams.moduleName != "" && typeof treeParams.moduleName != 'undefined'  ? "" : "none"}}>接口归属应用：{treeParams.appName}</span>
+                            <span style={{display: treeParams.moduleName != ""  && typeof treeParams.moduleName != 'undefined' ? "" : "none"}}>，接口归属模块：{treeParams.moduleName} （点击左侧切换筛选）</span>
                         </Tag>
                         <Table components={components} rowClassName={() => 'editable-row'}
                             bordered

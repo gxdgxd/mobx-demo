@@ -93,13 +93,19 @@ class TreeManagerStore {
 
     @action
     async insertTreeModule(){
+        let appId = this.item.appId
+        let parentId = this.item.id
+        if(typeof this.item.appId == "undefined"){
+            appId = this.item.id
+            parentId = 0
+        }
         if(this.modalName == "修改模块"){
-            const result = await post("1.0.0/hipac.api.test.module.save/",{"arg0":{"appId":this.item.appId,"id":this.tableRequestData.id,"name":this.tableRequestData.name}})
+            const result = await post("1.0.0/hipac.api.test.module.save/",{"arg0":{"appId":appId,"id":this.tableRequestData.id,"name":this.tableRequestData.name}})
             if(result.code == 200){
                 message.success("保存模块成功")
             }
         }else{
-            const result = await post("1.0.0/hipac.api.test.module.save/",{"arg0":{"appId":this.item.appId,"name":this.tableRequestData.name,"parentId":this.item.id}})
+            const result = await post("1.0.0/hipac.api.test.module.save/",{"arg0":{"appId":appId,"name":this.tableRequestData.name,"parentId":parentId}})
             if(result.code == 200){
                 message.success("保存模块成功")
             }
