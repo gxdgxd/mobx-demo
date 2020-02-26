@@ -33,8 +33,8 @@ class ExeCaseModal extends Component{
         });
     }
     timerExe = async(result) => {
-        let data = await this.props.ExeRecordStore.getDetailData(result.data)
-        this.timerDate = setInterval(()=> this.tick(data.status),1000);
+        // let data = await this.props.ExeRecordStore.getDetailData(result.data)
+        this.timerDate = setInterval(()=> this.tick(result.data),1000);
     }
     handleClearTimeout(){
         this.timerDate && clearInterval(this.timerDate);
@@ -42,8 +42,14 @@ class ExeCaseModal extends Component{
     componentWillUnmount(){
         this.handleClearTimeout()
     }
-    tick(status){
-        if(status == 2){
+    // tick(status){
+    //     if(status == 2){
+    //         this.handleClearTimeout()
+    //     }
+    // }
+    tick = async(data) => {
+        let detailData = await this.props.ExeRecordStore.getDetailData(data)
+        if(detailData.status == 2){
             this.handleClearTimeout()
         }
     }
