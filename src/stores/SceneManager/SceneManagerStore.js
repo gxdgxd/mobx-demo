@@ -30,7 +30,7 @@ class SceneManagerStore {
     @action
     async initData(pageNo) {
         const params = {"arg0":{"creatorId":this.tableRequestData.creatorId,"env":this.tableRequestData.env,"id":this.tableRequestData.id,"name":this.tableRequestData.name,"pageNo":pageNo,"pageSize":10,"scheduleType":this.tableRequestData.scheduleType}}
-        const result = await post("1.0.0/hipac.api.test.scene.query/",params)
+        const result = await post("1.0.0/hipac.gotest.scene.query/",params)
         this.dataSource = result.data;
     }
 
@@ -59,7 +59,7 @@ class SceneManagerStore {
                 "testCaseSchedules": caseArray
             }
         }
-        const result = await post("1.0.0/hipac.api.test.scene.save/",params)
+        const result = await post("1.0.0/hipac.gotest.scene.save/",params)
         if(result.code == "200"){
             message.success('添加场景成功');
             window.location.reload();
@@ -123,7 +123,7 @@ class SceneManagerStore {
     @action
     async getDetailData() {
         let sceneId = getUrlParam('sceneId',window.location.search);
-        const result = await post("1.0.0/hipac.api.test.scene.info/",{id:sceneId})
+        const result = await post("1.0.0/hipac.gotest.scene.info/",{id:sceneId})
         this.detailData = result.data;
         let testCaseSchedules = result.data.testCaseSchedules
         let caseDataSource = []
@@ -157,7 +157,7 @@ class SceneManagerStore {
             }
         }
         console.log(params)
-        const result = await post("1.0.0/hipac.api.test.scene.save/",params)
+        const result = await post("1.0.0/hipac.gotest.scene.save/",params)
         if(result.code == "200"){
             message.success('保存场景成功');
         }

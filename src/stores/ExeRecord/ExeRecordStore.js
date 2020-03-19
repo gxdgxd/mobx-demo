@@ -45,7 +45,7 @@ class ExeRecordStore {
     async initData(pageNo) {
 
         var testdata = {"arg0":{'operatorId':this.tableRequestData.operatorId,"env":this.tableRequestData.env,"exeTimeBefore":this.tableRequestData.exeTimeBefore,"finishTimeAfter":this.tableRequestData.finishTimeAfter,"pageNo":pageNo,"pageSize":10,"status":this.tableRequestData.status,"testSceneId":this.tableRequestData.testSceneId}}
-        const result = await post("1.0.0/hipac.api.test.exe.record.query/",testdata)
+        const result = await post("1.0.0/hipac.gotest.exe.record.query/",testdata)
 
         this.dataSource = result.data;
         this.pageNo = result.pageNo;
@@ -55,7 +55,7 @@ class ExeRecordStore {
 
     @action
     async getDetailData(id){
-        const result = await post("1.0.0/hipac.api.test.exe.record.info/",{id:id})
+        const result = await post("1.0.0/hipac.gotest.exe.record.info/",{id:id})
         this.exeDetailData = result.data;
         this.modalVisible = true;
         return result.data

@@ -42,7 +42,7 @@ class ApiManagerStore {
             this.tableRequestData.id = apiId
         }
         var testdata = {"query":{"name":this.tableRequestData.name,"creatorId":this.tableRequestData.creatorId,"apiMethodName":this.tableRequestData.apiMethodName,"appId":this.treeParams.appId,"id":this.tableRequestData.id,"moduleId":this.treeParams.moduleId,"pageNo":pageNo,"pageSize":10,"tagId":this.tableRequestData.tagId}}
-        const result = await post("1.0.0/hipac.api.test.api.queryApi/",testdata)
+        const result = await post("1.0.0/hipac.gotest.api.queryApi/",testdata)
 
         console.log(result)
         this.dataSource = result.data;
@@ -67,7 +67,7 @@ class ApiManagerStore {
             tagIds.push(tags[i].id)
         }
         const params = {"arg0":{"tagIds":tagIds,"apiClassName":this.detailData.apiClassName,"apiMethodName":this.detailData.apiMethodName,"appId":this.detailData.appId,"argsJsonFormat":this.detailData.argsJsonFormat,"argsTypeNames":this.detailData.argsTypeNames,"artifactId":this.detailData.artifactId,"creatorId":this.detailData.creatorId,"desc":this.detailData.desc,"groupId":this.detailData.groupId,"id":this.detailData.id,"moduleId":this.detailData.moduleId,"name":this.detailData.name,"resultJsonFormat":this.detailData.resultJsonFormat,"type":this.detailData.type}}
-        const result = await post("1.0.0/hipac.api.test.api.saveApi/",params)
+        const result = await post("1.0.0/hipac.gotest.api.saveApi/",params)
         console.log(result)
         if(result.code == 200){
             message.success("修改接口成功")
@@ -83,7 +83,7 @@ class ApiManagerStore {
     async fetchApiByGAV(pageNo){
         // var testdata = {"gav":{"artifactId":"pay-api","groupId":"com.yangt.pay","version":"1.0.20"}}
         let testdata = {"gav":{"artifactId":this.tableRequestData.artifactId,"groupId":this.tableRequestData.groupId,"version":this.tableRequestData.version}}
-        const result = await post("1.0.0/hipac.api.test.api.fetchApiByGAV/",testdata)
+        const result = await post("1.0.0/hipac.gotest.api.fetchApiByGAV/",testdata)
         const result_data = result.data;
         let array = []
         for (let i = 0; i < result_data.length ; i++) {
@@ -146,7 +146,7 @@ class ApiManagerStore {
         }
 
         const params = {"saveForms":array,"appId":this.treeParams.appId,"moduleId":this.treeParams.moduleId,"gav":{"artifactId":this.tableRequestData.artifactId,"groupId":this.tableRequestData.groupId,"version":this.tableRequestData.version}}
-        const result = await post("1.0.0/hipac.api.test.api.batchAddApi/",params)
+        const result = await post("1.0.0/hipac.gotest.api.batchAddApi/",params)
         console.log(result)
         if(result.code == 200){
             message.success("添加接口成功")
@@ -161,7 +161,7 @@ class ApiManagerStore {
     @action
     async getApiDetailData() {
         var apiID = getUrlParam('apiID',window.location.search);
-        const result = await post("1.0.0/hipac.api.test.api.info/",{id:apiID})
+        const result = await post("1.0.0/hipac.gotest.api.info/",{id:apiID})
         this.detailData = result.data;
         let tags = []
         if(typeof result.data.tags != "undefined" && result.data.tags != null){

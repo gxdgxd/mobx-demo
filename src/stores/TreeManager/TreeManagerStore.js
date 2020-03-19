@@ -49,7 +49,7 @@ class TreeManagerStore {
 
     @action
     async getTreeAppDataSouce(){
-        const appResult = await post("1.0.0/hipac.api.test.module.apps/",{})
+        const appResult = await post("1.0.0/hipac.gotest.module.apps/",{})
         let data = appResult.data
         let array = []
         for (let i = 0; i < data.length; i++) {
@@ -68,7 +68,7 @@ class TreeManagerStore {
     @action
     async getTreeModuleDataSouce(item,parentId){
         console.log('item', item);
-        const moduleResult = await post("1.0.0/hipac.api.test.module.findByAppIdAndParentId/",{"appId":item.appId,"parentId":parentId})
+        const moduleResult = await post("1.0.0/hipac.gotest.module.findByAppIdAndParentId/",{"appId":item.appId,"parentId":parentId})
         let data = moduleResult.data
         let array = []
         for (let i = 0; i < data.length; i++) {
@@ -100,12 +100,12 @@ class TreeManagerStore {
             parentId = 0
         }
         if(this.modalName == "修改模块"){
-            const result = await post("1.0.0/hipac.api.test.module.save/",{"arg0":{"appId":appId,"id":this.tableRequestData.id,"name":this.tableRequestData.name}})
+            const result = await post("1.0.0/hipac.gotest.module.save/",{"arg0":{"appId":appId,"id":this.tableRequestData.id,"name":this.tableRequestData.name}})
             if(result.code == 200){
                 message.success("保存模块成功")
             }
         }else{
-            const result = await post("1.0.0/hipac.api.test.module.save/",{"arg0":{"appId":appId,"name":this.tableRequestData.name,"parentId":parentId}})
+            const result = await post("1.0.0/hipac.gotest.module.save/",{"arg0":{"appId":appId,"name":this.tableRequestData.name,"parentId":parentId}})
             if(result.code == 200){
                 message.success("保存模块成功")
             }
@@ -122,7 +122,7 @@ class TreeManagerStore {
     @action
     async deleteTree(item) {
         this.item = item
-        const result = await post("1.0.0/hipac.api.test.module.del/",{id:this.item.id})
+        const result = await post("1.0.0/hipac.gotest.module.del/",{id:this.item.id})
 
         if(result.code == "200"){
             message.success('删除模块成功');
@@ -132,7 +132,7 @@ class TreeManagerStore {
 
     @action
     async getTreeData() {
-        const result = await post("1.0.0/hipac.api.test.module.all/",{})
+        const result = await post("1.0.0/hipac.gotest.module.all/",{})
         let data = result.data
         this.treeAppDataSource = data;
 
