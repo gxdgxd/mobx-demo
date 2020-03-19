@@ -16,6 +16,7 @@ class TestCaseManagerStore{
     @observable exeCaseModalVisible = false
     @observable drawerVisible = false
     @observable caseIds = []
+
     @observable caseDetailData = {
 
     };
@@ -42,7 +43,10 @@ class TestCaseManagerStore{
      */
     @action
     async initData(pageNo,appId,moduleId) {
-        this.treeParams = {'appId':appId,'moduleId':moduleId}
+        debugger
+        if(typeof appId != "undefined" || typeof moduleId != "undefined"){
+            this.treeParams = {'appId':appId,'moduleId':moduleId}
+        }
         let apiId = getUrlParam('apiId',window.location.search);
         if(apiId != ""){
             this.tableRequestData.apiId = apiId
