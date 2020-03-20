@@ -82,7 +82,7 @@ export const columns = (context) => [
         width:150,
     },
     {
-        title: '标签',
+        title: '接口标签',
         dataIndex: 'tags',
         key: 'tags',
         width:230,

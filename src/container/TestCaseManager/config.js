@@ -1,5 +1,5 @@
 import React  from 'react';
-import { Popover,Popconfirm} from 'antd';
+import { Popover,Popconfirm,Tag,Tooltip} from 'antd';
 import common from "../../style/common.css";
 import {getUrlParam} from "../../utils/common";
 
@@ -64,6 +64,34 @@ export const columns = (context) => [
         dataIndex: 'priority',
         key: 'priority',
         width:80
+    },
+    {
+        title: '用例标签',
+        dataIndex: 'tags',
+        key: 'tags',
+        width:230,
+        render:(row,record) => {
+
+            return (
+                <span>
+                    {record.tags.map((tag, index) => {
+                        const isLongTag = tag.length > 20;
+                        const tagElem = (
+                            <Tag key={tag.id} color="purple">
+                                {isLongTag ? `${tag.value.slice(0, 20)}...` : tag.value}
+                            </Tag>
+                        );
+                        return isLongTag ? (
+                            <Tooltip title={tag.value} key={tag.id}>
+                                {tagElem}
+                            </Tooltip>
+                        ) : (
+                            tagElem
+                        );
+                    })}
+                </span>
+            )
+        }
     },
     {
         title: '创建人',

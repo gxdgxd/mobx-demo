@@ -3,6 +3,7 @@ import axios from 'axios';
 import { message } from 'antd';
 import {getUrlParam,replaceUrlParamVal,removeUrlParam} from '../../utils/common'
 import {post} from '../../utils/http'
+import {toJS} from "mobx/lib/mobx";
 message.config({
     top: 200
 });
@@ -16,6 +17,7 @@ class TestCaseManagerStore{
     @observable exeCaseModalVisible = false
     @observable drawerVisible = false
     @observable caseIds = []
+    @observable caseTags = []
 
     @observable caseDetailData = {
 
@@ -72,6 +74,11 @@ class TestCaseManagerStore{
         this.caseDetailData = result.data;
         this.insertButtonStatus = "none"
         this.updateButtonStatus = ""
+        let tags = []
+        if(typeof result.data.tags != "undefined" && result.data.tags != null){
+            tags = toJS(result.data.tags)
+        }
+        this.caseTags = tags
     }
 
     /**
@@ -79,15 +86,16 @@ class TestCaseManagerStore{
      * @returns {Promise<void>}
      */
     @action
-    async insert(tags,apiDetailData,value) {
+    async insert(apiDetailData,value) {
         if(this.caseDetailData.validScript == "" || typeof this.caseDetailData.validScript == "undefined" ){
             message.warn("请填写用例校验规则")
             return
         }
-        let tagIds = []
-        if(tags.length > 0){
-            for (let i = 0; i < tags.length; i++) {
-                tagIds.push(tags[i].id)
+        let caseTags = this.caseTags
+        let caseTagIds = []
+        if(caseTags.length > 0){
+            for (let i = 0; i < caseTags.length; i++) {
+                caseTagIds.push(caseTags[i].id)
             }
         }
 
@@ -97,7 +105,7 @@ class TestCaseManagerStore{
         if(type == "copy"){
             caseId = ""
         }
-        const params = {"arg0":{"apiId":apiId,"appId":apiDetailData.appId,"contextParamScript":this.caseDetailData.contextParamScript,"desc":this.caseDetailData.desc,"id":caseId,"moduleId":apiDetailData.moduleId,"name":this.caseDetailData.name,"paramScript":this.caseDetailData.paramScript,"priority":this.caseDetailData.priority,"validScript":this.caseDetailData.validScript}}
+        const params = {"arg0":{"tagIds":caseTagIds,"apiId":apiId,"appId":apiDetailData.appId,"contextParamScript":this.caseDetailData.contextParamScript,"desc":this.caseDetailData.desc,"id":caseId,"moduleId":apiDetailData.moduleId,"name":this.caseDetailData.name,"paramScript":this.caseDetailData.paramScript,"priority":this.caseDetailData.priority,"validScript":this.caseDetailData.validScript}}
         const result = await post("1.0.0/hipac.gotest.case.saveCase/",params)
         if(result.code == 200){
             this.insertButtonStatus = "none"
@@ -174,6 +182,11 @@ class TestCaseManagerStore{
             message.success("删除用例成功！")
             this.initData(this.pageNo)
         }
+    }
+
+    @action
+    async insertCaseTags(tags){
+        this.caseTags.push(tags)
     }
 
 }

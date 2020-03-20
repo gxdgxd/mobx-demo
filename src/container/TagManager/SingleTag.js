@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Tag,Icon, Input,Tooltip } from 'antd';
 
-@inject('TagManagerStore','ApiManagerStore')
+@inject('TagManagerStore')
 @observer
 class SingleTag extends Component {
     constructor(props) {

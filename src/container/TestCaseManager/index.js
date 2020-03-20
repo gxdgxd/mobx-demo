@@ -159,7 +159,7 @@ class TestCaseManagerList extends Component {
                         <SearchForm/>
                         <Table
                             bordered
-                            columns={columns(this)} pagination={false} scroll={{ x: 1630, y: 600 }}
+                            columns={columns(this)} pagination={false} scroll={{ x: 1930, y: 600 }}
                             dataSource={mydataSource}  />
                         <Pagination onChange={this.onChangePage} pageSize={pageSize} current={pageNo}  total={totalCount} style={{'marginTop':'6px','float':'right'}}/>
                         <ExeCaseModal exeCaseModalVisible={exeCaseModalVisible} caseIds={caseIds}   ></ExeCaseModal>

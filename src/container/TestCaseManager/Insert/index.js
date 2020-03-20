@@ -4,6 +4,7 @@ import ReactJson from 'react-json-view'
 import { Tag, Button,Alert, Select, Row,Icon, Form, Input,Tooltip,message } from 'antd';
 import {getUrlParam} from '../../../utils/common'
 import ExeCaseDrawer from '../ExeCaseDrawer'
+import SingleTag from "../../TagManager/SingleTag";
 
 message.config({
     top: 200
@@ -13,7 +14,7 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const { TextArea } = Input;
 
-@inject('TestCaseManagerStore','ApiManagerStore','ExeRecordStore')
+@inject('TestCaseManagerStore','ApiManagerStore','ExeRecordStore','TagManagerStore','GlobalManagerStore')
 @observer
 class InsertIndex extends Component {
     componentDidMount() {
@@ -22,6 +23,8 @@ class InsertIndex extends Component {
             {name: '编辑用例'},
         ]);
         this.props.ApiManagerStore.getApiDetailData()
+        this.props.GlobalManagerStore.getVarDetail("default_env");
+
         if(getUrlParam('caseId',window.location.search) != ""){
             this.props.TestCaseManagerStore.getDetailData()
         }
@@ -38,8 +41,9 @@ class InsertIndex extends Component {
     /**
      * 获取子组件SingleTag中用户输入的tag标签
      */
-    getTags = (tags) => {
-        this.props.ApiManagerStore.insertTags(tags)
+    getCaseTags = (tags) => {
+        debugger
+        this.props.TestCaseManagerStore.insertCaseTags(tags)
     };
     /**
      * 输入框和单选按钮产生的change事件
@@ -63,7 +67,7 @@ class InsertIndex extends Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                this.props.TestCaseManagerStore.insert(this.props.ApiManagerStore.tags,this.props.ApiManagerStore.detailData,true)
+                this.props.TestCaseManagerStore.insert(this.props.ApiManagerStore.detailData,true)
             }
         });
     }
@@ -112,34 +116,35 @@ class InsertIndex extends Component {
             message.warn("请先保存用例再执行！")
             return
         }
-        if(this.state.dubboGroup == ""){
-            message.warn("请输入测试用的dubbo分组！")
-            return
-        }
+
         let abc = await this.props.TestCaseManagerStore.insert(this.props.ApiManagerStore.tags,this.props.ApiManagerStore.detailData,false)
         if(abc != 200){
             return
         }
-        let params =  {"id":null,"caseIds":[caseId],"scheduleType":1,"env":this.state.dubboGroup}
+        let params =  {"id":null,"caseIds":[caseId],"scheduleType":1,"env":this.props.GlobalManagerStore.varValue}
         let result = await this.props.TestCaseManagerStore.exeCase(params,'case');
-        if(result.code == 200){
-            this.timerExe(result)
+        if(typeof result != "undefined"){
+            if(result.code == 200){
+                this.timerExe(result)
 
-            this.props.TestCaseManagerStore.showCaseDrawer()
-        }else{
-            message.warn("执行出现错误")
+                this.props.TestCaseManagerStore.showCaseDrawer()
+            }else{
+                message.warn("执行出现错误")
+            }
         }
     }
     handleCopy(copy){
         message.success("复制成功")
     }
-
+    changeInput(e){
+        this.props.GlobalManagerStore.varValue = e.target.value
+    }
     render(){
-
+        const {varValue} = this.props.GlobalManagerStore
         const { getFieldDecorator} = this.props.form;
         const {detailData,tags} = this.props.ApiManagerStore
         const {exeDetailData} = this.props.ExeRecordStore
-        const {insertButtonStatus,updateButtonStatus,caseDetailData,drawerVisible} = this.props.TestCaseManagerStore
+        const {insertButtonStatus,updateButtonStatus,caseDetailData,drawerVisible,caseTags} = this.props.TestCaseManagerStore
         var mockJson = ""
         if(typeof caseDetailData.paramScript != "undefined"){
             try {
@@ -150,7 +155,6 @@ class InsertIndex extends Component {
                 console.log('error：'+e);
             }
         }
-
         return(
             <div className="container-bg" style={{'marginLeft':'15px'}}>
                 <Form  layout="inline" className="ant-advanced-search-form p-xs pb-0" onSubmit={this.insert}>
@@ -231,6 +235,11 @@ class InsertIndex extends Component {
                                 &nbsp;&nbsp;&nbsp;
                                 <Tag color="magenta"> P0为最高，P3为最低 </Tag>
                             </span>
+                        </FormItem>
+                    </Row>
+                    <Row>
+                        <FormItem {...this.formItemLayout} label="用例标签">
+                            <SingleTag tags={caseTags} getTags={this.getCaseTags}/>
                         </FormItem>
                     </Row>
                     <Row>
@@ -324,8 +333,14 @@ class InsertIndex extends Component {
                             <Button type="primary" style={{marginBottom:'8px'}} onClick={this.testCaseExe}>保存并执行</Button>
                         </FormItem>
                         <FormItem {...this.formItemLayout} label="" style={{display:updateButtonStatus}}>
-                            <Input style={{ width: 280 }} placeholder="请输入测试用的dubbo分组" allowClear={true}  onChange={e => this.setState({ dubboGroup: e.target.value })}/>
+                            {getFieldDecorator('dubboGroup', {
+                                initialValue: varValue,
+                                rules: [{ required: true, message: '请输入执行环境!' }],
+                            })(
+                                <Input placeholder="请输入执行环境" style={{ width: 280 }}  allowClear={true} style={{ width: 220 }}  onChange={this.changeInput.bind(this) }/>
+                            )}
                         </FormItem>
+
                     </Row>
                 </Form>
                 <ExeCaseDrawer exeDetailData={exeDetailData} drawerVisible={drawerVisible}></ExeCaseDrawer>
