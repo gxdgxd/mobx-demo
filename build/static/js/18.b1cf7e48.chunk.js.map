@@ -1,0 +1,1 @@
+{"version":3,"sources":["common/Forbidden.js"],"names":[],"mappings":"kIAAA,2BAMe,qBACX,OACI","file":"static/js/18.b1cf7e48.chunk.js","sourcesContent":["/*\n * 500错误订制页面\n */\n\nimport React from 'react';\n\nexport default () => {\n    return (\n        <div>page is forbidden</div>\n    );\n};"],"sourceRoot":""}

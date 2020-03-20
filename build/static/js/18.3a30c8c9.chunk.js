@@ -1,2 +1,0 @@
-(this.webpackJsonpapi_automation_static=this.webpackJsonpapi_automation_static||[]).push([[18],{1527:function(t,a,i){"use strict";i.r(a);var n=i(0),e=i.n(n);a.default=function(){return e.a.createElement("div",null,"page is forbidden")}}}]);
-//# sourceMappingURL=18.3a30c8c9.chunk.js.map
