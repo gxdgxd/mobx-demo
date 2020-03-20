@@ -335,7 +335,7 @@ class InsertIndex extends Component {
                         <FormItem {...this.formItemLayout} label="" style={{display:updateButtonStatus}}>
                             {getFieldDecorator('dubboGroup', {
                                 initialValue: varValue,
-                                rules: [{ required: true, message: '请输入执行环境!' }],
+                                rules: [{ required: false, message: '请输入执行环境!' }],
                             })(
                                 <Input placeholder="请输入执行环境" style={{ width: 280 }}  allowClear={true} style={{ width: 220 }}  onChange={this.changeInput.bind(this) }/>
                             )}
