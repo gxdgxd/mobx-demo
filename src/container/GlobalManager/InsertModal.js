@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Radio,Form, Input, Modal } from 'antd';
 const FormItem = Form.Item;
+const { TextArea } = Input;
 
 @inject('GlobalManagerStore')
 @observer
@@ -37,7 +38,7 @@ class InsertModal extends Component{
 
 
     formItemLayout = {
-        labelCol: { span: 5 },
+        labelCol: { span: 3 },
         wrapperCol: { span: 19 },
     }
     render(){
@@ -48,7 +49,7 @@ class InsertModal extends Component{
             <Modal
                 destroyOnClose
                 title="添加参数"
-                width="800px"
+                width="900px"
                 visible={modalVisible}
                 onOk={this.okModal.bind(this)}
                 onCancel={this.hideModal.bind(this)}
@@ -60,14 +61,14 @@ class InsertModal extends Component{
                         {getFieldDecorator('name', {
                             rules: [{ required: true, message: '请填写参数名!' }],
                         })(
-                            <Input type="text"  style={{ width: 300 }}  placeholder="请填写参数名" onChange={this.inputChange.bind(this,'name')}/>
+                            <Input type="text"  style={{ width: 650 }}  placeholder="请填写参数名" onChange={this.inputChange.bind(this,'name')}/>
                         )}
                     </FormItem>
                     <FormItem {...this.formItemLayout} label="参数值">
                         {getFieldDecorator('value', {
                             rules: [{ required: true, message: '请填写参数值!' }],
                         })(
-                            <Input type="text"  style={{ width: 300 }}  placeholder="请填写参数值" onChange={this.inputChange.bind(this,'value')}/>
+                            <TextArea rows={10} style={{ width: 650 }} placeholder="请填写参数值" onChange={this.inputChange.bind(this,'value')}/>
                         )}
                     </FormItem>
                     <FormItem {...this.formItemLayout} label="参数类型">

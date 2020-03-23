@@ -7,8 +7,7 @@ import common from "../../style/common.css";
 import {message} from "antd/lib/index";
 const FormItem = Form.Item;
 
-@inject('TestCaseManagerStore')
-@inject('SceneManagerStore')
+@inject('SceneManagerStore','TestCaseManagerStore')
 @observer
 class InsertCaseModal extends Component{
     componentDidMount() {
@@ -39,7 +38,6 @@ class InsertCaseModal extends Component{
         this.props.SceneManagerStore.hideInsertCaseModal('insert');
     }
     onChangePage = page => {
-        console.log(page);
         this.props.TestCaseManagerStore.initData(page);
     };
 
@@ -47,7 +45,7 @@ class InsertCaseModal extends Component{
         const {dataSource,pageNo,pageSize,totalCount} = this.props.TestCaseManagerStore
         const { insertCaseModalVisible} = this.props
         const mydataSource = dataSource.toJS()
-        const rowSelection = {
+        var rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
                 console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
                 this.setState({
@@ -71,7 +69,7 @@ class InsertCaseModal extends Component{
                 <Table rowSelection={rowSelection}
                     bordered
                     columns={caseColumns(this)} pagination={false}
-                    dataSource={mydataSource}  size="middle"/>
+                    dataSource={mydataSource}  size="middle" rowKey="id"/>
                 <Pagination onChange={this.onChangePage} pageSize={pageSize} current={pageNo}  total={totalCount} style={{'marginTop':'6px','float':'right'}}/>
             </Modal>
         )

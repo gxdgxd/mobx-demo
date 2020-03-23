@@ -16,7 +16,7 @@ class CommonStore {
      */
     @action
     async getAllTags(){
-        const result = await post("1.0.0/hipac.api.test.tag.all",{})
+        const result = await post("1.0.0/hipac.gotest.tag.all/",{})
         this.allTags = result.data;
     }
 
@@ -25,8 +25,8 @@ class CommonStore {
      * @returns {Promise<void>}
      */
     @action
-    async getAllCreators(){
-        const result = await post("1.0.0/hipac.api.test.tag.all",{})
+    async getAllCreators(realName){
+        const result = await post("1.0.0/hipac.gotest.user.query/",{"realName":realName})
         this.allCreators = result.data;
     }
 

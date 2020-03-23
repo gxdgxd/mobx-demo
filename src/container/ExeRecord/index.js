@@ -1,15 +1,16 @@
 import React, {Component} from 'react';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Table,Input,Tree,Form,Row, Col,Button,Icon,DatePicker} from 'antd';
+import { Table,Input,Select,Form,Row, Col,Button,Icon,DatePicker,Pagination} from 'antd';
 import moment from 'moment';
 import {columns} from "./config";
 import DetailModal from "./DetailModal";
+const Option = Select.Option;
 
-
+const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 
-@inject('ExeRecordStore')
+@inject('ExeRecordStore','CommonStore')
 @observer
 class ExeRecordIndex extends Component {
     componentDidMount() {
@@ -25,39 +26,100 @@ class ExeRecordIndex extends Component {
         }
     }
     inputChange(n,e) {
+        this.props.ExeRecordStore.changeTableRequestData(n,e.target.value);
     }
-    onChange(dates, dateStrings) {
-        console.log('From: ', dates[0], ', to: ', dates[1]);
-        console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
+    optionChange(n,v) {
+        this.props.ExeRecordStore.changeTableRequestData(n,v || '');
     }
-    showModal(record){
-        this.props.ExeRecordStore.getDetailData(record)
+    showModal(id){
+        this.props.ExeRecordStore.getDetailData(id)
     }
+    onChangePage = page => {
+        this.props.ExeRecordStore.initData(page);
+    };
+    onDateChange(dates, dateStrings) {
+        this.props.ExeRecordStore.changeTableRequestData('exeTimeBefore',dateStrings[0]);
+        this.props.ExeRecordStore.changeTableRequestData('finishTimeAfter',dateStrings[1]);
+    }
+    formItemLayout = {
+        labelCol: { span: 5 },
+        wrapperCol: { span: 19 },
+    }
+    handleSearch = () => {
+        this.props.ExeRecordStore.initData(1);
+    }
+    handleCreatorSearch = value => {
+        if (value) {
+            this.props.CommonStore.getAllCreators(value)
+        } else {
+            this.setState({ data: [] });
+        }
+    };
+
+    handleCreatorChange = value => {
+        this.setState({ value });
+        this.props.ExeRecordStore.changeTableRequestData('operatorId',value);
+    };
     render(){
-        const {dataSource,modalVisible} = this.props.ExeRecordStore
+        const {dataSource,modalVisible,pageNo,pageSize,totalCount,exeDetailData} = this.props.ExeRecordStore
+        const {allCreators} = this.props.CommonStore
         const mydataSource = dataSource.toJS()
         return(
             <div className="container-bg">
-                <Form  className="ant-advanced-search-form p-xs pb-0"  onSubmit={this.handleSubmit}>
+                <Form  className="ant-advanced-search-form p-xs pb-0">
                     <Row gutter={48}>
-                        <Col span={9}>
-                            时间：
+                        <Col span={8}>
+                            <FormItem {...this.formItemLayout} label="时间">
                                 <RangePicker
                                     ranges={{
                                         Today: [moment(), moment()],
                                         'This Month': [moment().startOf('month'), moment().endOf('month')],
                                     }}
-                                    onChange={this.onChange}
+                                    onChange={this.onDateChange}
                                 />
+                            </FormItem>
                         </Col>
-                        <Col span={5}>
-                            场景ID：<Input placeholder="请输入场景ID" style={{'width':'130px'}} onChange={this.inputChange.bind(this,'testSceneId')}/>
+                        <Col span={7}>
+                            <FormItem {...this.formItemLayout} label="场景ID">
+                                <Input placeholder="请输入场景ID"  allowClear={true}  onChange={this.inputChange.bind(this,'testSceneId')}/>
+                            </FormItem>
                         </Col>
-                        <Col span={5}>
-                            执行环境：<Input placeholder="请输入执行环境" style={{'width':'130px'}}onChange={this.inputChange.bind(this,'env')}/>
+                        <Col span={7}>
+                            <FormItem {...this.formItemLayout} label="执行环境">
+                                <Input placeholder="请输入执行环境"  allowClear={true} onChange={this.inputChange.bind(this,'env')}/>
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row gutter={48}>
+                        <Col span={8}>
+                            <FormItem {...this.formItemLayout} label="操作人">
+                                <Select
+                                    showSearch
+                                    value={this.state.value}
+                                    placeholder="请输入真名搜索(非花名)"
+                                    style={this.props.style}
+                                    defaultActiveFirstOption={false}
+                                    showArrow={false}
+                                    filterOption={false}  allowClear={true}
+                                    onSearch={this.handleCreatorSearch}
+                                    onChange={this.handleCreatorChange}
+                                    notFoundContent={null}
+                                >
+                                    {allCreators.map(d => <Option key={d.userId}>{d.realName}</Option>)}
+                                </Select>
+                            </FormItem>
+                        </Col>
+                        <Col span={7}>
+                            <FormItem {...this.formItemLayout} label="执行状态">
+                                <Select placeholder="请选择执行状态"  allowClear={true}  onChange={this.optionChange.bind(this,'status')}>
+                                    <Option value="0">待执行</Option>
+                                    <Option value="1">执行中</Option>
+                                    <Option value="2">已完成</Option>
+                                </Select>
+                            </FormItem>
                         </Col>
                         <Col span={3}>
-                            <Button type="primary" htmlType="submit" >
+                            <Button type="primary" htmlType="submit" onClick={this.handleSearch}>
                                 <Icon type="search" /> 搜索
                             </Button>
                         </Col>
@@ -66,10 +128,10 @@ class ExeRecordIndex extends Component {
                 <Row style={{'marginTop':'8px'}}>
                     <Table
                         bordered
-                        columns={columns(this)}
+                        columns={columns(this)} pagination={false}
                         dataSource={mydataSource} />
-                    <DetailModal modalVisible={modalVisible}/>
-
+                    <Pagination onChange={this.onChangePage} pageSize={pageSize} current={pageNo}  total={totalCount} style={{'marginTop':'6px','float':'right'}}/>
+                    <DetailModal modalVisible={modalVisible} detailData={exeDetailData}/>
                 </Row>
             </div>
         )

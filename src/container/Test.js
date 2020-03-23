@@ -7,17 +7,22 @@
  */
 
 import React, { Component } from 'react';
+import { Result,Icon,Button } from 'antd';
 class Test extends Component {
 
     componentDidMount() {
         this.props.setBreadcrumb([
-            { name: 'test', },
+            { name: 'home', },
         ]);
     }
     
     render() {
         return (
-            <div>Hello world22</div>
+            <Result
+                icon={<Icon type="smile" theme="twoTone" />}
+                title="欢迎访问接口自动化平台，开始你的第一个用例编写吧！"
+                extra={<Button type="primary"  onClick={()=>{window.location.href = '/insert_api'}}>Next</Button>}
+            />
         );
     }
 }

@@ -12,8 +12,7 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 
-@inject('TestCaseManagerStore')
-@inject('SceneManagerStore')
+@inject('SceneManagerStore','TestCaseManagerStore')
 @observer
 class UpdateIndex extends Component {
     componentDidMount() {
@@ -71,7 +70,9 @@ class UpdateIndex extends Component {
         labelCol: { span: 5 },
         wrapperCol: { span: 19 },
     }
-
+    exeCase = (record) => {
+        this.props.TestCaseManagerStore.exeCase(record,'scene')
+    }
     render(){
         const {insertCaseModalVisible,caseDataSource,detailData} = this.props.SceneManagerStore
         const { getFieldDecorator } = this.props.form;
@@ -93,9 +94,9 @@ class UpdateIndex extends Component {
                             <FormItem {...this.formItemLayout} label="环境">
                                 {getFieldDecorator('env', {
                                     initialValue: detailData.env,
-                                    rules: [{ required: true, message: '请输入环境!' }],
+                                    rules: [{ required: true, message: '请输入执行环境!' }],
                                 })(
-                                    <Input placeholder="请输入场景环境"  style={{ width: 200 }}  onChange={this.inputChange.bind(this,'env')}/>
+                                    <Input placeholder="请输入执行环境"  style={{ width: 200 }}  onChange={this.inputChange.bind(this,'env')}/>
                                 )}
                             </FormItem>
                         </Col>
@@ -122,7 +123,7 @@ class UpdateIndex extends Component {
                         <DndProvider backend={HTML5Backend}>
                             <Table
                                 bordered
-                                columns={insertCaseColumns(this)}
+                                columns={insertCaseColumns(this)} scroll={{ x: 1500, y: 600 }}
                                 dataSource={caseDataSource.toJS()} components={this.components}
                                 onRow={(record, index) => ({
                                     index,
@@ -136,7 +137,7 @@ class UpdateIndex extends Component {
                                 <Button type="primary" htmlType="submit" >
                                     保存此场景数据
                                 </Button> &nbsp; &nbsp; &nbsp;
-                                <Button type="primary" >
+                                <Button type="primary" onClick={this.exeCase}  onClick={() => this.exeCase(detailData)} >
                                     执行场景
                                 </Button>  &nbsp; &nbsp; &nbsp;
                             </Form.Item>

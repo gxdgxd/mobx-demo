@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Radio,Form, Input, Modal } from 'antd';
 const FormItem = Form.Item;
+const { TextArea } = Input;
 
 @inject('GlobalManagerStore')
 @observer
@@ -37,7 +38,7 @@ class InsertModal extends Component{
 
 
     formItemLayout = {
-        labelCol: { span: 5 },
+        labelCol: { span: 3 },
         wrapperCol: { span: 19 },
     }
     render(){
@@ -48,20 +49,20 @@ class InsertModal extends Component{
             <Modal
                 destroyOnClose
                 title="修改参数"
-                width="800px"
+                width="900px"
                 visible={updateModalVisible}
                 onOk={this.okModal.bind(this)}
                 onCancel={this.hideModal.bind(this)}
                 okText="保存"
                 cancelText="取消"
                 className="model">
-                <Form className="ant-advanced-search-form p-xs pb-0" onSubmit={this.handleSubmit}>
+                <Form className="ant-advanced-search-form p-xs pb-0" >
                     <FormItem {...this.formItemLayout} label="参数名">
                         {getFieldDecorator('name', {
                             initialValue: detailData.name,
                             rules: [{ required: true, message: '请填写参数名!' }],
                         })(
-                            <Input type="text"  style={{ width: 300 }}  placeholder="请填写参数名" onChange={this.inputChange.bind(this,'name')}/>
+                            <Input type="text"  style={{ width: 650 }}  placeholder="请填写参数名" onChange={this.inputChange.bind(this,'name')}/>
                         )}
                     </FormItem>
                     <FormItem {...this.formItemLayout} label="参数值">
@@ -69,7 +70,7 @@ class InsertModal extends Component{
                             initialValue: detailData.value,
                             rules: [{ required: true, message: '请填写参数值!' }],
                         })(
-                            <Input type="text"  style={{ width: 300 }}  placeholder="请填写参数值" onChange={this.inputChange.bind(this,'value')}/>
+                            <TextArea rows={10} style={{ width: 650 }} placeholder="请填写参数值" onChange={this.inputChange.bind(this,'value')}/>
                         )}
                     </FormItem>
                     <FormItem {...this.formItemLayout} label="参数类型">

@@ -1,14 +1,19 @@
 import React, {Component} from 'react';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Table,Pagination,Icon,Tree,Row, Col} from 'antd';
+import { Table,Pagination,Row, Col,Button,Input,Icon} from 'antd';
+import Highlighter from 'react-highlight-words';
+
 import {columns} from './config';
 import SearchForm from './SearchForm';
+import ExeCaseModal from './ExeCaseModal';
+import ExeCaseDrawer from './ExeCaseDrawer'
 import TreeManager from '../TreeManager/TreeManager';
-import TreeManagerStore from "../../stores/TreeManager/TreeManagerStore";
 import {message} from "antd/lib/index";
-
-@inject('TestCaseManagerStore','CommonStore')
+message.config({
+    top: 200
+});
+@inject('TestCaseManagerStore','CommonStore','SceneManagerStore','ExeRecordStore','GlobalManagerStore')
 @observer
 class TestCaseManagerList extends Component {
     componentDidMount() {
@@ -16,8 +21,7 @@ class TestCaseManagerList extends Component {
             {name: '用例管理'},
         ]);
         this.props.TestCaseManagerStore.initData(1);
-        this.props.CommonStore.getAllTags();
-        this.props.CommonStore.getAllCreators();
+        this.props.GlobalManagerStore.getVarDetail("default_env");
     }
     constructor(props){
         super(props);
@@ -31,18 +35,109 @@ class TestCaseManagerList extends Component {
      */
     batchExeCase = () => {
         if(this.state.selectedRowKeys.length <= 0){
-            message.warn("请先勾选需要添加的接口")
-        }else{
-            this.props.TestCaseManagerStore.batchExeCase(this.state.selectedRows)
+            message.warn("请先勾选需要执行的用例")
+            return
         }
+        let rows = this.state.selectedRows
+        let caseIds = []
+        for (let i = 0; i < rows.length ; i++) {
+            caseIds.push(rows[i].id)
+        }
+        this.showExeCaseModal(caseIds)
+        // let params =  {"id":null,"caseIds":this.props.caseIds,"scheduleType":1,"env":this.state.env}
+        // this.props.TestCaseManagerStore.exeCase(params,"case");
+        // this.props.SceneManagerStore.insertCase(this.state.selectedRows);
+        // this.props.history.push("/insert_scene")
+
+        // <Button type="primary" style={{'marginBottom':'7px'}} onClick={this.batchExeCase.bind(this)} >
+        // 批量执行
+        // </Button>
     }
     onChangePage = page => {
         this.props.TestCaseManagerStore.initData(page);
     };
+    showExeCaseModal(caseIds){
+        this.props.TestCaseManagerStore.showExeCaseModal(caseIds);
+    }
+    deleteCase(caseIds){
+        this.props.TestCaseManagerStore.deleteCase(caseIds);
+    }
+    /**
+     * 表头搜索触发
+     * @param dataIndex
+     * @returns {{filterDropdown: (function({setSelectedKeys: *, selectedKeys?: *, confirm?: *, clearFilters?: *}): *), filterIcon: (function(*): *), onFilter: (function(*, *): boolean), onFilterDropdownVisibleChange: onFilterDropdownVisibleChange, render: (function(*): *)}}
+     */
+    getColumnSearchProps = dataIndex => ({
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+            <div style={{ padding: 8 }}>
+                <Input
+                    ref={node => {
+                        this.searchInput = node;
+                    }}
+                    placeholder={`Search ${dataIndex}`}
+                    value={selectedKeys[0]}
+                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                    onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                    style={{ width: 188, marginBottom: 8, display: 'block' }}
+                />
+                <Button
+                    type="primary"
+                    onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                    icon="search"
+                    size="small"
+                    style={{ width: 90, marginRight: 8 }}
+                >
+                    Search
+                </Button>
+                <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+                    Reset
+                </Button>
+            </div>
+        ),
+        filterIcon: filtered => (
+            <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
+        ),
+        onFilter: (value, record) =>
+            record[dataIndex]
+                .toString()
+                .toLowerCase()
+                .includes(value.toLowerCase()),
+        onFilterDropdownVisibleChange: visible => {
+            if (visible) {
+                setTimeout(() => this.searchInput.select());
+            }
+        },
+        render: text =>
+            this.state.searchedColumn === dataIndex ? (
+                <Highlighter
+                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+                    searchWords={[this.state.searchText]}
+                    autoEscape
+                    textToHighlight={text.toString()}
+                />
+            ) : (
+                text
+            ),
+    });
+    handleSearch = (selectedKeys, confirm, dataIndex) => {
+        confirm();
+        this.setState({
+            searchText: selectedKeys[0],
+            searchedColumn: dataIndex,
+        });
+    };
+
+    handleReset = clearFilters => {
+        clearFilters();
+        this.setState({ searchText: '' });
+    };
+
+    /**
+     * 表头搜索触发 end
+     */
     render(){
-        const {dataSource,pageNo,pageSize,totalCount} = this.props.TestCaseManagerStore
+        const {dataSource,pageNo,pageSize,totalCount,exeCaseModalVisible,caseIds,drawerVisible} = this.props.TestCaseManagerStore
         const mydataSource = dataSource.toJS()
-        const {allTags,allCreators} = this.props.CommonStore
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
                 console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -52,6 +147,8 @@ class TestCaseManagerList extends Component {
                 });
             }
         };
+        const {exeDetailData} = this.props.ExeRecordStore
+
         return(
             <div className="container-bg">
                 <Row>
@@ -59,12 +156,14 @@ class TestCaseManagerList extends Component {
                         <TreeManager pageType="case" maxHeight="700px"/>
                     </Col>
                     <Col span={20}>
-                        <SearchForm allTags={allTags} allCreators={allCreators}/>
+                        <SearchForm/>
                         <Table
                             bordered
-                            columns={columns(this)} pagination={false}
-                            dataSource={mydataSource}  rowSelection={rowSelection}/>
+                            columns={columns(this)} pagination={false} scroll={{ x: 1930, y: 600 }}
+                            dataSource={mydataSource}  />
                         <Pagination onChange={this.onChangePage} pageSize={pageSize} current={pageNo}  total={totalCount} style={{'marginTop':'6px','float':'right'}}/>
+                        <ExeCaseModal exeCaseModalVisible={exeCaseModalVisible} caseIds={caseIds}   ></ExeCaseModal>
+                        <ExeCaseDrawer exeDetailData={exeDetailData} drawerVisible={drawerVisible}></ExeCaseDrawer>
 
                     </Col>
                 </Row>

@@ -12,7 +12,6 @@ import {insertCaseColumns} from '../config';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-@inject('TestCaseManagerStore')
 @inject('SceneManagerStore')
 @observer
 class InsertIndex extends Component {
@@ -84,16 +83,16 @@ class InsertIndex extends Component {
                                 {getFieldDecorator('name', {
                                     rules: [{ required: true, message: '请输入场景名!' }],
                                 })(
-                                    <Input placeholder="请输入场景名"  style={{ width: 200 }} onChange={this.inputChange.bind(this,'name')}/>
+                                    <Input placeholder="请输入场景名"  allowClear={true} style={{ width: 200 }} onChange={this.inputChange.bind(this,'name')}/>
                                 )}
                             </FormItem>
                         </Col>
                         <Col span={7}>
                             <FormItem {...this.formItemLayout} label="环境">
                                 {getFieldDecorator('env', {
-                                    rules: [{ required: true, message: '请输入环境!' }],
+                                    rules: [{ required: true, message: '请输入执行环境!' }],
                                 })(
-                                    <Input placeholder="请输入场景环境"  style={{ width: 200 }}  onChange={this.inputChange.bind(this,'env')}/>
+                                    <Input placeholder="请输入执行环境"  allowClear={true} style={{ width: 200 }}  onChange={this.inputChange.bind(this,'env')}/>
                                 )}
 
                             </FormItem>
@@ -112,11 +111,16 @@ class InsertIndex extends Component {
                     </Row>
 
                     <Row gutter={48}>
-                        <Tag color="purple" style={{'marginBottom':'8px'}}>  <Icon type="smile" /> 上下拖拽可以移动表格中用例顺序哦～  </Tag>
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit" >
+                                保存此场景数据
+                            </Button> &nbsp; &nbsp; &nbsp;
+                            <Tag color="purple" style={{'marginBottom':'8px'}}>  <Icon type="smile" /> 上下拖拽可以移动表格中用例顺序哦～  </Tag>
+                        </Form.Item>
                         <DndProvider backend={HTML5Backend}>
                             <Table
                                 bordered
-                                columns={insertCaseColumns(this)}
+                                columns={insertCaseColumns(this)}  scroll={{ x: 1580, y: 600 }}
                                 dataSource={caseDataSource.toJS()} components={this.components}
                                 onRow={(record, index) => ({
                                     index,
@@ -124,18 +128,7 @@ class InsertIndex extends Component {
                                 })} />
                         </DndProvider>
                     </Row>
-                    <Row style={{'marginTop':'6px'}}>
-                        <Col span={7}>
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit" >
-                                    保存此场景数据
-                                </Button> &nbsp; &nbsp; &nbsp;
-                                <Button type="primary" >
-                                    执行场景
-                                </Button>  &nbsp; &nbsp; &nbsp;
-                            </Form.Item>
-                        </Col>
-                    </Row>
+
                 </Form>
             </div>
         )

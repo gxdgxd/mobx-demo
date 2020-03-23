@@ -16,28 +16,22 @@ class SceneManagerStore {
     @observable totalCount = 0
     @observable pageSize = 0
     @observable pageNo = 0
-    @observable tableRequestData = {"scheduleType":0}
+    @observable tableRequestData = {}
 
     @action
     changeTableRequestData(n,v){
-        this.tableRequestData[n]=v;
+        this.tableRequestData[n] = v == "" ? undefined : v ;
     }
     @action
     changeDetailData(n,v){
-        this.detailData[n]=v;
+        this.detailData[n] = v;
     }
 
     @action
     async initData(pageNo) {
-        const params = {"arg0":{"creatorId":"","cron":"","desc":"","env":"","id":null,"name":"","pageNo":pageNo,"pageSize":10,"scheduleType":null}}
-        const result = await post("1.0.0/hipac.api.test.scene.query",params)
+        const params = {"arg0":{"creatorId":this.tableRequestData.creatorId,"env":this.tableRequestData.env,"id":this.tableRequestData.id,"name":this.tableRequestData.name,"pageNo":pageNo,"pageSize":10,"scheduleType":this.tableRequestData.scheduleType}}
+        const result = await post("1.0.0/hipac.gotest.scene.query/",params)
         this.dataSource = result.data;
-        // this.dataSource = [{
-        //     id:13,
-        //     name:'ceshi',
-        //     env:'测试环境',
-        //     scheduleType:0
-        // }]
     }
 
     @action
@@ -51,7 +45,6 @@ class SceneManagerStore {
      */
     @action
     async insertScene(){
-        debugger
         let caseArray  = []
         for (let i = 0; i < this.caseDataSource.length; i++) {
             let obj = {}
@@ -66,9 +59,10 @@ class SceneManagerStore {
                 "testCaseSchedules": caseArray
             }
         }
-        const result = await post("1.0.0/hipac.api.test.scene.save",params)
+        const result = await post("1.0.0/hipac.gotest.scene.save/",params)
         if(result.code == "200"){
             message.success('添加场景成功');
+            window.location.reload();
         }
     }
 
@@ -79,24 +73,25 @@ class SceneManagerStore {
      */
     @action
     async insertCase(data){
-        debugger
 
         console.log(JSON.stringify(data))
-        this.caseDataSource = data
-        let updateCaseDataSourceNew = this.updateCaseDataSource.toJS()
+        // this.caseDataSource = data
+        // let updateCaseDataSourceNew = this.updateCaseDataSource.toJS()
+        //
+        // if(updateCaseDataSourceNew.length > 0){
+        //     let caseDataSourceNew = data
+        //     for (let i = 0; i < updateCaseDataSourceNew.length; i++) {
+        //         let ret2 = caseDataSourceNew.findIndex((v) =>  v.id == updateCaseDataSourceNew[i].id);
+        //         if(ret2 < 0){
+        //             caseDataSourceNew.push(updateCaseDataSourceNew[i])
+        //         }
+        //     }
+        //     this.caseDataSource = caseDataSourceNew
+        // }
 
-
-        if(updateCaseDataSourceNew.length > 0){
-            let caseDataSourceNew = data
-            for (let i = 0; i < updateCaseDataSourceNew.length; i++) {
-                let ret2 = caseDataSourceNew.findIndex((v) =>  v.id == updateCaseDataSourceNew[i].id);
-                if(ret2 < 0){
-                    caseDataSourceNew.push(updateCaseDataSourceNew[i])
-                }
-            }
-            this.caseDataSource = caseDataSourceNew
+        for (let i = 0; i < data.length; i++) {
+            this.caseDataSource.push(data[i])
         }
-        debugger
         console.log(JSON.stringify(this.caseDataSource))
         this.hideInsertCaseModal()
     }
@@ -128,7 +123,7 @@ class SceneManagerStore {
     @action
     async getDetailData() {
         let sceneId = getUrlParam('sceneId',window.location.search);
-        const result = await post("1.0.0/hipac.api.test.scene.info",{id:sceneId})
+        const result = await post("1.0.0/hipac.gotest.scene.info/",{id:sceneId})
         this.detailData = result.data;
         let testCaseSchedules = result.data.testCaseSchedules
         let caseDataSource = []
@@ -162,7 +157,7 @@ class SceneManagerStore {
             }
         }
         console.log(params)
-        const result = await post("1.0.0/hipac.api.test.scene.save",params)
+        const result = await post("1.0.0/hipac.gotest.scene.save/",params)
         if(result.code == "200"){
             message.success('保存场景成功');
         }

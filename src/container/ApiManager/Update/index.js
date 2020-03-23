@@ -1,18 +1,14 @@
 import React, { Component } from 'react';
 import { observable, action, computed,toJS } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Table,Tag, Button,Tooltip,Alert, Radio, Select, Row, Col, Form, DatePicker, Input, Modal,Icon,Upload } from 'antd';
-const { Column, ColumnGroup } = Table;
-
-
+import TreeModal from './TreeModal'
+import { Tag, Button,Alert, Row, Form, Input,Icon } from 'antd';
+import SingleTag from "../../TagManager/SingleTag";
 const FormItem = Form.Item;
-const Option = Select.Option;
-const { RangePicker } = DatePicker;
-const RadioGroup = Radio.Group;
 const { TextArea } = Input;
 
 
-@inject('ApiManagerStore')
+@inject('ApiManagerStore','TagManagerStore')
 @observer
 class DetailIndex extends Component{
     componentDidMount() {
@@ -25,41 +21,17 @@ class DetailIndex extends Component{
     constructor(props){
         super(props);
         this.state={
-            tags:[],
-            inputVisible: false,
-            inputValue: '',
+
         }
     }
-    handleClose = removedTag => {
+
+    /**
+     * 获取子组件SingleTag中用户输入的tag标签
+     */
+    getTags = (tags) => {
         debugger
-        const tags = this.props.ApiManagerStore.tags.filter(tag => tag.id !== removedTag);
-        console.log(tags);
-        this.setState({ tags });
+        this.props.ApiManagerStore.insertTags(tags)
     };
-
-    showInput = () => {
-        this.setState({ inputVisible: true }, () => this.input.focus());
-    };
-
-    handleInputChange = e => {
-        this.setState({ inputValue: e.target.value });
-    };
-
-    handleInputConfirm = () => {
-        const { inputValue } = this.state;
-        let { tags } = this.state
-        if (inputValue && tags.indexOf(inputValue) === -1) {
-            tags = [...tags, inputValue];
-        }
-        this.props.ApiManagerStore.insertTag(tags[0])
-        this.setState({
-            inputVisible: false,
-            inputValue: '',
-        });
-    };
-
-    saveInputRef = input => (this.input = input);
-
     /**
      * 输入框和单选按钮产生的change事件
      * @param n
@@ -80,11 +52,13 @@ class DetailIndex extends Component{
             }
         });
     }
+
+    showTreeModal(){
+        this.props.ApiManagerStore.showTreeModal()
+    }
     render(){
         const { getFieldDecorator } = this.props.form;
-        debugger
-        const { detailData,tags} = this.props.ApiManagerStore
-        const { inputVisible, inputValue } = this.state;
+        const { detailData,tags,treeModalVisible} = this.props.ApiManagerStore
 
         return (
             <div  style={{'marginLeft':'15px'}}>
@@ -110,45 +84,16 @@ class DetailIndex extends Component{
                     </Row>
                     <Alert message="接口信息" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px'}}/>
                     <Row>
-                        <FormItem {...this.formItemLayout} label="应用名">
-                            {getFieldDecorator('version', {
-                                initialValue: detailData.version,
-                                rules: [{ required: true, message: '请填写version!' }],
-                            })(
-                                <Select style={{ width: 145 }}  showSearch >
-                                    <Option key="1" value="1">1</Option>
-                                </Select>
-                            )}
+
+                        <FormItem {...this.formItemLayout} label="">
+                            <Tag color="geekblue">接口归属应用：{detailData.appName}</Tag>
                         </FormItem>
-                        <FormItem {...this.formItemLayout} label="一级模块">
-                            {getFieldDecorator('version', {
-                                initialValue: detailData.version,
-                                rules: [{ required: false, message: '请填写version!' }],
-                            })(
-                                <Select style={{ width: 145 }}  showSearch >
-                                    <Option key="1" value="1">1</Option>
-                                </Select>
-                            )}
+                        <FormItem {...this.formItemLayout} label="">
+                            <Tag color="geekblue">接口归属模块：{detailData.moduleName}</Tag>
                         </FormItem>
-                        <FormItem {...this.formItemLayout} label="二级模块">
-                            {getFieldDecorator('version', {
-                                initialValue: detailData.version,
-                                rules: [{ required: false, message: '请填写version!' }],
-                            })(
-                                <Select style={{ width: 145 }}  showSearch >
-                                    <Option key="1" value="1">1</Option>
-                                </Select>
-                            )}
-                        </FormItem>
-                        <FormItem {...this.formItemLayout} label="三级模块">
-                            {getFieldDecorator('version', {
-                                initialValue: detailData.version,
-                                rules: [{ required: false, message: '请填写version!' }],
-                            })(
-                                <Select style={{ width: 145 }}  showSearch >
-                                    <Option key="1" value="1">1</Option>
-                                </Select>
-                            )}
+                        <FormItem {...this.formItemLayout} label="">
+                            <a href="#" onClick={this.showTreeModal.bind(this)}><Icon type="edit"></Icon> 编辑</a>
+                            <TreeModal treeModalVisible={treeModalVisible}></TreeModal>
                         </FormItem>
                     </Row>
                     <Row>
@@ -188,42 +133,8 @@ class DetailIndex extends Component{
                                 <Input disabled style={{ width: 145 }} />
                             )}
                         </FormItem>
-                        <FormItem {...this.formItemLayout} label="标签">
-                            <div>
-                                {tags.map((tag, index) => {
-                                    const isLongTag = tag.length > 20;
-                                    const tagElem = (
-                                        <Tag key={tag.id} closable onClose={() => this.handleClose(tag.id)}>
-                                            {isLongTag ? `${tag.value.slice(0, 20)}...` : tag.value}
-                                        </Tag>
-                                    );
-                                    return isLongTag ? (
-                                        <Tooltip title={tag.value} key={tag.id}>
-                                            {tagElem}
-                                        </Tooltip>
-                                    ) : (
-                                        tagElem
-                                    );
-                                })}
-                                {inputVisible && (
-                                    <Input
-                                        ref={this.saveInputRef}
-                                        type="text"
-                                        size="small"
-                                        style={{ width: 78 }}
-                                        value={inputValue}
-                                        onChange={this.handleInputChange}
-                                        onBlur={this.handleInputConfirm}
-                                        onPressEnter={this.handleInputConfirm}
-                                    />
-                                )}
-                                {!inputVisible && (
-                                    <Tag onClick={this.showInput} style={{ background: '#fff', borderStyle: 'dashed' }}>
-                                        <Icon type="plus" /> New Tag
-                                    </Tag>
-                                )}
-
-                            </div>
+                        <FormItem {...this.formItemLayout} label="接口标签">
+                            <SingleTag tags={tags} getTags={this.getTags}/>
                         </FormItem>
                     </Row>
                     <Row>

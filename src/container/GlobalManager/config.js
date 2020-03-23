@@ -1,24 +1,36 @@
 import React  from 'react';
-import { Icon,Popconfirm} from 'antd';
-
+import { Icon,Popconfirm,Input,Popover} from 'antd';
+const { TextArea } = Input;
 export const columns = (context) => [
     {
         title: '参数名',
         dataIndex: 'name',
         key: 'name',
+        width:'16%',
     },
     {
         title: '参数值',
         dataIndex: 'value',
         key: 'value',
+        width:'45%',
+        render: (row) => {
+            var name = row.length > 80 ? row.substr(0,80) + '...' : row;
+            let str = <TextArea rows={10} style={{ width: 650 }} value={row}></TextArea>
+            return (
+                <Popover content={str} >
+                    <pre style={{'whiteSpace': 'pre-wrap'}}>{name}</pre>
+                </Popover>
+            )
+        }
     },
     {
         title: '参数类型',
         dataIndex: 'varType',
         key: 'varType',
+        width:'8%',
         render: (row) => {
             return (
-                <span>{row == 0 ? "常量":"必包"}</span>
+                <span>{row == 0 ? "常量":"闭包"}</span>
             )
         }
     },
@@ -26,10 +38,12 @@ export const columns = (context) => [
         title: '更新时间',
         dataIndex: 'editTimeStr',
         key: 'editTimeStr',
+        width:'16%',
     },
     {
         title: '操作',
         key: 'operation',
+        width:'12%',
         render:(row,record) => {
             return (
                 <div>
