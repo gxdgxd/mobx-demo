@@ -90,7 +90,6 @@ class InsertIndex extends Component {
         })
     }
     timerExe = async(result) => {
-        // let data = await this.props.ExeRecordStore.getDetailData(result.data)
         this.timerDate = setInterval(()=> this.tick(result.data));
     }
     handleClearTimeout(){
@@ -119,6 +118,7 @@ class InsertIndex extends Component {
 
         let abc = await this.props.TestCaseManagerStore.insert(this.props.ApiManagerStore.tags,this.props.ApiManagerStore.detailData,false)
         if(abc != 200){
+            message.warn("保存出现错误")
             return
         }
         let params =  {"id":null,"caseIds":[caseId],"scheduleType":1,"env":this.props.GlobalManagerStore.varValue}

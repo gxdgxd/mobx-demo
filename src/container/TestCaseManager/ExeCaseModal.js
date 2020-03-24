@@ -24,17 +24,15 @@ class ExeCaseModal extends Component{
                 if(result.code == 200){
                     this.hideExeCaseModal()
                     this.timerExe(result)
-                    await this.props.TestCaseManagerStore.showCaseDrawer()
+                    this.props.TestCaseManagerStore.showCaseDrawer()
                 }else{
                     message.warn("执行出现错误")
                 }
-
             }
         });
     }
     timerExe = async(result) => {
-        // let data = await this.props.ExeRecordStore.getDetailData(result.data)
-        this.timerDate = setInterval(()=> this.tick(result.data),1000);
+        this.timerDate = setInterval(()=> this.tick(result.data));
     }
     handleClearTimeout(){
         this.timerDate && clearInterval(this.timerDate);
@@ -42,13 +40,10 @@ class ExeCaseModal extends Component{
     componentWillUnmount(){
         this.handleClearTimeout()
     }
-    // tick(status){
-    //     if(status == 2){
-    //         this.handleClearTimeout()
-    //     }
-    // }
+
     tick = async(data) => {
         let detailData = await this.props.ExeRecordStore.getDetailData(data)
+        debugger
         if(detailData.status == 2){
             this.handleClearTimeout()
         }

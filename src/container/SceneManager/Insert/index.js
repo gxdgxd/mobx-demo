@@ -140,7 +140,6 @@ class InsertIndex extends Component {
                                 })} />
                         </DndProvider>
                     </Row>
-
                 </Form>
             </div>
         )
