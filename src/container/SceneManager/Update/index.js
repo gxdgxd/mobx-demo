@@ -80,13 +80,13 @@ class UpdateIndex extends Component {
             <div style={{width:'96%',marginLeft:'25px'}}>
                 <Form  className="ant-advanced-search-form p-xs pb-0"  onSubmit={this.handleSubmit}>
                     <Row gutter={48}>
-                        <Col span={7}>
+                        <Col span={9}>
                             <FormItem {...this.formItemLayout} label="场景名">
                                 {getFieldDecorator('name', {
                                     initialValue: detailData.name,
                                     rules: [{ required: true, message: '请输入场景名!' }],
                                 })(
-                                    <Input placeholder="请输入场景名"  style={{ width: 200 }} onChange={this.inputChange.bind(this,'name')}/>
+                                    <Input placeholder="请输入场景名"  style={{ width: 280 }} onChange={this.inputChange.bind(this,'name')}/>
                                 )}
                             </FormItem>
                         </Col>
@@ -111,13 +111,33 @@ class UpdateIndex extends Component {
                                         <Option value="1">并行执行</Option>
                                     </Select>
                                 )}
-                               &nbsp; &nbsp;
-                                <Button type="primary" onClick={this.showInsertCaseModal.bind(this)} >追加用例</Button>
-                                <InsertCaseModal updateCaseDataSource={detailData.testCaseSchedules} insertCaseModalVisible={insertCaseModalVisible}></InsertCaseModal>
                             </FormItem>
                         </Col>
                     </Row>
-
+                    <Row>
+                        <Col span={9}>
+                            <FormItem {...this.formItemLayout} label="执行计划">
+                                {getFieldDecorator('cron', {
+                                    initialValue: detailData.cron,
+                                    rules: [{ required: false, message: '请输入执行计划!' }],
+                                })(
+                                    <Input placeholder="请输入执行计划"  style={{ width: 273 }} onChange={this.inputChange.bind(this,'cron')}/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col span={8}>
+                            <Form.Item>
+                                <Button type="primary" onClick={this.showInsertCaseModal.bind(this)} >追加用例</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <InsertCaseModal updateCaseDataSource={detailData.testCaseSchedules} insertCaseModalVisible={insertCaseModalVisible}></InsertCaseModal>
+                                <Button type="primary" htmlType="submit" >
+                                    保存此场景数据
+                                </Button> &nbsp; &nbsp; &nbsp;
+                                <Button type="primary" onClick={this.exeCase}  onClick={() => this.exeCase(detailData)} >
+                                    执行场景
+                                </Button>
+                            </Form.Item>
+                        </Col>
+                    </Row>
                     <Row gutter={48}>
                         <Tag color="purple" style={{'marginBottom':'8px'}}>  <Icon type="smile" /> 上下拖拽可以移动表格中用例顺序哦～  </Tag>
                         <DndProvider backend={HTML5Backend}>
@@ -130,18 +150,6 @@ class UpdateIndex extends Component {
                                     moveRow: this.moveRow,
                                 })} />
                         </DndProvider>
-                    </Row>
-                    <Row style={{'marginTop':'6px'}}>
-                        <Col span={7}>
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit" >
-                                    保存此场景数据
-                                </Button> &nbsp; &nbsp; &nbsp;
-                                <Button type="primary" onClick={this.exeCase}  onClick={() => this.exeCase(detailData)} >
-                                    执行场景
-                                </Button>  &nbsp; &nbsp; &nbsp;
-                            </Form.Item>
-                        </Col>
                     </Row>
                 </Form>
             </div>
