@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Row,Col,Form, Drawer, Tag ,Alert,Input} from 'antd';
+import { Row,Col,Form, Drawer, Tag ,Alert,Input,Spin} from 'antd';
 import ReactJson from 'react-json-view'
 import {toJS} from "mobx/lib/mobx";
 import {message} from "antd/lib/index";
@@ -25,7 +25,7 @@ class ExeCaseDrawer extends Component{
     render(){
         const {exeDetailData,drawerVisible} = this.props
         let caseData = toJS(exeDetailData.caseExeRecords)
-        let statusStr = ""
+        let statusStr = <Tag color="#2db7f5">执行中</Tag>
         if(exeDetailData.status == 0){
             statusStr = <Tag color="#f50">待执行</Tag>
         }else if(exeDetailData.status == 1){
@@ -47,12 +47,14 @@ class ExeCaseDrawer extends Component{
             'marginBottom':'8px'
         }
         return (
+
             <Drawer
                 title="执行结果" width={720}
                 placement="right"
                 onClose={this.onClose}
                 visible={drawerVisible}
             >
+                <Spin spinning={exeDetailData.status == 1 ? true : false}>
                 <Row gutter={48} style={style}>
                     <Col span={13}>
                         {typeof caseData == 'undefined' ? "" : caseData[0].testCase.name}
@@ -93,7 +95,9 @@ class ExeCaseDrawer extends Component{
                 <TextArea rows={5} style={{'width':'670px','marginBottom':'6px'}} value={typeof caseData == 'undefined' ? "" : caseData[0].param}/>
                 <Alert message="dubbo contextParams" type="info" style={{backgroundColor:'#c7e7ff',border:'0px','marginBottom':'10px'}}/>
                 <TextArea rows={3} style={{'width':'670px','marginBottom':'6px'}} value={typeof caseData == 'undefined' ? "" : caseData[0].testCase.contextParamScript}/>
+                </Spin>
             </Drawer>
+
         )
     }
 }

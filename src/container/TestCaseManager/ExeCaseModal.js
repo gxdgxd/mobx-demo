@@ -13,8 +13,10 @@ class ExeCaseModal extends Component{
         this.state={
             scheduleType:'',
             // env:this.props.varValue
+            recordId:0
         }
     }
+
 
     okModal = () =>{
         this.props.form.validateFieldsAndScroll( async (err, values) => {
@@ -22,8 +24,12 @@ class ExeCaseModal extends Component{
                 let params =  {"id":null,"caseIds":this.props.caseIds,"scheduleType":1,"env":this.props.GlobalManagerStore.varValue}
                 let result = await this.props.TestCaseManagerStore.exeCase(params,'case');
                 if(result.code == 200){
+                    this.setState({
+                        recordId:result.data
+                    })
+                    await this.props.ExeRecordStore.getDetailData(this.state.recordId)
                     this.hideExeCaseModal()
-                    this.timerExe(result)
+                    this.timerExe()
                     this.props.TestCaseManagerStore.showCaseDrawer()
                 }else{
                     message.warn("执行出现错误")
@@ -31,21 +37,22 @@ class ExeCaseModal extends Component{
             }
         });
     }
-    timerExe = async(result) => {
-        this.timerDate = setInterval(()=> this.tick(result.data));
+    timerExe = () =>{
+        this.timerDate = setInterval(() => this.tick(),3000);
     }
-    handleClearTimeout(){
+    handleClearTimeout = () =>{
         this.timerDate && clearInterval(this.timerDate);
     }
     componentWillUnmount(){
         this.handleClearTimeout()
     }
 
-    tick = async(data) => {
-        let detailData = await this.props.ExeRecordStore.getDetailData(data)
+    tick = async() => {
+        let detailData = await this.props.ExeRecordStore.getDetailData(this.state.recordId)
         debugger
+        console.log("status:" + detailData.status)
         if(detailData.status == 2){
-            this.handleClearTimeout()
+             this.handleClearTimeout()
         }
     }
     changeInput(e){

@@ -35,6 +35,7 @@ class InsertIndex extends Component {
             isCompressDisplay:'',
             isJsonFormatDisplay:'none',
             dubboGroup:'',
+            recordId:0,
             leg: {"userId":"*******","ipAddr":"10.10.10.10","appKey":"*******","openId":"******","unionId":"********","deviceId":"*******","appv":"","os":""}
         }
     }
@@ -89,8 +90,8 @@ class InsertIndex extends Component {
             'isJsonFormatDisplay':'',
         })
     }
-    timerExe = async(result) => {
-        this.timerDate = setInterval(()=> this.tick(result.data));
+    timerExe = async() => {
+        this.timerDate = setInterval(()=> this.tick(),3000);
     }
     handleClearTimeout(){
         this.timerDate && clearInterval(this.timerDate);
@@ -98,8 +99,8 @@ class InsertIndex extends Component {
     componentWillUnmount(){
         this.handleClearTimeout()
     }
-    tick = async(data) => {
-        let detailData = await this.props.ExeRecordStore.getDetailData(data)
+    tick = async() => {
+        let detailData = await this.props.ExeRecordStore.getDetailData(this.state.recordId)
         if(detailData.status == 2){
             this.handleClearTimeout()
         }
@@ -125,8 +126,11 @@ class InsertIndex extends Component {
         let result = await this.props.TestCaseManagerStore.exeCase(params,'case');
         if(typeof result != "undefined"){
             if(result.code == 200){
+                this.setState({
+                    recordId:result.data
+                })
+                await this.props.ExeRecordStore.getDetailData(this.state.recordId)
                 this.timerExe(result)
-
                 this.props.TestCaseManagerStore.showCaseDrawer()
             }else{
                 message.warn("执行出现错误")
