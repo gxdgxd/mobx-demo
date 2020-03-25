@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "3d63fc045ae84c075e5375cfef92e2ee",
+    "revision": "7a43f946f5c5a8b73bf22447d1c54d62",
     "url": "https://staticfed.hipac.cn/asset/automation/api_automation_static/1.0.2/index.html"
   },
   {
-    "revision": "24a2c6c5f1b9d55b3ff2",
+    "revision": "496f35c99d14d3fe199c",
     "url": "https://staticfed.hipac.cn/asset/automation/api_automation_static/1.0.2/static/css/10.454e001e.chunk.css"
   },
   {
@@ -48,8 +48,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "https://staticfed.hipac.cn/asset/automation/api_automation_static/1.0.2/static/css/main.11dbb441.chunk.css"
   },
   {
-    "revision": "24a2c6c5f1b9d55b3ff2",
-    "url": "https://staticfed.hipac.cn/asset/automation/api_automation_static/1.0.2/static/js/10.6a849b89.chunk.js"
+    "revision": "496f35c99d14d3fe199c",
+    "url": "https://staticfed.hipac.cn/asset/automation/api_automation_static/1.0.2/static/js/10.0fbb9e6f.chunk.js"
   },
   {
     "revision": "231ae49a1dc09be42151",
@@ -120,8 +120,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "https://staticfed.hipac.cn/asset/automation/api_automation_static/1.0.2/static/js/main.4e847652.chunk.js"
   },
   {
-    "revision": "a1dd6c69207a1f395560",
-    "url": "https://staticfed.hipac.cn/asset/automation/api_automation_static/1.0.2/static/js/runtime-main.a2b79d43.js"
+    "revision": "a219f251dc009cc305eb",
+    "url": "https://staticfed.hipac.cn/asset/automation/api_automation_static/1.0.2/static/js/runtime-main.73f1a6a6.js"
   },
   {
     "revision": "1e303d406d68ec3a1b5e",
