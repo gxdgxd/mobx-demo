@@ -83,6 +83,18 @@ class Index extends Component{
             ...row,
         });
         this.props.ApiManagerStore.insertDataSource = newData
+
+
+        let newSelectedRowsApis = [...this.state.selectedRowsApis]
+        let indexSelect = newSelectedRowsApis.findIndex(itemSelect => row.key === itemSelect.key)
+        const itemSelect = newData[indexSelect];
+        newSelectedRowsApis.splice(indexSelect, 1, {
+            ...itemSelect,
+            ...row,
+        });
+        this.setState({
+            selectedRowsApis: newSelectedRowsApis
+        });
     };
 
     /**
