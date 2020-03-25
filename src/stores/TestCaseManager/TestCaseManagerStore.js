@@ -45,7 +45,6 @@ class TestCaseManagerStore{
      */
     @action
     async initData(pageNo,appId,moduleId) {
-        debugger
         if(typeof appId != "undefined" || typeof moduleId != "undefined"){
             this.treeParams = {'appId':appId,'moduleId':moduleId}
         }

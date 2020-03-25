@@ -89,6 +89,11 @@ class SearchForm extends Component{
                             </Select>
                         </FormItem>
                     </Col>
+                    <Col span={7}>
+                        <FormItem {...this.formItemLayout} label="执行计划">
+                            <Input placeholder="请输入执行计划" allowClear={true} onChange={this.inputChange.bind(this,'cron')}/>
+                        </FormItem>
+                    </Col>
                     <Col span={3}>
                         <Form.Item>
                             <Button type="primary"  onClick={this.handleSubmit}>

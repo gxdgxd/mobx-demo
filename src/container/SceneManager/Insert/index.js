@@ -78,12 +78,12 @@ class InsertIndex extends Component {
             <div style={{width:'96%',marginLeft:'25px'}}>
                 <Form  className="ant-advanced-search-form p-xs pb-0"  onSubmit={this.handleSubmit}>
                     <Row gutter={48}>
-                        <Col span={7}>
-                            <FormItem {...this.formItemLayout} label="场景名">
+                        <Col span={9}>
+                            <FormItem {...this.formItemLayout} label="场景名称">
                                 {getFieldDecorator('name', {
-                                    rules: [{ required: true, message: '请输入场景名!' }],
+                                    rules: [{ required: true, message: '请输入场景名称!' }],
                                 })(
-                                    <Input placeholder="请输入场景名"  allowClear={true} style={{ width: 200 }} onChange={this.inputChange.bind(this,'name')}/>
+                                    <Input placeholder="请输入场景名"  allowClear={true} style={{ width: 280 }} onChange={this.inputChange.bind(this,'name')}/>
                                 )}
                             </FormItem>
                         </Col>
@@ -94,7 +94,6 @@ class InsertIndex extends Component {
                                 })(
                                     <Input placeholder="请输入执行环境"  allowClear={true} style={{ width: 200 }}  onChange={this.inputChange.bind(this,'env')}/>
                                 )}
-
                             </FormItem>
                         </Col>
                         <Col span={8}>
@@ -103,20 +102,33 @@ class InsertIndex extends Component {
                                     <Option value="0">顺序执行</Option>
                                     <Option value="1">并行执行</Option>
                                 </Select>
-                               &nbsp; &nbsp;
-                                <Button type="primary" onClick={this.showInsertCaseModal.bind(this)} >追加用例</Button>
-                                <InsertCaseModal insertCaseModalVisible={insertCaseModalVisible}></InsertCaseModal>
+
                             </FormItem>
                         </Col>
                     </Row>
-
+                    <Row>
+                        <Col span={9}>
+                            <FormItem {...this.formItemLayout} label="执行计划">
+                                {getFieldDecorator('cron', {
+                                    rules: [{ required: false, message: '请输入执行计划!' }],
+                                })(
+                                    <Input placeholder="请输入执行计划"  style={{ width: 273 }} onChange={this.inputChange.bind(this,'cron')}/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col span={8}>
+                            <Form.Item>
+                                <Button type="primary" onClick={this.showInsertCaseModal.bind(this)} >追加用例</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <InsertCaseModal insertCaseModalVisible={insertCaseModalVisible}></InsertCaseModal>
+                                <Button type="primary" htmlType="submit" >
+                                    保存此场景数据
+                                </Button> &nbsp; &nbsp; &nbsp;
+                            </Form.Item>
+                        </Col>
+                    </Row>
                     <Row gutter={48}>
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit" >
-                                保存此场景数据
-                            </Button> &nbsp; &nbsp; &nbsp;
-                            <Tag color="purple" style={{'marginBottom':'8px'}}>  <Icon type="smile" /> 上下拖拽可以移动表格中用例顺序哦～  </Tag>
-                        </Form.Item>
+                        <Tag color="purple" style={{'marginBottom':'8px'}}>  <Icon type="smile" /> 上下拖拽可以移动表格中用例顺序哦～  </Tag>
+
                         <DndProvider backend={HTML5Backend}>
                             <Table
                                 bordered
@@ -128,7 +140,6 @@ class InsertIndex extends Component {
                                 })} />
                         </DndProvider>
                     </Row>
-
                 </Form>
             </div>
         )

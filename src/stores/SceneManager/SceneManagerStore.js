@@ -29,7 +29,7 @@ class SceneManagerStore {
 
     @action
     async initData(pageNo) {
-        const params = {"arg0":{"creatorId":this.tableRequestData.creatorId,"env":this.tableRequestData.env,"id":this.tableRequestData.id,"name":this.tableRequestData.name,"pageNo":pageNo,"pageSize":10,"scheduleType":this.tableRequestData.scheduleType}}
+        const params = {"arg0":{"creatorId":this.tableRequestData.creatorId,"env":this.tableRequestData.env,"id":this.tableRequestData.id,"name":this.tableRequestData.name,"pageNo":pageNo,"pageSize":10,"scheduleType":this.tableRequestData.scheduleType,"cron":this.tableRequestData.cron}}
         const result = await post("1.0.0/hipac.gotest.scene.query/",params)
         this.dataSource = result.data;
     }
@@ -56,13 +56,16 @@ class SceneManagerStore {
                 "env": this.tableRequestData.env,
                 "name": this.tableRequestData.name,
                 "scheduleType": this.tableRequestData.scheduleType,
-                "testCaseSchedules": caseArray
+                "testCaseSchedules": caseArray,
+                "cron":this.tableRequestData.cron
             }
         }
         const result = await post("1.0.0/hipac.gotest.scene.save/",params)
         if(result.code == "200"){
-            message.success('添加场景成功');
-            window.location.reload();
+            message.success('添加场景成功，5秒后页面将刷新');
+            setTimeout( function(){
+                window.location.reload();
+            }, 5 * 1000 );
         }
     }
 
@@ -153,6 +156,7 @@ class SceneManagerStore {
                 "env": this.detailData.env,
                 "name": this.detailData.name,
                 "scheduleType": this.detailData.scheduleType,
+                "cron": this.detailData.cron,
                 "testCaseSchedules": caseArray
             }
         }

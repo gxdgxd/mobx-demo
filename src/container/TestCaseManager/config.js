@@ -107,9 +107,8 @@ export const columns = (context) => [
     },
     {
         title: '操作',
-        width: '27%',
         key: 'operation',
-        width:250,
+        width:280,
         fixed: 'right',
         render:(row,record) => {
             let insertHref = '/edit_testcase?apiId=' + record.apiId
