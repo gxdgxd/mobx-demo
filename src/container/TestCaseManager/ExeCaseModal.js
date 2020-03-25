@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Form, Input, Modal, Tag } from 'antd';
 import { message } from "antd/lib/index";
@@ -7,7 +7,7 @@ const FormItem = Form.Item;
 
 @inject('TestCaseManagerStore', 'ExeRecordStore', 'GlobalManagerStore')
 @observer
-class ExeCaseModal extends Component {
+class ExeCaseModal extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
