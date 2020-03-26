@@ -142,7 +142,7 @@ class UpdateIndex extends Component {
                         <Tag color="purple" style={{'marginBottom':'8px'}}>  <Icon type="smile" /> 上下拖拽可以移动表格中用例顺序哦～  </Tag>
                         <DndProvider backend={HTML5Backend}>
                             <Table
-                                bordered
+                                bordered pagination={false}
                                 columns={insertCaseColumns(this)} scroll={{ x: 1500, y: 600 }}
                                 dataSource={caseDataSource.toJS()} components={this.components}
                                 onRow={(record, index) => ({

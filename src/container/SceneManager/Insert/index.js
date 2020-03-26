@@ -137,7 +137,7 @@ class InsertIndex extends Component {
 
                         <DndProvider backend={HTML5Backend}>
                             <Table
-                                bordered
+                                bordered pagination={false}
                                 columns={insertCaseColumns(this)}  scroll={{ x: 1580, y: 600 }}
                                 dataSource={caseDataSource.toJS()} components={this.components}
                                 onRow={(record, index) => ({
