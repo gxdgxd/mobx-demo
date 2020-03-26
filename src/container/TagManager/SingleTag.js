@@ -19,6 +19,7 @@ class SingleTag extends Component {
         const tags = this.props.tags.filter(tag => tag.id !== removedTag);
         console.log(tags);
         this.setState({ tags });
+        this.props.deleteTags(tags)
     };
 
     showInput = () => {

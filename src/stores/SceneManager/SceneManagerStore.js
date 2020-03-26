@@ -35,8 +35,8 @@ class SceneManagerStore {
     }
 
     @action
-    async deleteSceneCase(caseId){
-        this.caseDataSource = this.caseDataSource.filter(it => it.id !== caseId);
+    async deleteSceneCase(key){
+        this.caseDataSource = this.caseDataSource.filter(it => it.key !== key);
     }
 
     /**
@@ -77,7 +77,6 @@ class SceneManagerStore {
     @action
     async insertCase(data){
 
-        console.log(JSON.stringify(data))
         // this.caseDataSource = data
         // let updateCaseDataSourceNew = this.updateCaseDataSource.toJS()
         //
@@ -91,13 +90,22 @@ class SceneManagerStore {
         //     }
         //     this.caseDataSource = caseDataSourceNew
         // }
-
+        // let updateCaseDataSource = []
         for (let i = 0; i < data.length; i++) {
             this.caseDataSource.push(data[i])
         }
+
+        this.caseDataSource = this.caseDataSource.map(function(item,i){
+            return {
+                ...item,
+                key:  i + 1
+            }
+        });
+
         console.log(JSON.stringify(this.caseDataSource))
         this.hideInsertCaseModal()
     }
+
 
     @action
     showInsertCaseModal(){
@@ -130,11 +138,12 @@ class SceneManagerStore {
         this.detailData = result.data;
         let testCaseSchedules = result.data.testCaseSchedules
         let caseDataSource = []
+        debugger
         for (let i = 0; i < testCaseSchedules.length ; i++) {
             let testCase = testCaseSchedules[i].testCase
+            testCase.key = i + 1
             caseDataSource.push(testCase)
         }
-        this.updateCaseDataSource = caseDataSource
         this.caseDataSource = caseDataSource
     }
 

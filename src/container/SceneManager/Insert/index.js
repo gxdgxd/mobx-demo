@@ -20,11 +20,14 @@ class InsertIndex extends Component {
             {name: '场景管理'},
             {name: '添加场景'}
         ]);
+
     }
+
     constructor(props){
         super(props);
         this.state= {
-            data:[]
+            data:[],
+            newCaseDataSource :[]
         }
     }
     components = {
@@ -63,9 +66,11 @@ class InsertIndex extends Component {
     showInsertCaseModal(){
         this.props.SceneManagerStore.showInsertCaseModal()
     }
-    deleteSceneCase(caseId){
-        this.props.SceneManagerStore.deleteSceneCase(caseId)
+    deleteSceneCase(key){
+        this.props.SceneManagerStore.deleteSceneCase(key)
     }
+
+
     formItemLayout = {
         labelCol: { span: 5 },
         wrapperCol: { span: 19 },
@@ -74,6 +79,7 @@ class InsertIndex extends Component {
     render(){
         const {insertCaseModalVisible,caseDataSource} = this.props.SceneManagerStore
         const { getFieldDecorator } = this.props.form;
+
         return(
             <div style={{width:'96%',marginLeft:'25px'}}>
                 <Form  className="ant-advanced-search-form p-xs pb-0"  onSubmit={this.handleSubmit}>

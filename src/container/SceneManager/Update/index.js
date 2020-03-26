@@ -63,8 +63,8 @@ class UpdateIndex extends Component {
     showInsertCaseModal(){
         this.props.SceneManagerStore.showInsertCaseModal()
     }
-    deleteSceneCase(caseId){
-        this.props.SceneManagerStore.deleteSceneCase(caseId)
+    deleteSceneCase(key){
+        this.props.SceneManagerStore.deleteSceneCase(key)
     }
     formItemLayout = {
         labelCol: { span: 5 },
