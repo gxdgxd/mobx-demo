@@ -80,6 +80,7 @@ export const insertCaseColumns = (context) => [
         dataIndex: 'id',
         key: 'id',
         width:80,
+        fixed: 'left',
     },
     {
         title: '用例名称',
