@@ -47,6 +47,13 @@ class InsertIndex extends Component {
         this.props.TestCaseManagerStore.insertCaseTags(tags)
     };
     /**
+     * 移除用户输入的tag标签
+     */
+    deleteCaseTags = (tags) => {
+        debugger
+        this.props.TestCaseManagerStore.deleteCaseTags(tags)
+    };
+    /**
      * 输入框和单选按钮产生的change事件
      * @param n
      * @param e
@@ -243,7 +250,7 @@ class InsertIndex extends Component {
                     </Row>
                     <Row>
                         <FormItem {...this.formItemLayout} label="用例标签">
-                            <SingleTag tags={caseTags} getTags={this.getCaseTags}/>
+                            <SingleTag tags={caseTags} getTags={this.getCaseTags} deleteTags={this.deleteCaseTags}/>
                         </FormItem>
                     </Row>
                     <Row>

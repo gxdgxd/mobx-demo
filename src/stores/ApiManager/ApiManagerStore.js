@@ -207,6 +207,11 @@ class ApiManagerStore {
     async insertTags(tags){
         this.tags.push(tags)
     }
+
+    @action
+    async deleteTags(tags){
+        this.tags = tags
+    }
 }
 
 export default new ApiManagerStore();

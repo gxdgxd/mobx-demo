@@ -74,6 +74,7 @@ export const columns = (context) => [
 ];
 
 export const insertCaseColumns = (context) => [
+
     {
         title: '用例ID',
         dataIndex: 'id',
@@ -150,7 +151,7 @@ export const insertCaseColumns = (context) => [
             let apiHref = '/api_manager?apiId=' + record.apiId
             return (
                 <span>
-                    <Popconfirm title="确定从此场景中移除此用例吗？" onConfirm={() => context.deleteSceneCase(record.id)} >
+                    <Popconfirm title="确定从此场景中移除此用例吗？" onConfirm={() => context.deleteSceneCase(record.key)} >
                       <a href="#">移除用例</a>&nbsp;
                     </Popconfirm>
                     <a href={updateHref} target="_blank"  className="vLine"> 修改用例</a>&nbsp;

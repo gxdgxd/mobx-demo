@@ -32,6 +32,14 @@ class DetailIndex extends Component{
         debugger
         this.props.ApiManagerStore.insertTags(tags)
     };
+
+    /**
+     * 移除用户输入的tag标签
+     */
+    deleteTags = (tags) => {
+        debugger
+        this.props.ApiManagerStore.deleteTags(tags)
+    };
     /**
      * 输入框和单选按钮产生的change事件
      * @param n
@@ -134,7 +142,7 @@ class DetailIndex extends Component{
                             )}
                         </FormItem>
                         <FormItem {...this.formItemLayout} label="接口标签">
-                            <SingleTag tags={tags} getTags={this.getTags}/>
+                            <SingleTag tags={tags} getTags={this.getTags} deleteTags={this.deleteTags}/>
                         </FormItem>
                     </Row>
                     <Row>

@@ -188,6 +188,11 @@ class TestCaseManagerStore{
         this.caseTags.push(tags)
     }
 
+    @action
+    async deleteCaseTags(tags){
+        this.caseTags = tags
+    }
+
 }
 
 export default new TestCaseManagerStore();
