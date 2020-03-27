@@ -32,6 +32,9 @@ class SceneManagerStore {
         const params = {"arg0":{"creatorId":this.tableRequestData.creatorId,"env":this.tableRequestData.env,"id":this.tableRequestData.id,"name":this.tableRequestData.name,"pageNo":pageNo,"pageSize":10,"scheduleType":this.tableRequestData.scheduleType,"cron":this.tableRequestData.cron}}
         const result = await post("1.0.0/hipac.gotest.scene.query/",params)
         this.dataSource = result.data;
+        this.pageNo = result.pageNo;
+        this.pageSize = result.pageSize;
+        this.totalCount = result.totalCount;
     }
 
     @action
