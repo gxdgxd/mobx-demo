@@ -104,11 +104,10 @@ class InsertIndex extends Component {
                         </Col>
                         <Col span={8}>
                             <FormItem {...this.formItemLayout} label="执行方式">
-                                <Select defaultValue="顺序执行" style={{ width: 130 }} onChange={this.optionChange.bind(this,'scheduleType')}>
+                                <Select defaultValue="顺序执行" style={{ width: 140 }} onChange={this.optionChange.bind(this,'scheduleType')}>
                                     <Option value="0">顺序执行</Option>
                                     <Option value="1">并行执行</Option>
                                 </Select>
-
                             </FormItem>
                         </Col>
                     </Row>
@@ -118,23 +117,31 @@ class InsertIndex extends Component {
                                 {getFieldDecorator('cron', {
                                     rules: [{ required: false, message: '请输入执行计划!' }],
                                 })(
-                                    <Input placeholder="请输入执行计划"  style={{ width: 273 }} onChange={this.inputChange.bind(this,'cron')}/>
+                                    <Input placeholder="cron表达式，如：1-2 * * * * ?"  style={{ width: 273 }} onChange={this.inputChange.bind(this,'cron')}/>
                                 )}
                             </FormItem>
                         </Col>
-                        <Col span={8}>
-                            <Form.Item>
-                                <Button type="primary" onClick={this.showInsertCaseModal.bind(this)} >追加用例</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <Col span={9}>
+                            <FormItem {...this.formItemLayout} label="钉钉webhook">
+                                {getFieldDecorator('alarmDingUrls', {
+                                    rules: [{ required: false, message: '钉钉webhook!' }],
+                                })(
+                                    <Input placeholder="钉钉机器人webhook，如：https://oapi.dingtalk.com/robot/send?access_token=17c1994369e0842647978a405713cb6e257fdf6c53df80bc6526afcf3866ba84"  style={{ width: 500 }} onChange={this.inputChange.bind(this,'alarmDingUrls')}/>
+                                )}
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={15}>
+                                <Button type="primary" onClick={this.showInsertCaseModal.bind(this)} >追加用例</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <InsertCaseModal insertCaseModalVisible={insertCaseModalVisible}></InsertCaseModal>
                                 <Button type="primary" htmlType="submit" >
                                     保存此场景数据
-                                </Button> &nbsp; &nbsp; &nbsp;
-                            </Form.Item>
+                                </Button> &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;
+                            <Tag color="purple" style={{'marginBottom':'8px'}}>  <Icon type="smile" /> 上下拖拽可以移动表格中用例顺序哦～  </Tag>
                         </Col>
                     </Row>
                     <Row gutter={48}>
-                        <Tag color="purple" style={{'marginBottom':'8px'}}>  <Icon type="smile" /> 上下拖拽可以移动表格中用例顺序哦～  </Tag>
-
                         <DndProvider backend={HTML5Backend}>
                             <Table
                                 bordered pagination={false}

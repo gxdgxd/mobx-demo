@@ -1,5 +1,5 @@
 import React  from 'react';
-import { Popover,Popconfirm} from 'antd';
+import { Popover,Popconfirm,Icon } from 'antd';
 import common from "../../style/common.css";
 
 export const columns = (context) => [
@@ -13,7 +13,15 @@ export const columns = (context) => [
         title: '场景名称',
         dataIndex: 'name',
         key: 'name',
-        width: '18%',
+        width: '20%',
+        render: (row,record) => {
+            let dingding = record.alarmDingUrls != null ? <Icon type="dingding" style={{'color':'#30a4ea'}} /> : ""
+            let clock = record.cron != null ? <Icon type="clock-circle" style={{'color':'#30a4ea'}}/> : ""
+            if(record.cron != null){}
+            return (
+                <span>{dingding} {clock} {row}</span>
+            )
+        }
     },
     {
         title: '执行方式',
@@ -38,13 +46,13 @@ export const columns = (context) => [
         title: '环境',
         dataIndex: 'env',
         key: 'env',
-        width: '10%',
+        width: '12%',
     },
 
     {
         title: '创建人',
         dataIndex: 'creatorName',
-        key: 'creatorName', width: '15%',
+        key: 'creatorName', width: '13%',
     },
     {
         title: '更新时间',
@@ -54,7 +62,7 @@ export const columns = (context) => [
     },
     {
         title: '操作',
-        width: '15%',
+        width: '12%',
         key: 'operation',
         render:(row,record) => {
             let href = "/update_scene?sceneId=" + record.id
@@ -62,6 +70,7 @@ export const columns = (context) => [
             return (
                 <div>
                     <span>
+
                         <a href={href} target="_blank">修改场景</a>&nbsp;
                         <Popconfirm title="确定执行此场景吗？" onConfirm={() => context.exeCase(record)} >
                             <a href="#"  className="vLine"> 执行场景</a>

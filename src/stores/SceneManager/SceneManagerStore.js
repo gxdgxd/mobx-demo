@@ -60,7 +60,8 @@ class SceneManagerStore {
                 "name": this.tableRequestData.name,
                 "scheduleType": this.tableRequestData.scheduleType,
                 "testCaseSchedules": caseArray,
-                "cron":this.tableRequestData.cron
+                "cron":this.tableRequestData.cron,
+                "alarmDingUrls":this.tableRequestData.alarmDingUrls
             }
         }
         const result = await post("1.0.0/hipac.gotest.scene.save/",params)
@@ -169,6 +170,7 @@ class SceneManagerStore {
                 "name": this.detailData.name,
                 "scheduleType": this.detailData.scheduleType,
                 "cron": this.detailData.cron,
+                "alarmDingUrls":this.detailData.alarmDingUrls,
                 "testCaseSchedules": caseArray
             }
         }

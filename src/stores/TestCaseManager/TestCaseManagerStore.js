@@ -71,8 +71,10 @@ class TestCaseManagerStore{
         let caseId = getUrlParam('caseId',window.location.search);
         const result = await post("1.0.0/hipac.gotest.case.caseInfo/",{id:caseId})
         this.caseDetailData = result.data;
-        this.insertButtonStatus = "none"
-        this.updateButtonStatus = ""
+        let type = getUrlParam('type',window.location.search);
+
+        this.insertButtonStatus = type == "copy" ? "" : "none"
+        this.updateButtonStatus = type == "copy" ? "none" : ""
         let tags = []
         if(typeof result.data.tags != "undefined" && result.data.tags != null){
             tags = toJS(result.data.tags)
