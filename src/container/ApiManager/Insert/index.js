@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Table, Button,Tag, Alert, message, Row, Col, Form, Input,Icon, } from 'antd';
+import { Table, Button,Tag,Row, Alert, message,Col, Layout, Form, Input,Icon, } from 'antd';
 import SearchForm from './SearchForm';
-import {insertColumns} from "../config";
+import {columns, insertColumns} from "../config";
 import TreeManager from '../../TreeManager/TreeManager';
 import Highlighter from 'react-highlight-words';
+import common from '../../../style/common.css'
 
+const { Sider } = Layout;
 const FormItem = Form.Item;
 
 message.config({
@@ -24,6 +26,7 @@ class Index extends Component{
             selectedRowsApis:[],
             searchText: '',
             searchedColumn: '',
+            collapsed:false
         }
     }
 
@@ -194,7 +197,10 @@ class Index extends Component{
     /**
      * 表头搜索触发 end
      */
-
+    onCollapse = collapsed => {
+        console.log(collapsed);
+        this.setState({ collapsed });
+    };
     render(){
         //可编辑单元格
         const components = {
@@ -236,27 +242,31 @@ class Index extends Component{
 
         console.log(treeParams.appId)
         return (
-            <div className="container-bg">
-                <Row>
-                    <Col span={4}>
-                        <TreeManager pageType="insertApi" maxHeight="870px"/>
-                    </Col>
-                    <Col span={20}>
-                        <SearchForm/>
-                        <Alert message="接口信息" type="info" style={{backgroundColor:'#c7e7ff',border:'0px',marginBottom:'13px'}}/>
-                        <Button type="primary" style={{marginBottom:'10px'}}   onClick={() => this.batchInsertApi()}><Icon type="plus" /> 批量添加</Button>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <Tag color="geekblue" style={{display: treeParams.appName != "" && typeof treeParams.appName != 'undefined'  ? "" : "none"}}>
-                            <span style={{display: treeParams.moduleName != "" && typeof treeParams.moduleName != 'undefined'  ? "" : "none"}}>接口归属应用：{treeParams.appName}</span>
-                            <span style={{display: treeParams.moduleName != ""  && typeof treeParams.moduleName != 'undefined' ? "" : "none"}}>，接口归属模块：{treeParams.moduleName} （点击左侧切换筛选）</span>
-                        </Tag>
-                        <Table components={components} rowClassName={() => 'editable-row'}
-                            bordered
-                            columns={columnsValue}
-                            dataSource={insertDataSource} rowSelection={rowSelection}/>
-                    </Col>
-                </Row>
-            </div>
+            <Layout style={{ minHeight: '100vh' }}>
+                <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+                    <TreeManager pageType="insertApi" maxHeight="700px"/>
+                </Sider>
+                <Layout>
+                    <SearchForm/>
+                    <Alert message="接口信息" type="info" style={{backgroundColor:'#c7e7ff',border:'0px',marginBottom:'13px'}}/>
+                    <Row>
+                        <Col span={4}>
+                            <Button type="primary" style={{marginBottom:'10px'}}   onClick={() => this.batchInsertApi()}><Icon type="plus" /> 批量添加</Button>
+                        </Col>
+                        <Col span={6}>
+                            <Tag color="geekblue" style={{'marginTop':'5px',display: treeParams.appName != "" && typeof treeParams.appName != 'undefined'  ? "" : "none"}}>
+                                <span style={{display: treeParams.moduleName != "" && typeof treeParams.moduleName != 'undefined'  ? "" : "none"}}>接口归属应用：{treeParams.appName}</span>
+                                <span style={{display: treeParams.moduleName != ""  && typeof treeParams.moduleName != 'undefined' ? "" : "none"}}>，接口归属模块：{treeParams.moduleName} （点击左侧切换筛选）</span>
+                            </Tag>
+                        </Col>
+                    </Row>
+
+                    <Table components={components} rowClassName={() => 'editable-row'}
+                           bordered
+                           columns={columnsValue}
+                           dataSource={insertDataSource} rowSelection={rowSelection}/>
+                </Layout>
+            </Layout>
         )
     }
 }

@@ -7,13 +7,14 @@ export const columns = (context) => [
         title: '场景ID',
         dataIndex: 'id',
         key: 'id',
-        width: '7%',
+        width: 80,
+        fixed: 'left',
     },
     {
         title: '场景名称',
         dataIndex: 'name',
         key: 'name',
-        width: '20%',
+        width: 300,
         render: (row,record) => {
             let dingding = record.alarmDingUrls != null ? <Icon type="dingding" style={{'color':'#30a4ea'}} /> : ""
             let clock = record.cron != null ? <Icon type="clock-circle" style={{'color':'#30a4ea'}}/> : ""
@@ -27,7 +28,7 @@ export const columns = (context) => [
         title: '执行方式',
         dataIndex: 'scheduleType',
         key: 'scheduleType',
-        width: '10%',
+        width: 120,
         render: (row) => {
             var name = ''
             if(row == 0){
@@ -46,31 +47,31 @@ export const columns = (context) => [
         title: '环境',
         dataIndex: 'env',
         key: 'env',
-        width: '12%',
+        width: 300,
     },
 
     {
         title: '创建人',
         dataIndex: 'creatorName',
-        key: 'creatorName', width: '13%',
+        key: 'creatorName',width: 200,
     },
     {
         title: '更新时间',
         dataIndex: 'editTimeStr',
         key: 'editTimeStr',
-        width: '15%',
+        width: 200,
     },
     {
         title: '操作',
-        width: '12%',
+        width: 200,
         key: 'operation',
+        fixed: 'right',
         render:(row,record) => {
             let href = "/update_scene?sceneId=" + record.id
 
             return (
                 <div>
                     <span>
-
                         <a href={href} target="_blank">修改场景</a>&nbsp;
                         <Popconfirm title="确定执行此场景吗？" onConfirm={() => context.exeCase(record)} >
                             <a href="#"  className="vLine"> 执行场景</a>

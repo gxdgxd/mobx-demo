@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Table,Pagination,Row, Col,Button,Input,Icon} from 'antd';
+import { Table,Pagination,Row, Col,Button,Input,Icon,Layout,message} from 'antd';
 import Highlighter from 'react-highlight-words';
 
 import {columns} from './config';
@@ -9,7 +9,7 @@ import SearchForm from './SearchForm';
 import ExeCaseModal from './ExeCaseModal';
 import ExeCaseDrawer from './ExeCaseDrawer'
 import TreeManager from '../TreeManager/TreeManager';
-import {message} from "antd/lib/index";
+const { Sider } = Layout;
 message.config({
     top: 200
 });
@@ -27,7 +27,8 @@ class TestCaseManagerList extends Component {
         super(props);
         this.state= {
             selectedRowKeys:[],
-            selectedRows:[]
+            selectedRows:[],
+            collapsed:false
         }
     }
     /**
@@ -131,7 +132,10 @@ class TestCaseManagerList extends Component {
         clearFilters();
         this.setState({ searchText: '' });
     };
-
+    onCollapse = collapsed => {
+        console.log(collapsed);
+        this.setState({ collapsed });
+    };
     /**
      * 表头搜索触发 end
      */
@@ -150,24 +154,22 @@ class TestCaseManagerList extends Component {
         const {exeDetailData} = this.props.ExeRecordStore
 
         return(
-            <div className="container-bg">
-                <Row>
-                    <Col span={4}>
-                        <TreeManager pageType="case" maxHeight="700px"/>
-                    </Col>
-                    <Col span={20}>
-                        <SearchForm/>
-                        <Table
-                            bordered
-                            columns={columns(this)} pagination={false} scroll={{ x: 1930, y: 600 }}
-                            dataSource={mydataSource}  />
-                        <Pagination onChange={this.onChangePage} pageSize={pageSize} current={pageNo}  total={totalCount} style={{'marginTop':'6px','float':'right'}}/>
-                        <ExeCaseModal exeCaseModalVisible={exeCaseModalVisible} caseIds={caseIds}   ></ExeCaseModal>
-                        <ExeCaseDrawer exeDetailData={exeDetailData} drawerVisible={drawerVisible}></ExeCaseDrawer>
+            <Layout style={{ minHeight: '100vh' }}>
+                <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+                    <TreeManager pageType="case" maxHeight="700px"/>
+                </Sider>
+                <Layout>
+                    <SearchForm/>
+                    <Table
+                        bordered
+                        columns={columns(this)} pagination={false} scroll={{ x: 1930, y: 600 }}
+                        dataSource={mydataSource}  />
+                    <Pagination onChange={this.onChangePage} pageSize={pageSize} current={pageNo}  total={totalCount} style={{'marginTop':'6px','float':'right'}}/>
+                    <ExeCaseModal exeCaseModalVisible={exeCaseModalVisible} caseIds={caseIds}   ></ExeCaseModal>
+                    <ExeCaseDrawer exeDetailData={exeDetailData} drawerVisible={drawerVisible}></ExeCaseDrawer>
 
-                    </Col>
-                </Row>
-            </div>
+                </Layout>
+            </Layout>
         )
     }
 }

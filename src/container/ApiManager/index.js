@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Table,Row,Input,Button, Col,Icon,Pagination} from 'antd';
+import { Table,Row,Input,Button, Col,Icon,Pagination,Layout} from 'antd';
 import {columns} from './config';
 import SearchForm from './SearchForm';
 import TreeManager from '../TreeManager/TreeManager';
 import Highlighter from 'react-highlight-words';
+import common from '../../style/common.css'
+const { Sider } = Layout;
 
-import common from "../../style/common.css";
 
 @inject('ApiManagerStore','CommonStore',)
 @observer
@@ -28,6 +29,7 @@ class ApiManagerList extends Component {
             selectedKeys: [],
             searchText: '',
             searchedColumn: '',
+            collapsed:false
         }
     }
 
@@ -110,7 +112,10 @@ class ApiManagerList extends Component {
         clearFilters();
         this.setState({ searchText: '' });
     };
-
+    onCollapse = collapsed => {
+        console.log(collapsed);
+        this.setState({ collapsed });
+    };
     /**
      * 表头搜索触发 end
      */
@@ -120,22 +125,20 @@ class ApiManagerList extends Component {
         const mydataSource = dataSource.toJS()
 
         return(
-            <div className="container-bg">
-                <Row>
-                    <Col span={4}>
-                        <TreeManager pageType="api" maxHeight="700px"/>
-                    </Col>
-                    <Col span={20}>
-                        <SearchForm allTags={allTags} allCreators={allCreators} />
-                        <Table
-                            bordered
-                            columns={columns(this)} scroll={{ x: 1780, y: 600 }}
-                            dataSource={mydataSource} pagination={false}
-                        />
-                        <Pagination onChange={this.onChangePage} pageSize={pageSize} current={pageNo}  total={totalCount} style={{'marginTop':'6px','float':'right'}}/>
-                    </Col>
-                </Row>
-            </div>
+            <Layout style={{ minHeight: '100vh' }}>
+                <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+                    <TreeManager pageType="api" maxHeight="700px"/>
+                </Sider>
+                <Layout>
+                    <SearchForm allTags={allTags} allCreators={allCreators} />
+                    <Table
+                        bordered
+                        columns={columns(this)} scroll={{ x: 1780, y: 600 }}
+                        dataSource={mydataSource} pagination={false}
+                    />
+                    <Pagination onChange={this.onChangePage} pageSize={pageSize} current={pageNo}  total={totalCount} style={{'marginTop':'6px','float':'right'}}/>
+                </Layout>
+            </Layout>
         )
     }
 }
