@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "https://staticfed.hipac.cn/asset/automation/api_automation_static/1.0.4/precache-manifest.cc817a73b0aa2fb12fe92d8579468515.js"
+  "https://ytstatic.hipac.cn/asset/automation/api_automation_static/1.0.4/precache-manifest.8d8171cf8a458fa373c3eea8ac750aac.js"
 );
 
 self.addEventListener('message', (event) => {
@@ -33,7 +33,7 @@ workbox.core.clientsClaim();
 self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute(workbox.precaching.getCacheKeyForURL("https://staticfed.hipac.cn/asset/automation/api_automation_static/1.0.4/index.html"), {
+workbox.routing.registerNavigationRoute(workbox.precaching.getCacheKeyForURL("https://ytstatic.hipac.cn/asset/automation/api_automation_static/1.0.4/index.html"), {
   
   blacklist: [/^\/_/,/\/[^\/?]+\.[^\/]+$/],
 });
