@@ -46,3 +46,37 @@
     border-top: 1px solid #e8e8e8;
     border-radius: 0 0 4px 4px;
 }
+
+.ant-layout-sider {
+    position: relative;
+    min-width: 0;
+    background: #f0f2f5;
+    -webkit-transition: all 0.2s;
+    transition: all 0.2s;
+}
+.anticon {
+    display: inline-block;
+    color: #716868;
+    font-style: normal;
+    line-height: 0;
+    text-align: center;
+    text-transform: none;
+    vertical-align: -0.125em;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.ant-layout-sider-trigger {
+    position: fixed;
+    bottom: 0;
+    z-index: 1;
+    height: 48px;
+    color: #fff;
+    line-height: 48px;
+    text-align: center;
+    background: #f0f2f5;
+    cursor: pointer;
+    -webkit-transition: all 0.2s;
+    transition: all 0.2s;
+}

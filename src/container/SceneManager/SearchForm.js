@@ -91,7 +91,7 @@ class SearchForm extends Component{
                     </Col>
                     <Col span={7}>
                         <FormItem {...this.formItemLayout} label="执行计划">
-                            <Input placeholder="请输入执行计划" allowClear={true} onChange={this.inputChange.bind(this,'cron')}/>
+                            <Input placeholder="cron表达式，如：1-2 * * * * ?" allowClear={true} onChange={this.inputChange.bind(this,'cron')}/>
                         </FormItem>
                     </Col>
                     <Col span={3}>
