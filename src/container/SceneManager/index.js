@@ -41,7 +41,7 @@ class SceneManagerList extends Component {
                     <Table
                         bordered
                         columns={columns(this)} pagination={false}
-                        dataSource={mydataSource}  />
+                        dataSource={mydataSource}   scroll={{ x: 1380, y: 600 }}/>
                     <Pagination onChange={this.onChangePage} pageSize={pageSize} current={pageNo}  total={totalCount} style={{'marginTop':'6px','float':'right'}}/>
                 </Row>
             </div>

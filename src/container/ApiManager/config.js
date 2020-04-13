@@ -137,7 +137,7 @@ export const insertColumns = (context) => [
         width:'30%',
         ...context.getColumnSearchProps('apiClassName'),
         render:function(text, record){
-            var name = record.apiClassName.length > 35 ? record.apiClassName.substr(0,35) + '...' : record.apiClassName;
+            // var name = record.apiClassName.length > 35 ? record.apiClassName.substr(0,35) + '...' : record.apiClassName;
 
             let str = <div>
                 <span>接口路径：{record.apiClassName}</span><br/>
@@ -147,7 +147,7 @@ export const insertColumns = (context) => [
             return (
                 <span>
                     <Popover content={str} >
-                       {name}
+                       {record.apiClassName}
                     </Popover>
                 </span>
             )
