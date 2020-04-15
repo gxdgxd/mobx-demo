@@ -16,8 +16,8 @@ export const columns = (context) => [
         key: 'name',
         width: 300,
         render: (row,record) => {
-            let dingding = record.alarmDingUrls != null ? <Icon type="dingding" style={{'color':'#30a4ea'}} /> : ""
-            let clock = record.cron != null ? <Icon type="clock-circle" style={{'color':'#30a4ea'}}/> : ""
+            let dingding = record.alarmDingUrls != null && record.alarmDingUrls != "" ? <Icon type="dingding" style={{'color':'#30a4ea'}} /> : ""
+            let clock = record.cron != null && record.cron != "" ? <Icon type="clock-circle" style={{'color':'#30a4ea'}}/> : ""
             if(record.cron != null){}
             return (
                 <span>{dingding} {clock} {row}</span>
