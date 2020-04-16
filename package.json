@@ -69,6 +69,11 @@
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
+    "parserOptions": {
+      "ecmaFeatures": {
+        "legacyDecorators": true
+      }
+    },
     "extends": "react-app"
   },
   "browserslist": {
@@ -134,8 +139,22 @@
     ]
   },
   "babel": {
+    "plugins": [
+      "@babel/plugin-propsal-decorators",
+      {
+        "legacy": true
+      },
+      "@babel/plugin-propsal-class-properties",
+      {
+        "loose": true
+      }
+    ],
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-decorators": "^7.8.3"
   }
 }
