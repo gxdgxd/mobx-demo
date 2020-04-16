@@ -1,24 +1,26 @@
-import React, { Suspense } from 'react';
-import { Provider } from 'mobx-react';
-import { BrowserRouter, Switch } from 'react-router-dom';
-import * as stores from '@/stores';
-import routerConfig from './config/router';
-import { basename } from './config/env';
-import AdminRoute from './common/Route';
-import AdminLayout from './common/AdminLayout';
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
 
-export default () => {
-    return (
-        <Provider {...stores}>
-            <BrowserRouter basename={basename}>
-                <AdminLayout>
-                    <Suspense fallback={null}>
-                        <Switch>
-                            {routerConfig.map((routerItem, index) => <AdminRoute {...routerItem} key={index} />)}
-                        </Switch>
-                    </Suspense>
-                </AdminLayout>
-            </BrowserRouter>
-        </Provider>
-    );
-};
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
+  );
+}
+
+export default App;
